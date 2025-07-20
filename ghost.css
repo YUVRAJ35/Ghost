@@ -1,0 +1,9 @@
+
+body {
+  background-color: black;
+  color: #0ff;
+  font-family: 'Courier New', monospace;
+}
+input:focus {
+  outline: none;
+}
