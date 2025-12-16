@@ -1,0 +1,325 @@
+/**
+ * YTDEV Studios E-Books Platform Backend Server (Conceptual)
+ * Technology Stack: Node.js / Express
+ *
+ * This file demonstrates:
+ * 1. User registration and login.
+ * 2. Mock JSON Web Token (JWT) generation.
+ * 3. Role-based Authorization Middleware ('reader' vs 'author').
+ * 4. Conceptual database operations (using an array for mock data).
+ *
+ * NOTE: For a real application, you would replace mock functions with
+ * actual libraries (e.g., 'express', 'bcrypt' for hashing, 'jsonwebtoken',
+ * and a MongoDB/PostgreSQL driver).
+ */
+
+// --- 1. MOCK ENVIRONMENT SETUP (Simulating Express and Database) ---
+
+// Mock data store for users
+const mockUsersDB = [
+    { id: 101, email: 'reader@ytdev.com', passwordHash: 'hashed_reader_pw', role: 'reader', username: 'AlexReader' },
+    { id: 202, email: 'author@ytdev.com', passwordHash: 'hashed_author_pw', role: 'author', username: 'SarahAuthor' },
+];
+
+// Mock dependencies
+const express = {
+    Router: () => ({
+        post: (path, ...handlers) => console.log(`[Router] POST ${path}`),
+        get: (path, ...handlers) => console.log(`[Router] GET ${path}`),
+    }),
+    json: () => (req, res, next) => next(),
+};
+
+// Mock the Express app object
+const app = {
+    use: (middleware) => console.log(`[App] Using middleware: ${middleware.name || 'anonymous'}`),
+    listen: (port, callback) => callback(),
+    get: (path, ...handlers) => console.log(`[App] GET ${path}`),
+    post: (path, ...handlers) => console.log(`[App] POST ${path}`),
+};
+
+const PORT = 3000;
+
+// --- 2. MOCK SECURITY FUNCTIONS ---
+
+/**
+ * MOCK: Simulates securely hashing a password (using a library like bcrypt).
+ * @param {string} password - The plain text password.
+ * @returns {string} The hashed password.
+ */
+const mockHashPassword = (password) => {
+    // In production: return bcrypt.hashSync(password, 10);
+    return `hashed_${password}_${Date.now()}`;
+};
+
+/**
+ * MOCK: Simulates generating a JSON Web Token (JWT) for the user.
+ * The token payload is critical and includes the user's role.
+ * @param {Object} user - User object from the database.
+ * @returns {string} The mock JWT string.
+ */
+const mockGenerateToken = (user) => {
+    const payload = {
+        userId: user.id,
+        email: user.email,
+        role: user.role, // <-- CRITICAL for authorization
+    };
+    // In production: return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+    return `MOCK_JWT_HEADER.${Buffer.from(JSON.stringify(payload)).toString('base64')}.MOCK_SIGNATURE`;
+};
+
+/**
+ * MOCK: Simulates verifying a JWT and extracting the payload.
+ * @param {string} token - The JWT from the Authorization header.
+ * @returns {Object|null} The decoded user payload or null if invalid.
+ */
+const mockVerifyToken = (token) => {
+    try {
+        if (!token.startsWith('MOCK_JWT_HEADER.')) return null;
+        const encodedPayload = token.split('.')[1];
+        const payloadJson = Buffer.from(encodedPayload, 'base64').toString('utf8');
+        return JSON.parse(payloadJson);
+    } catch (e) {
+        return null;
+    }
+};
+
+// --- 3. AUTHENTICATION & AUTHORIZATION MIDDLEWARE ---
+
+/**
+ * Middleware: Verifies the JWT from the Authorization header (Bearer <token>).
+ * If valid, it attaches the decoded user payload to req.user.
+ */
+const authenticateJWT = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        console.log('[Auth] Error: Missing or malformed token.');
+        return { status: 401, message: 'Access denied. Token required.' }; // Mock response
+    }
+
+    const token = authHeader.split(' ')[1];
+    const user = mockVerifyToken(token);
+
+    if (user) {
+        req.user = user; // Attach user info (including role) to the request
+        next();
+    } else {
+        console.log('[Auth] Error: Invalid token.');
+        return { status: 403, message: 'Invalid token.' }; // Mock response
+    }
+};
+
+/**
+ * Middleware: Authorizes the request based on the required role.
+ * Must be executed AFTER authenticateJWT.
+ * @param {string} requiredRole - 'reader' or 'author'
+ */
+const authorizeRole = (requiredRole) => (req, res, next) => {
+    if (req.user && req.user.role === requiredRole) {
+        next(); // Role is correct, proceed to the route handler
+    } else {
+        console.log(`[Auth] Error: Role '${req.user.role}' not authorized for '${requiredRole}' access.`);
+        return { status: 403, message: `Forbidden. Requires ${requiredRole} role.` }; // Mock response
+    }
+};
+
+// --- 4. ROUTE HANDLERS (Conceptual) ---
+
+/**
+ * Handles the logic for a Sign-Up request.
+ */
+const handleSignUp = (req) => {
+    // In production: Get email, password, role from req.body.
+    const { email, password, role } = req.body || {
+        email: 'newuser@ytdev.com',
+        password: 'securePassword123',
+        role: 'reader'
+    };
+
+    // 1. Validate input (email format, password strength)
+    if (!email || !password || !['reader', 'author'].includes(role)) {
+        return { status: 400, message: 'Invalid registration data.' };
+    }
+
+    // 2. Check if user already exists
+    if (mockUsersDB.find(u => u.email === email)) {
+        return { status: 409, message: 'User already exists.' };
+    }
+
+    // 3. Hash the password
+    const passwordHash = mockHashPassword(password);
+
+    // 4. Create and save new user
+    const newUser = {
+        id: Date.now(),
+        email,
+        passwordHash,
+        role,
+        username: email.split('@')[0],
+    };
+    mockUsersDB.push(newUser);
+
+    console.log(`[Auth] SUCCESS: New ${role} user created: ${newUser.email}`);
+    return { status: 201, message: `User registered successfully as ${role}.` };
+};
+
+/**
+ * Handles the logic for a Login request.
+ */
+const handleLogin = (req) => {
+    // In production: Get email, password from req.body.
+    const { email, password } = req.body || {
+        email: 'author@ytdev.com',
+        password: 'any_password_will_do_for_mock',
+    };
+
+    // 1. Find user by email
+    const user = mockUsersDB.find(u => u.email === email);
+    if (!user) {
+        return { status: 401, message: 'Invalid credentials.' };
+    }
+
+    // 2. Verify password (using bcrypt.compare)
+    // MOCK: Assume password is correct
+    if (user.passwordHash !== 'hashed_reader_pw' && user.passwordHash !== 'hashed_author_pw') {
+        // This is where real verification would happen
+    }
+
+    // 3. Generate JWT containing the user role
+    const token = mockGenerateToken(user);
+
+    console.log(`[Auth] SUCCESS: ${user.role} user logged in: ${user.email}`);
+    return {
+        status: 200,
+        message: 'Login successful.',
+        data: { token, role: user.role, username: user.username }
+    };
+};
+
+/**
+ * Conceptual Author Dashboard Handler (Requires 'author' role)
+ */
+const handleAuthorDashboard = (req) => {
+    console.log(`[API] Author ${req.user.email} accessing dashboard.`);
+    // Logic to fetch author's book listings, sales reports, etc.
+    return {
+        status: 200,
+        message: 'Welcome to your Author Dashboard.',
+        data: {
+            stats: '15,000 Sales Total',
+            pendingPayout: '$1,200.50',
+            booksToReview: 3,
+            userId: req.user.userId,
+        }
+    };
+};
+
+/**
+ * Conceptual Reader Library Handler (Requires 'reader' role)
+ */
+const handleReaderLibrary = (req) => {
+    console.log(`[API] Reader ${req.user.email} accessing library.`);
+    // Logic to fetch the reader's purchased books.
+    return {
+        status: 200,
+        message: 'Welcome to your Digital Library.',
+        data: {
+            books: ['Book Title 1', 'Book Title 2'],
+            recentActivity: 'Last read: Book Title 1',
+            userId: req.user.userId,
+        }
+    };
+};
+
+// --- 5. APPLICATION INITIALIZATION & MOCK EXECUTION ---
+
+// Initialize the Express app
+const SERVER_IP = '127.0.0.1'; // Mock IP
+const SERVER_URL = `http://${SERVER_IP}:${PORT}`;
+
+// In a real app, you would add:
+// app.use(express.json()); // Middleware to parse JSON body
+
+console.log(`\n======================================================`);
+console.log(` E-BOOKS PLATFORM (YTDEV Studios) SERVER STARTED (MOCK)`);
+console.log(`======================================================`);
+console.log(`Server URL: ${SERVER_URL}`);
+
+// --- Mocking Route Execution ---
+console.log('\n--- 1. Testing Authentication (Sign-Up and Login) ---');
+console.log('--- SIGN UP (New Reader) ---');
+handleSignUp({});
+
+const mockLoginResponse = handleLogin({ body: { email: 'author@ytdev.com', password: 'password' } });
+const MOCK_AUTHOR_TOKEN = mockLoginResponse.data.token;
+console.log(`Mock Login Status: ${mockLoginResponse.status}. Token Generated.`);
+
+
+// --- 2. Testing Authorization (Role-Based Access) ---
+console.log('\n--- A. Testing AUTHOR Access (Success) ---');
+const authorRequest = {
+    headers: { authorization: `Bearer ${MOCK_AUTHOR_TOKEN}` },
+    user: null // Will be populated by middleware
+};
+
+// Execute Auth Middleware
+let authResult = authenticateJWT(authorRequest, {}, () => {
+    // If auth passes, execute Authorize Role Middleware
+    const authzResult = authorizeRole('author')(authorRequest, {}, () => {
+        // If authz passes, execute Handler
+        handleAuthorDashboard(authorRequest);
+    });
+    if (authzResult) console.log(`[MOCK RESPONSE] ${authzResult.status}: ${authzResult.message}`);
+});
+if (authResult) console.log(`[MOCK RESPONSE] ${authResult.status}: ${authResult.message}`);
+
+console.log('\n--- B. Testing READER Access (Failure for Author Route) ---');
+const mockReaderLogin = handleLogin({ body: { email: 'reader@ytdev.com', password: 'password' } });
+const MOCK_READER_TOKEN = mockReaderLogin.data.token;
+const readerRequest = {
+    headers: { authorization: `Bearer ${MOCK_READER_TOKEN}` },
+    user: null
+};
+
+// Execute Auth Middleware
+authResult = authenticateJWT(readerRequest, {}, () => {
+    // Execute Authorize Role Middleware (will fail: reader != author)
+    const authzResult = authorizeRole('author')(readerRequest, {}, () => {
+        // Handler should not run
+        console.log('[ERROR] Route handler ran despite incorrect role!');
+    });
+    // This is the expected failure message:
+    if (authzResult) console.log(`[MOCK RESPONSE] ${authzResult.status}: ${authzResult.message}`);
+});
+if (authResult) console.log(`[MOCK RESPONSE] ${authResult.status}: ${authResult.message}`);
+
+
+// --- 3. Testing Reader Library Access (Success) ---
+console.log('\n--- C. Testing READER Access (Success for Reader Route) ---');
+// Execute Auth Middleware
+authResult = authenticateJWT(readerRequest, {}, () => {
+    // If auth passes, execute Authorize Role Middleware
+    const authzResult = authorizeRole('reader')(readerRequest, {}, () => {
+        // If authz passes, execute Handler
+        handleReaderLibrary(readerRequest);
+    });
+    if (authzResult) console.log(`[MOCK RESPONSE] ${authzResult.status}: ${authzResult.message}`);
+});
+if (authResult) console.log(`[MOCK RESPONSE] ${authResult.status}: ${authResult.message}`);
+
+
+// Final Express App Mock Setup (shows how the real app structure looks)
+app.post('/auth/signup', handleSignUp);
+app.post('/auth/login', handleLogin);
+app.get('/author/dashboard', authenticateJWT, authorizeRole('author'), handleAuthorDashboard);
+app.get('/reader/library', authenticateJWT, authorizeRole('reader'), handleReaderLibrary);
+
+app.listen(PORT, () => {
+    console.log(`\n======================================================`);
+    console.log(` Conceptual setup complete. See console logs for flow.`);
+    console.log(`======================================================`);
+});
+
+// A dummy next function for middleware chains
+function next() { }
+
