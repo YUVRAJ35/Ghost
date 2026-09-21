@@ -1,21 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#100609" />
+  <title>RAGE SMP AI — v0.1 Mini</title>
 
-<html>
-  <head>
-    <title>GHOST | Terminal UI</title>
-    <link href="ghost.css" rel="stylesheet">
-  </head>
-  <body class="bg-black text-blue-400 font-mono p-8">
-    <div id="terminal">
-      <h1 class="text-green-500 text-2xl mb-4">[ GHOST SYSTEM ONLINE ]</h1>
-      
-      <div id="chat-box" class="bg-black border border-blue-400 p-4 h-96 overflow-y-scroll mb-4">
-        <div>[DEV-1]: /whisper</div>
-        <div class="text-purple-400">[GHOST]: The next one… doesn’t speak. It resets.</div>
+  <style>
+    :root {
+      --bg: #090609;
+      --panel: #120b10;
+      --panel2: #1b0d14;
+      --red: #e32645;
+      --red2: #ff405c;
+      --text: #f7edf0;
+      --muted: #a9959d;
+      --border: #38202a;
+      --green: #64e6a1;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at top, #2a0b16 0%, transparent 48%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, textarea, input, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+      width: 270px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 20px 15px;
+      background: rgba(14, 8, 12, 0.96);
+      border-right: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 5px 7px 17px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-logo {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #ff3858, #870c29);
+      font-size: 23px;
+      box-shadow: 0 0 24px #e3264530;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: 1px;
+    }
+
+    .brand small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .new-chat {
+      width: 100%;
+      padding: 12px;
+      color: white;
+      background: linear-gradient(135deg, #e32645, #a50f31);
+      border: 0;
+      border-radius: 11px;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    .new-chat:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
+    }
+
+    .section-label {
+      margin: 8px 7px 0;
+      color: #8f7781;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.7px;
+      text-transform: uppercase;
+    }
+
+    .mode-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .mode-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px;
+      text-align: left;
+      color: #cdbdc4;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      transition: 0.15s;
+    }
+
+    .mode-btn:hover {
+      background: #211019;
+    }
+
+    .mode-btn.active {
+      color: white;
+      background: #30101c;
+      border-color: #76243a;
+    }
+
+    .mode-icon {
+      font-size: 19px;
+    }
+
+    .mode-name {
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .mode-version {
+      display: block;
+      margin-top: 3px;
+      color: #9e8490;
+      font-size: 10px;
+    }
+
+    .history-area {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .history-open {
+      flex: 1;
+      min-width: 0;
+      padding: 10px;
+      overflow: hidden;
+      color: #bcaab2;
+      background: transparent;
+      border: 0;
+      border-radius: 8px;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+    }
+
+    .history-open:hover {
+      color: white;
+      background: #211019;
+    }
+
+    .history-delete {
+      padding: 7px;
+      color: #9f7d89;
+      background: transparent;
+      border: 0;
+      border-radius: 6px;
+    }
+
+    .history-delete:hover {
+      color: #ff647b;
+      background: #30101c;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      padding-top: 13px;
+      border-top: 1px solid var(--border);
+    }
+
+    .account-btn {
+      width: 100%;
+      padding: 11px;
+      color: #e8d9df;
+      background: #1a1016;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .account-btn:hover {
+      border-color: var(--red);
+    }
+
+    .account-note {
+      margin: 9px 4px 0;
+      color: #8f7a83;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    /* MAIN */
+
+    .main {
+      display: flex;
+      flex: 1;
+      min-width: 0;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px 24px;
+      background: #0e080ce8;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-title {
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .topbar-subtitle {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #b7a6ae;
+      font-size: 11px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px #64e6a180;
+    }
+
+    .chat {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      width: 100%;
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 25px 25px 0;
+    }
+
+    .welcome {
+      margin: auto 0;
+      padding: 45px 0;
+      text-align: center;
+    }
+
+    .welcome-logo {
+      display: grid;
+      place-items: center;
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 22px;
+      border: 1px solid #76243a;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #3a101f, #160a11);
+      font-size: 38px;
+      box-shadow: 0 0 45px #e326451c;
+    }
+
+    .welcome h2 {
+      margin: 0;
+      font-size: clamp(25px, 4vw, 39px);
+      letter-spacing: -1px;
+    }
+
+    .welcome h2 span {
+      color: var(--red2);
+    }
+
+    .welcome p {
+      max-width: 500px;
+      margin: 13px auto 24px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .suggestions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .suggestion {
+      padding: 14px;
+      color: #d8c5cd;
+      background: #160d13;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: left;
+      font-size: 12px;
+      transition: 0.2s;
+    }
+
+    .suggestion:hover {
+      color: white;
+      border-color: #a32a46;
+      background: #25101a;
+      transform: translateY(-2px);
+    }
+
+    .messages {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding-bottom: 25px;
+    }
+
+    .message {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      animation: appear 0.2s ease;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .avatar {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+      border: 1px solid #512031;
+      border-radius: 11px;
+      background: #25101a;
+      font-size: 17px;
+    }
+
+    .message.user .avatar {
+      background: #27202a;
+      border-color: #514151;
+    }
+
+    .message-content {
+      flex: 1;
+      min-width: 0;
+      padding-top: 3px;
+    }
+
+    .message-label {
+      margin-bottom: 7px;
+      color: #e9dce2;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .message-text {
+      color: #d9cbd1;
+      font-size: 14px;
+      line-height: 1.75;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .message-text code {
+      padding: 2px 5px;
+      color: #ff9aac;
+      background: #28131c;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+    }
+
+    .message-text pre {
+      padding: 14px;
+      overflow-x: auto;
+      color: #f5dce4;
+      background: #0a0709;
+      border: 1px solid #3c202b;
+      border-radius: 10px;
+      white-space: pre;
+    }
+
+    .message-text pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .message-image {
+      display: block;
+      max-width: min(100%, 360px);
+      max-height: 300px;
+      margin-top: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .message-actions {
+      display: flex;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .message-actions button {
+      padding: 5px 8px;
+      color: #9d8791;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+
+    .message-actions button:hover {
+      color: white;
+      border-color: #512031;
+      background: #1c1016;
+    }
+
+    .typing {
+      display: inline-flex;
+      gap: 5px;
+      padding: 10px 0;
+    }
+
+    .typing span {
+      width: 7px;
+      height: 7px;
+      background: #df4964;
+      border-radius: 50%;
+      animation: bounce 1s infinite ease-in-out;
+    }
+
+    .typing span:nth-child(2) { animation-delay: 0.15s; }
+    .typing span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.45; }
+      30% { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* COMPOSER */
+
+    .composer-wrap {
+      position: sticky;
+      bottom: 0;
+      padding: 15px 25px 18px;
+      background: linear-gradient(transparent, #090609 18%);
+    }
+
+    .composer {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 11px;
+      background: #170d13;
+      border: 1px solid #512031;
+      border-radius: 17px;
+      box-shadow: 0 8px 35px #00000045;
+    }
+
+    .composer:focus-within {
+      border-color: #a62b48;
+      box-shadow: 0 0 0 2px #e3264515;
+    }
+
+    .attachment-preview {
+      display: none;
+      align-items: center;
+      gap: 9px;
+      margin: 0 5px 9px;
+      padding: 8px;
+      background: #26121b;
+      border-radius: 9px;
+    }
+
+    .attachment-preview img {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 7px;
+    }
+
+    .attachment-preview span {
+      flex: 1;
+      color: #d9c3cc;
+      font-size: 11px;
+    }
+
+    .attachment-preview button {
+      color: #ff8195;
+      background: transparent;
+      border: 0;
+    }
+
+    #prompt {
+      display: block;
+      width: 100%;
+      min-height: 48px;
+      max-height: 180px;
+      resize: none;
+      padding: 8px 9px;
+      color: white;
+      background: transparent;
+      border: 0;
+      outline: none;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    #prompt::placeholder {
+      color: #8f7883;
+    }
+
+    .composer-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 5px 2px 0;
+    }
+
+    .tool-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tool-btn {
+      padding: 8px 10px;
+      color: #bda9b2;
+      background: #24131c;
+      border: 1px solid #3d202c;
+      border-radius: 8px;
+      font-size: 11px;
+    }
+
+    .tool-btn:hover {
+      color: white;
+      border-color: #9e2a45;
+    }
+
+    .tool-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .send-btn {
+      min-width: 75px;
+      padding: 10px 15px;
+      color: white;
+      background: linear-gradient(135deg, #f03452, #a30d30);
+      border: 0;
+      border-radius: 9px;
+      font-weight: 800;
+    }
+
+    .send-btn:hover {
+      filter: brightness(1.15);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .disclaimer {
+      max-width: 900px;
+      margin: 10px auto 0;
+      color: #806d76;
+      text-align: center;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .mobile-menu {
+      display: none;
+      padding: 8px 10px;
+      color: white;
+      background: #24121b;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 20;
+      max-width: calc(100vw - 40px);
+      padding: 12px 16px;
+      color: white;
+      background: #29131d;
+      border: 1px solid #8d2942;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px #0008;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: 0.2s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 760px) {
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 10;
+        width: 270px;
+        transform: translateX(-100%);
+        transition: transform 0.22s ease;
+        box-shadow: 15px 0 40px #0008;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .topbar {
+        padding: 13px 14px;
+      }
+
+      .chat {
+        padding: 15px 14px 0;
+      }
+
+      .composer-wrap {
+        padding: 12px 12px 14px;
+      }
+
+      .suggestions {
+        grid-template-columns: 1fr;
+      }
+
+      .welcome {
+        padding: 25px 0;
+      }
+
+      .welcome p {
+        font-size: 13px;
+      }
+
+      .tool-btn {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-logo">⚔️</div>
+        <div>
+          <h1>RAGE SMP AI</h1>
+          <small>v0.1 MINI · WEBSITE EDITION</small>
+        </div>
       </div>
 
-      <input id="command" type="text" placeholder="Type your command..." class="w-full p-2 bg-black border border-blue-300 text-white focus:outline-none">
-    </div>
+      <button class="new-chat" id="newChatBtn">＋ New Chat</button>
 
-    <script src="ghost.js"></script>
-  </body>
+      <div class="section-label">AI Modes</div>
+
+      <div class="mode-list" id="modeList">
+        <button class="mode-btn active" data-mode="funny">
+          <span class="mode-icon">😂</span>
+          <span>
+            <span class="mode-name">Funny</span>
+            <span class="mode-version">RS 0.1</span>
+          </span>
+        </button>
+
+        <button class="mode-btn" data-mode="chill">
+          <span class="mode-icon">😎</span>
+          <span>
+            <span class="mode-name">Chill</span>
+            <span class="mode-version">RS 0.2.1</span>
+          </span>
+        </button>
+
+        <button class="mode-btn" data-mode="playfull">
+          <span class="mode-icon">😈</span>
+          <span>
+            <span class="mode-name">Playfull</span>
+            <span class="mode-version">RS 0.1.2</span>
+          </span>
+        </button>
+
+        <button class="mode-btn" data-mode="minecraft">
+          <span class="mode-icon">⛏️</span>
+          <span>
+            <span class="mode-name">Minecraft Inf Knowledge</span>
+            <span class="mode-version">RS M 0.1.3</span>
+          </span>
+        </button>
+      </div>
+
+      <div class="section-label">Recent Chats · This Browser</div>
+      <div class="history-area" id="historyList"></div>
+
+      <div class="sidebar-bottom">
+        <button class="account-btn" id="accountBtn">👤 Sign in with Google</button>
+        <p class="account-note">
+          Sign-in is a UI placeholder in this Mini build. Google authentication
+          and synced chat saving need backend setup.
+        </p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div style="display:flex;align-items:center;gap:11px;">
+          <button class="mobile-menu" id="mobileMenuBtn" aria-label="Open menu">☰</button>
+          <div>
+            <div class="topbar-title">RAGE SMP AI <span style="color:#ff405c;">/ MINI</span></div>
+            <div class="topbar-subtitle" id="activeModeText">😂 RS 0.1 — Funny Mode</div>
+          </div>
+        </div>
+
+        <div class="status">
+          <span class="status-dot"></span>
+          <span>Frontend Online</span>
+        </div>
+      </header>
+
+      <section class="chat">
+        <div class="welcome" id="welcome">
+          <div class="welcome-logo">🤖</div>
+          <h2>Welcome to <span>RAGE SMP AI</span></h2>
+          <p>
+            Your RAGE SMP helper. Ask about the server, Minecraft, gameplay,
+            commands, or get help with gaming problems.
+          </p>
+
+          <div class="suggestions">
+            <button class="suggestion" data-prompt="How do I join RAGE SMP?">
+              ⚔️ How do I join RAGE SMP?
+            </button>
+            <button class="suggestion" data-prompt="Help me troubleshoot Minecraft lag.">
+              🎮 Help me troubleshoot Minecraft lag.
+            </button>
+            <button class="suggestion" data-prompt="Give me some tips for Minecraft PvP.">
+              🗡️ Give me some Minecraft PvP tips.
+            </button>
+            <button class="suggestion" data-prompt="Explain how Minecraft enchantments work.">
+              ✨ Explain Minecraft enchantments.
+            </button>
+          </div>
+        </div>
+
+        <div class="messages" id="messages"></div>
+      </section>
+
+      <div class="composer-wrap">
+        <div class="composer">
+          <div class="attachment-preview" id="attachmentPreview">
+            <img id="attachmentImage" alt="Selected image preview" />
+            <span id="attachmentName">Image attached</span>
+            <button id="removeAttachment" title="Remove image">✕</button>
+          </div>
+
+          <textarea id="prompt" rows="1" placeholder="Message RAGE SMP AI..."></textarea>
+
+          <div class="composer-tools">
+            <div class="tool-group">
+              <button class="tool-btn" id="imageBtn" title="Attach an image">🖼 Image</button>
+              <input id="imageInput" type="file" accept="image/*" hidden />
+
+              <button class="tool-btn" id="voiceBtn" title="Voice input">🎙 Voice</button>
+              <button class="tool-btn" id="speakBtn" title="Read the latest AI reply aloud">🔊 Read</button>
+              <button class="tool-btn" id="searchBtn" title="Request web search">🌐 Search: Off</button>
+            </div>
+
+            <button class="send-btn" id="sendBtn">Send ↑</button>
+          </div>
+        </div>
+
+        <div class="disclaimer">
+          RAGE SMP AI v0.1 Mini · Demo frontend · Do not enter passwords or private information.
+          AI answers can be incorrect; verify important server details.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /*
+    ============================================================
+      RAGE SMP AI v0.1 MINI — FRONTEND CONFIGURATION
+    ============================================================
+
+    BACKEND TODO:
+    1. Set API_URL to your secure backend chat endpoint.
+    2. Backend should call your chosen free AI model provider.
+    3. Keep API keys on the backend. NEVER put secret API keys here.
+    4. Implement Google OAuth on the backend.
+    5. Validate Premium access server-side.
+    6. Store account chat history in a database.
+    7. Implement real web search and Minecraft server status endpoints.
+
+    This file currently uses demo replies so the interface can be tested.
+    */
+
+    const API_URL = ""; // Example: "https://your-api.example.com/api/chat"
+
+    const SERVER_IP = "ragesmp.pixelforge.gg";
+    const DISCORD_URL = "https://discord.gg/TZDGExER6c";
+
+    const MODE_INFO = {
+      funny: {
+        name: "Funny",
+        version: "RS 0.1",
+        icon: "😂",
+        instruction: "Be humorous, witty, and entertaining while remaining helpful."
+      },
+      chill: {
+        name: "Chill",
+        version: "RS 0.2.1",
+        icon: "😎",
+        instruction: "Be relaxed, casual, friendly, and easy to understand."
+      },
+      playfull: {
+        name: "Playfull",
+        version: "RS 0.1.2",
+        icon: "😈",
+        instruction: "Be energetic, playful, interactive, and gamer-like."
+      },
+      minecraft: {
+        name: "Minecraft Inf Knowledge",
+        version: "RS M 0.1.3",
+        icon: "⛏️",
+        instruction: "Focus on Minecraft mechanics, gameplay, crafting, mobs, redstone, commands, server administration, and troubleshooting. Be accurate and admit uncertainty."
+      }
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+
+    const messagesEl = $("#messages");
+    const welcomeEl = $("#welcome");
+    const promptEl = $("#prompt");
+    const historyEl = $("#historyList");
+    const toastEl = $("#toast");
+
+    let activeMode = "funny";
+    let chats = loadChats();
+    let activeChatId = null;
+    let attachedImage = null;
+    let searchEnabled = false;
+    let busy = false;
+    let recognition = null;
+
+    function loadChats() {
+      try {
+        const saved = JSON.parse(localStorage.getItem("rage_smp_ai_chats") || "[]");
+        return Array.isArray(saved) ? saved : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveChats() {
+      try {
+        localStorage.setItem("rage_smp_ai_chats", JSON.stringify(chats));
+      } catch {
+        showToast("Browser storage is full. Some chats may not be saved.");
+      }
+      renderHistory();
+    }
+
+    function makeId() {
+      return Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+    }
+
+    function getActiveChat() {
+      return chats.find(chat => chat.id === activeChatId) || null;
+    }
+
+    function createChat() {
+      const chat = {
+        id: makeId(),
+        title: "New Chat",
+        mode: activeMode,
+        messages: [],
+        updatedAt: Date.now()
+      };
+
+      chats.unshift(chat);
+      activeChatId = chat.id;
+      saveChats();
+      renderMessages();
+      closeSidebarOnMobile();
+    }
+
+    function ensureChat() {
+      if (!getActiveChat()) createChat();
+      return getActiveChat();
+    }
+
+    function setMode(mode) {
+      if (!MODE_INFO[mode]) return;
+
+      activeMode = mode;
+
+      document.querySelectorAll(".mode-btn").forEach(button => {
+        button.classList.toggle("active", button.dataset.mode === mode);
+      });
+
+      const info = MODE_INFO[mode];
+      $("#activeModeText").textContent = `${info.icon} ${info.version} — ${info.name} Mode`;
+
+      const chat = getActiveChat();
+      if (chat) {
+        chat.mode = mode;
+        chat.updatedAt = Date.now();
+        saveChats();
+      }
+
+      closeSidebarOnMobile();
+    }
+
+    function renderHistory() {
+      historyEl.innerHTML = "";
+
+      if (!chats.length) {
+        const empty = document.createElement("div");
+        empty.textContent = "No chats yet";
+        empty.style.cssText = "padding:9px;color:#806d76;font-size:11px;";
+        historyEl.appendChild(empty);
+        return;
+      }
+
+      chats.slice(0, 30).forEach(chat => {
+        const row = document.createElement("div");
+        row.className = "history-item";
+
+        const open = document.createElement("button");
+        open.className = "history-open";
+        open.textContent = chat.title || "New Chat";
+        open.title = chat.title || "New Chat";
+        open.onclick = () => {
+          activeChatId = chat.id;
+          activeMode = chat.mode || "funny";
+          setMode(activeMode);
+          renderMessages();
+          closeSidebarOnMobile();
+        };
+
+        const del = document.createElement("button");
+        del.className = "history-delete";
+        del.textContent = "✕";
+        del.title = "Delete chat";
+        del.onclick = () => {
+          chats = chats.filter(item => item.id !== chat.id);
+          if (activeChatId === chat.id) activeChatId = null;
+          saveChats();
+          renderMessages();
+        };
+
+        row.append(open, del);
+        historyEl.appendChild(row);
+      });
+    }
+
+    function renderMessages() {
+      const chat = getActiveChat();
+      messagesEl.innerHTML = "";
+
+      const hasMessages = !!chat && chat.messages.length > 0;
+      welcomeEl.style.display = hasMessages ? "none" : "block";
+
+      if (!chat) return;
+
+      chat.messages.forEach((message, index) => {
+        const row = document.createElement("article");
+        row.className = `message ${message.role === "user" ? "user" : "assistant"}`;
+
+        const avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.textContent = message.role === "user" ? "👤" : "🤖";
+
+        const content = document.createElement("div");
+        content.className = "message-content";
+
+        const label = document.createElement("div");
+        label.className = "message-label";
+        label.textContent = message.role === "user" ? "You" : "RAGE SMP AI";
+
+        const text = document.createElement("div");
+        text.className = "message-text";
+        text.textContent = message.content || "";
+
+        content.append(label, text);
+
+        if (message.imageData) {
+          const image = document.createElement("img");
+          image.className = "message-image";
+          image.src = message.imageData;
+          image.alt = "User attached image";
+          content.appendChild(image);
+        }
+
+        if (message.role === "user") {
+          const actions = document.createElement("div");
+          actions.className = "message-actions";
+
+          const edit = document.createElement("button");
+          edit.textContent = "✏️ Edit";
+          edit.onclick = () => editMessage(index);
+
+          actions.appendChild(edit);
+          content.appendChild(actions);
+        } else {
+          const actions = document.createElement("div");
+          actions.className = "message-actions";
+
+          const copy = document.createElement("button");
+          copy.textContent = "📋 Copy";
+          copy.onclick = async () => {
+            try {
+              await navigator.clipboard.writeText(message.content || "");
+              showToast("Response copied.");
+            } catch {
+              showToast("Copy failed. Select the text and copy it manually.");
+            }
+          };
+
+          const regen = document.createElement("button");
+          regen.textContent = "🔄 Regenerate";
+          regen.onclick = () => regenerateResponse(index);
+
+          const read = document.createElement("button");
+          read.textContent = "🔊 Read";
+          read.onclick = () => speakText(message.content || "");
+
+          actions.append(copy, regen, read);
+          content.appendChild(actions);
+        }
+
+        row.append(avatar, content);
+        messagesEl.appendChild(row);
+      });
+
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
+
+    function showTyping() {
+      const row = document.createElement("article");
+      row.className = "message";
+      row.id = "typingRow";
+
+      const avatar = document.createElement("div");
+      avatar.className = "avatar";
+      avatar.textContent = "🤖";
+
+      const content = document.createElement("div");
+      content.className = "message-content";
+
+      const label = document.createElement("div");
+      label.className = "message-label";
+      label.textContent = "RAGE SMP AI is thinking";
+
+      const typing = document.createElement("div");
+      typing.className = "typing";
+      typing.innerHTML = "<span></span><span></span><span></span>";
+
+      content.append(label, typing);
+      row.append(avatar, content);
+      messagesEl.appendChild(row);
+      row.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+
+    function removeTyping() {
+      $("#typingRow")?.remove();
+    }
+
+    function showToast(message) {
+      toastEl.textContent = message;
+      toastEl.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toastEl.classList.remove("show"), 2800);
+    }
+
+    function setBusy(value) {
+      busy = value;
+      $("#sendBtn").disabled = value;
+      $("#sendBtn").textContent = value ? "..." : "Send ↑";
+    }
+
+    function updateChatTitle(chat, firstMessage) {
+      if (!chat || chat.title !== "New Chat") return;
+      chat.title = firstMessage.slice(0, 38) || "New Chat";
+    }
+
+    async function sendMessage(textOverride = null, options = {}) {
+      if (busy) return;
+
+      const text = (textOverride ?? promptEl.value).trim();
+      if (!text && !attachedImage) {
+        showToast("Type a message first!");
+        return;
+      }
+
+      const chat = ensureChat();
+      const userMessage = {
+        role: "user",
+        content: text,
+        imageData: attachedImage?.dataUrl || null
+      };
+
+      if (!options.regenerate) {
+        chat.messages.push(userMessage);
+        updateChatTitle(chat, text || "Image question");
+      }
+
+      chat.mode = activeMode;
+      chat.updatedAt = Date.now();
+
+      const imageForRequest = attachedImage;
+      promptEl.value = "";
+      clearAttachment();
+      autoResize();
+      renderMessages();
+      saveChats();
+
+      setBusy(true);
+      showTyping();
+
+      try {
+        let reply;
+
+        if (API_URL) {
+          reply = await requestBackend(chat, imageForRequest);
+        } else {
+          await new Promise(resolve => setTimeout(resolve, 650));
+          reply = demoReply(text, activeMode);
+        }
+
+        removeTyping();
+
+        chat.messages.push({
+          role: "assistant",
+          content: reply
+        });
+
+        chat.updatedAt = Date.now();
+        saveChats();
+        renderMessages();
+      } catch (error) {
+        removeTyping();
+        chat.messages.push({
+          role: "assistant",
+          content: "I couldn't reach the AI service. Please check the backend connection and try again."
+        });
+        saveChats();
+        renderMessages();
+        console.error(error);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function requestBackend(chat, image) {
+      /*
+        Expected backend contract (customize to match your API):
+
+        POST API_URL
+        Content-Type: application/json
+
+        {
+          "message": "user message",
+          "mode": "funny",
+          "modeVersion": "RS 0.1",
+          "systemInstruction": "...",
+          "history": [{ "role": "user", "content": "..." }],
+          "image": {
+            "name": "screenshot.png",
+            "dataUrl": "data:image/png;base64,..."
+          },
+          "webSearch": true
+        }
+
+        The backend should return:
+        { "reply": "AI response text" }
+
+        Do not trust client-supplied Premium status or user identity.
+        Validate both on the server.
+      */
+
+      const info = MODE_INFO[activeMode];
+      const history = chat.messages.slice(-20).map(message => ({
+        role: message.role,
+        content: message.content
+      }));
+
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: history[history.length - 1]?.content || "",
+          mode: activeMode,
+          modeVersion: info.version,
+          systemInstruction: info.instruction,
+          serverIp: SERVER_IP,
+          history,
+          image: image ? {
+            name: image.name,
+            dataUrl: image.dataUrl
+          } : null,
+          webSearch: searchEnabled
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Backend returned ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (!data || typeof data.reply !== "string") {
+        throw new Error("Invalid backend response");
+      }
+
+      return data.reply;
+    }
+
+    function demoReply(text, mode) {
+      const info = MODE_INFO[mode];
+      const lower = (text || "").toLowerCase();
+
+      if (lower.includes("join") && (lower.includes("rage") || lower.includes("server"))) {
+        return `To join RAGE SMP, use this server address:\n\n${SERVER_IP}\n\nIf you need help joining, visit the RAGE SMP Discord:\n${DISCORD_URL}\n\nThis is a demo response. Connect the AI backend for complete server instructions.`;
+      }
+
+      if (lower.includes("ip") || lower.includes("server address")) {
+        return `The RAGE SMP server address is:\n\n${SERVER_IP}\n\nFor help and updates, check the Discord:\n${DISCORD_URL}`;
+      }
+
+      if (lower.includes("lag") || lower.includes("fps")) {
+        return `Let's troubleshoot that, gamer. 🎮\n\n1. Lower render distance and simulation distance.\n2. Close unnecessary background applications.\n3. Check whether the lag is low FPS, network latency, or server TPS.\n4. If you're using mods or shaders, test without them to narrow down the cause.\n5. Check your connection and whether other players are experiencing the same issue.\n\nTell me your Minecraft version, whether it's FPS or ping lag, and when it happens.`;
+      }
+
+      if (lower.includes("pvp")) {
+        return `Minecraft PvP practice ideas ⚔️\n\n• Practice aiming and tracking in a safe practice world.\n• Learn spacing and timing for your version's combat system.\n• Keep your hotbar organized so important items are easy to reach.\n• Review what happened after a fight and identify one thing to improve.\n\nTell me your Minecraft edition and version for more specific tips.`;
+      }
+
+      const modeExtras = {
+        funny: "My circuits are ready, my gamer. 😂",
+        chill: "No rush. We can work through it together. 😎",
+        playfull: "AYOOO, let's get this quest started! 😈🎮",
+        minecraft: "Minecraft-focused mode selected. ⛏️"
+      };
+
+      return `${modeExtras[mode] || ""}\n\nYou said: "${text || "You attached an image"}"\n\nI'm currently running the frontend demo, so I don't have the full AI model connected yet. Set API_URL to your backend endpoint to enable real AI responses.`;
+    }
+
+    function editMessage(index) {
+      const chat = getActiveChat();
+      if (!chat) return;
+
+      const message = chat.messages[index];
+      if (!message || message.role !== "user") return;
+
+      promptEl.value = message.content || "";
+      promptEl.focus();
+
+      chat.messages = chat.messages.slice(0, index);
+      chat.updatedAt = Date.now();
+      saveChats();
+      renderMessages();
+      autoResize();
+
+      showToast("Message loaded for editing. Send it when ready.");
+    }
+
+    async function regenerateResponse(index) {
+      const chat = getActiveChat();
+      if (!chat || busy) return;
+
+      if (index !== chat.messages.length - 1 ||
+          chat.messages[index]?.role !== "assistant") {
+        showToast("Regenerate the latest AI response only.");
+        return;
+      }
+
+      chat.messages.pop();
+      const lastUserMessage = [...chat.messages].reverse().find(m => m.role === "user");
+
+      if (!lastUserMessage) {
+        renderMessages();
+        return;
+      }
+
+      // Keep the original user message and ask the backend to respond again.
+      const originalText = lastUserMessage.content;
+      promptEl.value = originalText;
+      await sendMessage(originalText, { regenerate: true });
+    }
+
+    function clearAttachment() {
+      attachedImage = null;
+      $("#imageInput").value = "";
+      $("#attachmentPreview").style.display = "none";
+      $("#attachmentImage").removeAttribute("src");
+    }
+
+    function autoResize() {
+      promptEl.style.height = "auto";
+      promptEl.style.height = Math.min(promptEl.scrollHeight, 180) + "px";
+    }
+
+    function speakText(text) {
+      if (!("speechSynthesis" in window)) {
+        showToast("Text-to-speech isn't supported in this browser.");
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function startVoiceInput() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        showToast("Voice input isn't supported in this browser. Try a compatible browser.");
+        return;
+      }
+
+      if (recognition) {
+        recognition.stop();
+        recognition = null;
+        $("#voiceBtn").textContent = "🎙 Voice";
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = true;
+      recognition.continuous = false;
+
+      $("#voiceBtn").textContent = "⏹ Stop";
+
+      recognition.onresult = event => {
+        let transcript = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        promptEl.value = transcript;
+        autoResize();
+      };
+
+      recognition.onerror = () => showToast("Voice input stopped or couldn't be recognized.");
+
+      recognition.onend = () => {
+        recognition = null;
+        $("#voiceBtn").textContent = "🎙 Voice";
+      };
+
+      recognition.start();
+    }
+
+    /* EVENTS */
+
+    $("#newChatBtn").addEventListener("click", createChat);
+
+    $("#modeList").addEventListener("click", event => {
+      const button = event.target.closest(".mode-btn");
+      if (button) setMode(button.dataset.mode);
+    });
+
+    $("#sendBtn").addEventListener("click", () => sendMessage());
+
+    promptEl.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    promptEl.addEventListener("input", autoResize);
+
+    document.querySelectorAll(".suggestion").forEach(button => {
+      button.addEventListener("click", () => sendMessage(button.dataset.prompt));
+    });
+
+    $("#imageBtn").addEventListener("click", () => {
+      /*
+        Premium gating must be verified by your backend.
+        This button currently allows local preview for UI testing only.
+      */
+      $("#imageInput").click();
+    });
+
+    $("#imageInput").addEventListener("change", event => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        showToast("Please select an image file.");
+        clearAttachment();
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        showToast("For this demo, images must be 5 MB or smaller.");
+        clearAttachment();
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        attachedImage = {
+          name: file.name,
+          dataUrl: reader.result
+        };
+
+        $("#attachmentImage").src = reader.result;
+        $("#attachmentName").textContent = file.name;
+        $("#attachmentPreview").style.display = "flex";
+      };
+
+      reader.readAsDataURL(file);
+    });
+
+    $("#removeAttachment").addEventListener("click", clearAttachment);
+
+    $("#voiceBtn").addEventListener("click", startVoiceInput);
+
+    $("#speakBtn").addEventListener("click", () => {
+      const chat = getActiveChat();
+      const latest = chat?.messages.filter(m => m.role === "assistant").at(-1);
+
+      if (!latest) {
+        showToast("No AI response to read yet.");
+        return;
+      }
+
+      speakText(latest.content);
+    });
+
+    $("#searchBtn").addEventListener("click", () => {
+      searchEnabled = !searchEnabled;
+      $("#searchBtn").textContent = searchEnabled ? "🌐 Search: On" : "🌐 Search: Off";
+      showToast(
+        searchEnabled
+          ? "Search requested. Real web search requires backend integration."
+          : "Web search request turned off."
+      );
+    });
+
+    $("#accountBtn").addEventListener("click", () => {
+      showToast("Google sign-in isn't connected yet. Add Google OAuth to your backend.");
+    });
+
+    $("#mobileMenuBtn").addEventListener("click", () => {
+      $("#sidebar").classList.toggle("open");
+    });
+
+    function closeSidebarOnMobile() {
+      if (window.innerWidth <= 760) {
+        $("#sidebar").classList.remove("open");
+      }
+    }
+
+    // Initial setup
+    renderHistory();
+    renderMessages();
+    setMode("funny");
+  </script>
+</body>
 </html>
