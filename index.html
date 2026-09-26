@@ -1,1535 +1,920 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#100609" />
-  <title>RAGE SMP AI — v0.1 Mini</title>
-
-  <style>
-    :root {
-      --bg: #090609;
-      --panel: #120b10;
-      --panel2: #1b0d14;
-      --red: #e32645;
-      --red2: #ff405c;
-      --text: #f7edf0;
-      --muted: #a9959d;
-      --border: #38202a;
-      --green: #64e6a1;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(ellipse at top, #2a0b16 0%, transparent 48%),
-        var(--bg);
-      color: var(--text);
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    button, textarea, input, select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .app {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    /* SIDEBAR */
-
-    .sidebar {
-      width: 270px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      padding: 20px 15px;
-      background: rgba(14, 8, 12, 0.96);
-      border-right: 1px solid var(--border);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 5px 7px 17px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .brand-logo {
-      display: grid;
-      place-items: center;
-      width: 43px;
-      height: 43px;
-      border-radius: 13px;
-      background: linear-gradient(135deg, #ff3858, #870c29);
-      font-size: 23px;
-      box-shadow: 0 0 24px #e3264530;
-    }
-
-    .brand h1 {
-      margin: 0;
-      font-size: 17px;
-      letter-spacing: 1px;
-    }
-
-    .brand small {
-      display: block;
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .new-chat {
-      width: 100%;
-      padding: 12px;
-      color: white;
-      background: linear-gradient(135deg, #e32645, #a50f31);
-      border: 0;
-      border-radius: 11px;
-      font-weight: 700;
-      transition: 0.2s;
-    }
-
-    .new-chat:hover {
-      filter: brightness(1.15);
-      transform: translateY(-1px);
-    }
-
-    .section-label {
-      margin: 8px 7px 0;
-      color: #8f7781;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 1.7px;
-      text-transform: uppercase;
-    }
-
-    .mode-list {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-
-    .mode-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px;
-      text-align: left;
-      color: #cdbdc4;
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 10px;
-      transition: 0.15s;
-    }
-
-    .mode-btn:hover {
-      background: #211019;
-    }
-
-    .mode-btn.active {
-      color: white;
-      background: #30101c;
-      border-color: #76243a;
-    }
-
-    .mode-icon {
-      font-size: 19px;
-    }
-
-    .mode-name {
-      font-size: 12px;
-      font-weight: 750;
-    }
-
-    .mode-version {
-      display: block;
-      margin-top: 3px;
-      color: #9e8490;
-      font-size: 10px;
-    }
-
-    .history-area {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      min-height: 0;
-      overflow-y: auto;
-    }
-
-    .history-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .history-open {
-      flex: 1;
-      min-width: 0;
-      padding: 10px;
-      overflow: hidden;
-      color: #bcaab2;
-      background: transparent;
-      border: 0;
-      border-radius: 8px;
-      text-align: left;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 12px;
-    }
-
-    .history-open:hover {
-      color: white;
-      background: #211019;
-    }
-
-    .history-delete {
-      padding: 7px;
-      color: #9f7d89;
-      background: transparent;
-      border: 0;
-      border-radius: 6px;
-    }
-
-    .history-delete:hover {
-      color: #ff647b;
-      background: #30101c;
-    }
-
-    .sidebar-bottom {
-      margin-top: auto;
-      padding-top: 13px;
-      border-top: 1px solid var(--border);
-    }
-
-    .account-btn {
-      width: 100%;
-      padding: 11px;
-      color: #e8d9df;
-      background: #1a1016;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-    }
-
-    .account-btn:hover {
-      border-color: var(--red);
-    }
-
-    .account-note {
-      margin: 9px 4px 0;
-      color: #8f7a83;
-      font-size: 10px;
-      line-height: 1.5;
-    }
-
-    /* MAIN */
-
-    .main {
-      display: flex;
-      flex: 1;
-      min-width: 0;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 17px 24px;
-      background: #0e080ce8;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .topbar-title {
-      font-weight: 800;
-      font-size: 14px;
-    }
-
-    .topbar-subtitle {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .status {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      color: #b7a6ae;
-      font-size: 11px;
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      background: var(--green);
-      border-radius: 50%;
-      box-shadow: 0 0 10px #64e6a180;
-    }
-
-    .chat {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      width: 100%;
-      max-width: 950px;
-      margin: 0 auto;
-      padding: 25px 25px 0;
-    }
-
-    .welcome {
-      margin: auto 0;
-      padding: 45px 0;
-      text-align: center;
-    }
-
-    .welcome-logo {
-      display: grid;
-      place-items: center;
-      width: 76px;
-      height: 76px;
-      margin: 0 auto 22px;
-      border: 1px solid #76243a;
-      border-radius: 25px;
-      background: linear-gradient(135deg, #3a101f, #160a11);
-      font-size: 38px;
-      box-shadow: 0 0 45px #e326451c;
-    }
-
-    .welcome h2 {
-      margin: 0;
-      font-size: clamp(25px, 4vw, 39px);
-      letter-spacing: -1px;
-    }
-
-    .welcome h2 span {
-      color: var(--red2);
-    }
-
-    .welcome p {
-      max-width: 500px;
-      margin: 13px auto 24px;
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 14px;
-    }
-
-    .suggestions {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      max-width: 620px;
-      margin: 0 auto;
-    }
-
-    .suggestion {
-      padding: 14px;
-      color: #d8c5cd;
-      background: #160d13;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      text-align: left;
-      font-size: 12px;
-      transition: 0.2s;
-    }
-
-    .suggestion:hover {
-      color: white;
-      border-color: #a32a46;
-      background: #25101a;
-      transform: translateY(-2px);
-    }
-
-    .messages {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      padding-bottom: 25px;
-    }
-
-    .message {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      animation: appear 0.2s ease;
-    }
-
-    @keyframes appear {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .avatar {
-      display: grid;
-      place-items: center;
-      width: 34px;
-      height: 34px;
-      flex-shrink: 0;
-      border: 1px solid #512031;
-      border-radius: 11px;
-      background: #25101a;
-      font-size: 17px;
-    }
-
-    .message.user .avatar {
-      background: #27202a;
-      border-color: #514151;
-    }
-
-    .message-content {
-      flex: 1;
-      min-width: 0;
-      padding-top: 3px;
-    }
-
-    .message-label {
-      margin-bottom: 7px;
-      color: #e9dce2;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .message-text {
-      color: #d9cbd1;
-      font-size: 14px;
-      line-height: 1.75;
-      overflow-wrap: anywhere;
-      white-space: pre-wrap;
-    }
-
-    .message-text code {
-      padding: 2px 5px;
-      color: #ff9aac;
-      background: #28131c;
-      border-radius: 5px;
-      font-family: Consolas, monospace;
-    }
-
-    .message-text pre {
-      padding: 14px;
-      overflow-x: auto;
-      color: #f5dce4;
-      background: #0a0709;
-      border: 1px solid #3c202b;
-      border-radius: 10px;
-      white-space: pre;
-    }
-
-    .message-text pre code {
-      padding: 0;
-      background: transparent;
-      color: inherit;
-    }
-
-    .message-image {
-      display: block;
-      max-width: min(100%, 360px);
-      max-height: 300px;
-      margin-top: 10px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-    }
-
-    .message-actions {
-      display: flex;
-      gap: 7px;
-      margin-top: 10px;
-    }
-
-    .message-actions button {
-      padding: 5px 8px;
-      color: #9d8791;
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 6px;
-      font-size: 11px;
-    }
-
-    .message-actions button:hover {
-      color: white;
-      border-color: #512031;
-      background: #1c1016;
-    }
-
-    .typing {
-      display: inline-flex;
-      gap: 5px;
-      padding: 10px 0;
-    }
-
-    .typing span {
-      width: 7px;
-      height: 7px;
-      background: #df4964;
-      border-radius: 50%;
-      animation: bounce 1s infinite ease-in-out;
-    }
-
-    .typing span:nth-child(2) { animation-delay: 0.15s; }
-    .typing span:nth-child(3) { animation-delay: 0.3s; }
-
-    @keyframes bounce {
-      0%, 60%, 100% { transform: translateY(0); opacity: 0.45; }
-      30% { transform: translateY(-5px); opacity: 1; }
-    }
-
-    /* COMPOSER */
-
-    .composer-wrap {
-      position: sticky;
-      bottom: 0;
-      padding: 15px 25px 18px;
-      background: linear-gradient(transparent, #090609 18%);
-    }
-
-    .composer {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 11px;
-      background: #170d13;
-      border: 1px solid #512031;
-      border-radius: 17px;
-      box-shadow: 0 8px 35px #00000045;
-    }
-
-    .composer:focus-within {
-      border-color: #a62b48;
-      box-shadow: 0 0 0 2px #e3264515;
-    }
-
-    .attachment-preview {
-      display: none;
-      align-items: center;
-      gap: 9px;
-      margin: 0 5px 9px;
-      padding: 8px;
-      background: #26121b;
-      border-radius: 9px;
-    }
-
-    .attachment-preview img {
-      width: 48px;
-      height: 48px;
-      object-fit: cover;
-      border-radius: 7px;
-    }
-
-    .attachment-preview span {
-      flex: 1;
-      color: #d9c3cc;
-      font-size: 11px;
-    }
-
-    .attachment-preview button {
-      color: #ff8195;
-      background: transparent;
-      border: 0;
-    }
-
-    #prompt {
-      display: block;
-      width: 100%;
-      min-height: 48px;
-      max-height: 180px;
-      resize: none;
-      padding: 8px 9px;
-      color: white;
-      background: transparent;
-      border: 0;
-      outline: none;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    #prompt::placeholder {
-      color: #8f7883;
-    }
-
-    .composer-tools {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 5px 2px 0;
-    }
-
-    .tool-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-    }
-
-    .tool-btn {
-      padding: 8px 10px;
-      color: #bda9b2;
-      background: #24131c;
-      border: 1px solid #3d202c;
-      border-radius: 8px;
-      font-size: 11px;
-    }
-
-    .tool-btn:hover {
-      color: white;
-      border-color: #9e2a45;
-    }
-
-    .tool-btn:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-
-    .send-btn {
-      min-width: 75px;
-      padding: 10px 15px;
-      color: white;
-      background: linear-gradient(135deg, #f03452, #a30d30);
-      border: 0;
-      border-radius: 9px;
-      font-weight: 800;
-    }
-
-    .send-btn:hover {
-      filter: brightness(1.15);
-    }
-
-    .send-btn:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-
-    .disclaimer {
-      max-width: 900px;
-      margin: 10px auto 0;
-      color: #806d76;
-      text-align: center;
-      font-size: 10px;
-      line-height: 1.5;
-    }
-
-    .mobile-menu {
-      display: none;
-      padding: 8px 10px;
-      color: white;
-      background: #24121b;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-    }
-
-    .toast {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      z-index: 20;
-      max-width: calc(100vw - 40px);
-      padding: 12px 16px;
-      color: white;
-      background: #29131d;
-      border: 1px solid #8d2942;
-      border-radius: 10px;
-      box-shadow: 0 10px 30px #0008;
-      font-size: 12px;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(10px);
-      transition: 0.2s;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: 760px) {
-      .sidebar {
-        position: fixed;
-        inset: 0 auto 0 0;
-        z-index: 10;
-        width: 270px;
-        transform: translateX(-100%);
-        transition: transform 0.22s ease;
-        box-shadow: 15px 0 40px #0008;
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .mobile-menu {
-        display: block;
-      }
-
-      .topbar {
-        padding: 13px 14px;
-      }
-
-      .chat {
-        padding: 15px 14px 0;
-      }
-
-      .composer-wrap {
-        padding: 12px 12px 14px;
-      }
-
-      .suggestions {
-        grid-template-columns: 1fr;
-      }
-
-      .welcome {
-        padding: 25px 0;
-      }
-
-      .welcome p {
-        font-size: 13px;
-      }
-
-      .tool-btn {
-        padding: 8px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODERISMC | Cyber Network & Rank Store</title>
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #060911;
+            --bg-card: rgba(13, 20, 36, 0.75);
+            --cyan-glow: #00f3ff;
+            --blue-accent: #0066ff;
+            --neon-red: #ff2255;
+            --neon-green: #00ff88;
+            --gold-accent: #ffcc00;
+            --text-light: #f0f6ff;
+            --text-dim: #8ba0c2;
+            --border-cyber: rgba(0, 243, 255, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none !important; /* Managed by Red/Green Custom Cursor */
+            font-family: 'Rajdhani', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* --- RED / GREEN COMBO CUSTOM CURSOR --- */
+        #cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-red);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+            transition: transform 0.05s ease;
+        }
+
+        #cursor-ring {
+            width: 34px;
+            height: 34px;
+            border: 2px solid var(--neon-green);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
+            transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+        }
+
+        .cursor-hover #cursor-ring {
+            width: 48px;
+            height: 48px;
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        .cursor-hover #cursor-dot {
+            background: var(--neon-green);
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+
+        /* BACKGROUND CANVAS */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* HEADER & NAVIGATION */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(6, 9, 17, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-cyber);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--blue-accent), var(--cyan-glow));
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 24px;
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+        }
+
+        .brand-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #fff, var(--cyan-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-btn:hover {
+            color: var(--cyan-glow);
+            text-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .server-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--cyan-glow);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            color: var(--cyan-glow);
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, #ffffff 0%, var(--cyan-glow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .ip-box {
+            display: inline-flex;
+            gap: 15px;
+            background: rgba(13, 20, 36, 0.9);
+            border: 1px solid var(--cyan-glow);
+            padding: 12px 25px;
+            border-radius: 12px;
+            align-items: center;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
+        }
+
+        .ip-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .copy-btn {
+            background: var(--cyan-glow);
+            color: #000;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 15px #fff;
+        }
+
+        /* --- STANDOUT FREE WEBSITE SHOWCASE --- */
+        .free-website-section {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .free-web-card {
+            background: linear-gradient(135deg, rgba(255, 34, 85, 0.15), rgba(0, 255, 136, 0.15));
+            border: 2px solid transparent;
+            border-image: linear-gradient(90deg, var(--neon-red), var(--neon-green), var(--cyan-glow)) 1;
+            padding: 35px;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 35px rgba(0, 255, 136, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 25px rgba(255, 34, 85, 0.3); }
+            100% { box-shadow: 0 0 45px rgba(0, 255, 136, 0.4); }
+        }
+
+        .free-web-badge {
+            background: var(--neon-green);
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .free-web-card h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .free-web-card p {
+            font-size: 17px;
+            color: #d1e2ff;
+            max-width: 750px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .free-web-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(90deg, var(--neon-green), var(--cyan-glow));
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 16px;
+            padding: 16px 36px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        .free-web-cta:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 35px rgba(0, 243, 255, 0.8);
+            background: #fff;
+            color: #000;
+        }
+
+        /* RANK STORE SECTION */
+        .store-section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 40px;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .ranks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .rank-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-cyber);
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+        }
+
+        .rank-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--cyan-glow);
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.25);
+        }
+
+        .rank-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .rank-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 26px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .rank-hero { color: #88aa88; }
+        .rank-titan { color: #00ccff; }
+        .rank-knight { color: #aa00ff; }
+        .rank-champion { color: #ff9900; }
+        .rank-custom { color: #ff0055; }
+        .rank-oderis { color: #00ff88; text-shadow: 0 0 10px var(--neon-green); }
+
+        .rank-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .rank-price span {
+            font-size: 16px;
+            color: var(--text-dim);
+        }
+
+        .rank-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .rank-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rank-features li i {
+            color: var(--cyan-glow);
+        }
+
+        .buy-btn {
+            width: 100%;
+            background: linear-gradient(90deg, var(--blue-accent), var(--cyan-glow));
+            border: none;
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 15px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .buy-btn:hover {
+            box-shadow: 0 0 20px var(--cyan-glow);
+            background: #fff;
+        }
+
+        /* FLOATING BOTTOM-MIDDLE LOGIN PILL */
+        .floating-login-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 900;
+            background: rgba(13, 20, 36, 0.95);
+            border: 1px solid var(--cyan-glow);
+            padding: 8px 20px;
+            border-radius: 40px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 243, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .login-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: #111;
+            border: 1px solid var(--cyan-glow);
+            object-fit: cover;
+        }
+
+        .login-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            width: 140px;
+        }
+
+        .login-input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .login-submit-btn {
+            background: var(--cyan-glow);
+            color: #000;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 12px;
+            font-family: 'Orbitron', sans-serif;
+            transition: 0.3s;
+        }
+
+        .login-submit-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 10px #fff;
+        }
+
+        /* MODAL (PAYMENT NOTICE) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(4, 7, 13, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: none;
+            place-items: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: var(--bg-card);
+            border: 2px solid var(--neon-red);
+            padding: 35px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(255, 34, 85, 0.3);
+            position: relative;
+        }
+
+        .modal-icon {
+            font-size: 48px;
+            color: var(--neon-red);
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .modal-msg {
+            color: var(--text-dim);
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .modal-discord-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #5865F2;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .modal-discord-btn:hover {
+            background: #4752C4;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.6);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 20px;
+        }
+
+        /* SPEEDRUN CHALLENGE SECTION */
+        .speedrun-section {
+            max-width: 1100px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .speedrun-card {
+            background: linear-gradient(135deg, rgba(13, 20, 36, 0.9), rgba(0, 102, 255, 0.15));
+            border: 1px solid var(--cyan-glow);
+            border-radius: 16px;
+            padding: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .speedrun-info h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            color: var(--gold-accent);
+            margin-bottom: 10px;
+        }
+
+        .speedrun-info p {
+            color: var(--text-dim);
+            font-size: 16px;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        .prize-pool {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--neon-green);
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border-cyber);
+            padding: 40px 20px 100px;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        footer strong {
+            color: var(--cyan-glow);
+        }
+    </style>
 </head>
-
 <body>
-  <div class="app">
 
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <div class="brand-logo">⚔️</div>
-        <div>
-          <h1>RAGE SMP AI</h1>
-          <small>v0.1 MINI · WEBSITE EDITION</small>
+    <!-- CUSTOM DUAL CURSOR (RED / GREEN COMBO) -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- CANVAS BACKGROUND -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- HEADER NAVIGATION -->
+    <header>
+        <div class="brand">
+            <div class="brand-logo">O</div>
+            <div class="brand-title">ODERISMC</div>
         </div>
-      </div>
-
-      <button class="new-chat" id="newChatBtn">＋ New Chat</button>
-
-      <div class="section-label">AI Modes</div>
-
-      <div class="mode-list" id="modeList">
-        <button class="mode-btn active" data-mode="funny">
-          <span class="mode-icon">😂</span>
-          <span>
-            <span class="mode-name">Funny</span>
-            <span class="mode-version">RS 0.1</span>
-          </span>
-        </button>
-
-        <button class="mode-btn" data-mode="chill">
-          <span class="mode-icon">😎</span>
-          <span>
-            <span class="mode-name">Chill</span>
-            <span class="mode-version">RS 0.2.1</span>
-          </span>
-        </button>
-
-        <button class="mode-btn" data-mode="playfull">
-          <span class="mode-icon">😈</span>
-          <span>
-            <span class="mode-name">Playfull</span>
-            <span class="mode-version">RS 0.1.2</span>
-          </span>
-        </button>
-
-        <button class="mode-btn" data-mode="minecraft">
-          <span class="mode-icon">⛏️</span>
-          <span>
-            <span class="mode-name">Minecraft Inf Knowledge</span>
-            <span class="mode-version">RS M 0.1.3</span>
-          </span>
-        </button>
-      </div>
-
-      <div class="section-label">Recent Chats · This Browser</div>
-      <div class="history-area" id="historyList"></div>
-
-      <div class="sidebar-bottom">
-        <button class="account-btn" id="accountBtn">👤 Sign in with Google</button>
-        <p class="account-note">
-          Sign-in is a UI placeholder in this Mini build. Google authentication
-          and synced chat saving need backend setup.
-        </p>
-      </div>
-    </aside>
-
-    <main class="main">
-      <header class="topbar">
-        <div style="display:flex;align-items:center;gap:11px;">
-          <button class="mobile-menu" id="mobileMenuBtn" aria-label="Open menu">☰</button>
-          <div>
-            <div class="topbar-title">RAGE SMP AI <span style="color:#ff405c;">/ MINI</span></div>
-            <div class="topbar-subtitle" id="activeModeText">😂 RS 0.1 — Funny Mode</div>
-          </div>
+        <div class="nav-links">
+            <button class="nav-btn" onclick="scrollToSection('free-web')">Free Website</button>
+            <button class="nav-btn" onclick="scrollToSection('store')">Ranks</button>
+            <button class="nav-btn" onclick="scrollToSection('speedrun')">100h Speedrun</button>
+            <a href="https://discord.gg/d7W62FeAXM" target="_blank" class="nav-btn" style="color: var(--cyan-glow);"><i class="fab font-discord"></i> Discord</a>
         </div>
+    </header>
 
-        <div class="status">
-          <span class="status-dot"></span>
-          <span>Frontend Online</span>
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="server-badge">
+            <i class="fas fa-signal"></i> 24/7 ONLINE • CROSS-PLAY JAVA & BEDROCK
         </div>
-      </header>
-
-      <section class="chat">
-        <div class="welcome" id="welcome">
-          <div class="welcome-logo">🤖</div>
-          <h2>Welcome to <span>RAGE SMP AI</span></h2>
-          <p>
-            Your RAGE SMP helper. Ask about the server, Minecraft, gameplay,
-            commands, or get help with gaming problems.
-          </p>
-
-          <div class="suggestions">
-            <button class="suggestion" data-prompt="How do I join RAGE SMP?">
-              ⚔️ How do I join RAGE SMP?
-            </button>
-            <button class="suggestion" data-prompt="Help me troubleshoot Minecraft lag.">
-              🎮 Help me troubleshoot Minecraft lag.
-            </button>
-            <button class="suggestion" data-prompt="Give me some tips for Minecraft PvP.">
-              🗡️ Give me some Minecraft PvP tips.
-            </button>
-            <button class="suggestion" data-prompt="Explain how Minecraft enchantments work.">
-              ✨ Explain Minecraft enchantments.
-            </button>
-          </div>
+        <h1>THE ULTIMATE CYBER SMP EXPERIENCE</h1>
+        <p>Join thousands of players in a high-octane survival economy featuring custom dungeons, keep inventory protection, and competitive speedrun events.</p>
+        
+        <div class="ip-box">
+            <i class="fas fa-server" style="color: var(--cyan-glow);"></i>
+            <span class="ip-text">play.oderismc.fun <span style="font-size: 12px; color: var(--text-dim);">(Port: 19142)</span></span>
+            <button class="copy-btn" onclick="copyIP()">COPY IP</button>
         </div>
+    </section>
 
-        <div class="messages" id="messages"></div>
-      </section>
+    <!-- STANDOUT FREE WEBSITE SHOWCASE SECTION -->
+    <section class="free-website-section" id="free-web">
+        <div class="free-web-card">
+            <div class="free-web-badge">POWERED BY YJDEV STUDIOS</div>
+            <h2>WANT A FREE CUSTOM WEBSITE?</h2>
+            <p>Get a high-performance, fully custom web application built in under 2 hours! Connect with lead developer <strong>ragebg.exe</strong> directly inside the official Discord developer portal.</p>
+            <a href="https://discord.gg/VhYXxUkCMg" target="_blank" class="free-web-cta">
+                <i class="fab fa-discord" style="font-size: 20px;"></i> CLAIM FREE WEBSITE NOW
+            </a>
+        </div>
+    </section>
 
-      <div class="composer-wrap">
-        <div class="composer">
-          <div class="attachment-preview" id="attachmentPreview">
-            <img id="attachmentImage" alt="Selected image preview" />
-            <span id="attachmentName">Image attached</span>
-            <button id="removeAttachment" title="Remove image">✕</button>
-          </div>
+    <!-- RANK STORE SECTION -->
+    <section class="store-section" id="store">
+        <h2 class="section-title">SERVER RANKS</h2>
+        <div class="ranks-grid">
 
-          <textarea id="prompt" rows="1" placeholder="Message RAGE SMP AI..."></textarea>
-
-          <div class="composer-tools">
-            <div class="tool-group">
-              <button class="tool-btn" id="imageBtn" title="Attach an image">🖼 Image</button>
-              <input id="imageInput" type="file" accept="image/*" hidden />
-
-              <button class="tool-btn" id="voiceBtn" title="Voice input">🎙 Voice</button>
-              <button class="tool-btn" id="speakBtn" title="Read the latest AI reply aloud">🔊 Read</button>
-              <button class="tool-btn" id="searchBtn" title="Request web search">🌐 Search: Off</button>
+            <!-- Hero Rank -->
+            <div class="rank-card">
+                <div class="rank-header">
+                    <div class="rank-name rank-hero">HERO</div>
+                    <div class="rank-price">₹30 <span>/ lifetime</span></div>
+                </div>
+                <ul class="rank-features">
+                    <li><i class="fas fa-check"></i> Hero Prefix & Color</li>
+                    <li><i class="fas fa-check"></i> /fly in Player Hubs</li>
+                    <li><i class="fas fa-check"></i> 3 Vault Claims</li>
+                    <li><i class="fas fa-check"></i> Kit Hero Access</li>
+                </ul>
+                <button class="buy-btn" onclick="triggerPaymentModal('HERO')">BUY RANK</button>
             </div>
 
-            <button class="send-btn" id="sendBtn">Send ↑</button>
-          </div>
+            <!-- Titan Rank -->
+            <div class="rank-card">
+                <div class="rank-header">
+                    <div class="rank-name rank-titan">TITAN</div>
+                    <div class="rank-price">₹60 <span>/ lifetime</span></div>
+                </div>
+                <ul class="rank-features">
+                    <li><i class="fas fa-check"></i> Titan Prefix & Neon Tag</li>
+                    <li><i class="fas fa-check"></i> /feed & /heal Cooldowns</li>
+                    <li><i class="fas fa-check"></i> 5 Vault Claims</li>
+                    <li><i class="fas fa-check"></i> Kit Titan Access</li>
+                </ul>
+                <button class="buy-btn" onclick="triggerPaymentModal('TITAN')">BUY RANK</button>
+            </div>
+
+            <!-- Knight Rank -->
+            <div class="rank-card">
+                <div class="rank-header">
+                    <div class="rank-name rank-knight">KNIGHT</div>
+                    <div class="rank-price">₹100 <span>/ lifetime</span></div>
+                </div>
+                <ul class="rank-features">
+                    <li><i class="fas fa-check"></i> Knight Title Badge</li>
+                    <li><i class="fas fa-check"></i> Priority Server Queue</li>
+                    <li><i class="fas fa-check"></i> 8 Vault Claims</li>
+                    <li><i class="fas fa-check"></i> Kit Knight Access</li>
+                </ul>
+                <button class="buy-btn" onclick="triggerPaymentModal('KNIGHT')">BUY RANK</button>
+            </div>
+
+            <!-- Champion Rank -->
+            <div class="rank-card">
+                <div class="rank-header">
+                    <div class="rank-name rank-champion">CHAMPION</div>
+                    <div class="rank-price">₹150 <span>/ lifetime</span></div>
+                </div>
+                <ul class="rank-features">
+                    <li><i class="fas fa-check"></i> Gold Champion Aura</li>
+                    <li><i class="fas fa-check"></i> Custom Particle Trails</li>
+                    <li><i class="fas fa-check"></i> 12 Vault Claims</li>
+                    <li><i class="fas fa-check"></i> Kit Champion Access</li>
+                </ul>
+                <button class="buy-btn" onclick="triggerPaymentModal('CHAMPION')">BUY RANK</button>
+            </div>
+
+            <!-- Custom Rank -->
+            <div class="rank-card">
+                <div class="rank-header">
+                    <div class="rank-name rank-custom">CUSTOM</div>
+                    <div class="rank-price">₹200 <span>/ lifetime</span></div>
+                </div>
+                <ul class="rank-features">
+                    <li><i class="fas fa-check"></i> Personalized Prefix Name</li>
+                    <li><i class="fas fa-check"></i> Custom Color Code Picker</li>
+                    <li><i class="fas fa-check"></i> 15 Vault Claims</li>
+                    <li><i class="fas fa-check"></i> VIP Discord Role</li>
+                </ul>
+                <button class="buy-btn" onclick="triggerPaymentModal('CUSTOM')">BUY RANK</button>
+            </div>
+
+            <!-- Oderis Rank -->
+            <div class="rank-card" style="border-color: var(--neon-green);">
+                <div class="rank-header">
+                    <div class="rank-name rank-oderis">ODERIS</div>
+                    <div class="rank-price">₹250 <span>/ lifetime</span></div>
+                </div>
+                <ul class="rank-features">
+                    <li><i class="fas fa-check"></i> Ultimate Oderis Glow Prefix</li>
+                    <li><i class="fas fa-check"></i> All In-Game Commands Unlocked</li>
+                    <li><i class="fas fa-check"></i> Unlimited Home Teleports</li>
+                    <li><i class="fas fa-check"></i> Exclusive Oderis God Kit</li>
+                </ul>
+                <button class="buy-btn" style="background: linear-gradient(90deg, var(--neon-green), var(--cyan-glow));" onclick="triggerPaymentModal('ODERIS')">BUY RANK</button>
+            </div>
+
         </div>
+    </section>
 
-        <div class="disclaimer">
-          RAGE SMP AI v0.1 Mini · Demo frontend · Do not enter passwords or private information.
-          AI answers can be incorrect; verify important server details.
+    <!-- 100-HOUR SPEEDRUN SECTION -->
+    <section class="speedrun-section" id="speedrun">
+        <div class="speedrun-card">
+            <div class="speedrun-info">
+                <h3><i class="fas fa-trophy"></i> 100-HOUR SPEEDRUN EVENT</h3>
+                <p>Clock 100 active playing hours on ODERISMC to instantly earn a massive in-game economy payout!</p>
+            </div>
+            <div class="prize-pool">$500,000 CASH</div>
         </div>
-      </div>
-    </main>
-  </div>
+    </section>
 
-  <div class="toast" id="toast"></div>
+    <!-- FLOATING BOTTOM-MIDDLE LOGIN PILL -->
+    <div class="floating-login-container">
+        <img src="https://crafatar.com/avatars/steve?overlay=true" id="player-avatar" class="login-avatar" alt="Avatar">
+        <input type="text" id="mc-username" class="login-input" placeholder="Enter Minecraft IGN..." onchange="updateAvatar(this.value)">
+        <button class="login-submit-btn" onclick="loginPlayer()">CONNECT</button>
+    </div>
 
-  <script>
-    /*
-    ============================================================
-      RAGE SMP AI v0.1 MINI — FRONTEND CONFIGURATION
-    ============================================================
+    <!-- PAYMENT MODAL -->
+    <div class="modal-overlay" id="payment-modal">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+            <i class="fas fa-exclamation-triangle modal-icon"></i>
+            <div class="modal-title">PAYMENT NOTICE</div>
+            <div class="modal-msg">
+                The Oderismc is not accepting Auto-rankup Payments Right now try again later or connect with Staff in the discord server
+            </div>
+            <a href="https://discord.gg/d7W62FeAXM" target="_blank" class="modal-discord-btn">
+                <i class="fab fa-discord"></i> JOIN DISCORD SERVER
+            </a>
+        </div>
+    </div>
 
-    BACKEND TODO:
-    1. Set API_URL to your secure backend chat endpoint.
-    2. Backend should call your chosen free AI model provider.
-    3. Keep API keys on the backend. NEVER put secret API keys here.
-    4. Implement Google OAuth on the backend.
-    5. Validate Premium access server-side.
-    6. Store account chat history in a database.
-    7. Implement real web search and Minecraft server status endpoints.
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 <strong>ODERISMC Network</strong>. All Rights Reserved. Powered by <strong>YJDEV STUDIOS</strong>.</p>
+        <p style="margin-top: 8px; font-size: 12px; color: #556688;">Not affiliated with Mojang Studios or Microsoft.</p>
+    </footer>
 
-    This file currently uses demo replies so the interface can be tested.
-    */
+    <!-- INTERACTIVE SCRIPTS -->
+    <script>
+        // RED / GREEN COMBO CURSOR ENGINE
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
 
-    const API_URL = ""; // Example: "https://your-api.example.com/api/chat"
+        document.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+            
+            cursorRing.style.left = e.clientX + 'px';
+            cursorRing.style.top = e.clientY + 'px';
+        });
 
-    const SERVER_IP = "ragesmp.pixelforge.gg";
-    const DISCORD_URL = "https://discord.gg/TZDGExER6c";
+        // Hover Effect on Interactive Elements
+        document.querySelectorAll('button, a, input, .rank-card').forEach(elem => {
+            elem.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            elem.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
 
-    const MODE_INFO = {
-      funny: {
-        name: "Funny",
-        version: "RS 0.1",
-        icon: "😂",
-        instruction: "Be humorous, witty, and entertaining while remaining helpful."
-      },
-      chill: {
-        name: "Chill",
-        version: "RS 0.2.1",
-        icon: "😎",
-        instruction: "Be relaxed, casual, friendly, and easy to understand."
-      },
-      playfull: {
-        name: "Playfull",
-        version: "RS 0.1.2",
-        icon: "😈",
-        instruction: "Be energetic, playful, interactive, and gamer-like."
-      },
-      minecraft: {
-        name: "Minecraft Inf Knowledge",
-        version: "RS M 0.1.3",
-        icon: "⛏️",
-        instruction: "Focus on Minecraft mechanics, gameplay, crafting, mobs, redstone, commands, server administration, and troubleshooting. Be accurate and admit uncertainty."
-      }
-    };
+        // CANVAS BACKGROUND PARTICLES
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
 
-    const $ = (selector) => document.querySelector(selector);
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
 
-    const messagesEl = $("#messages");
-    const welcomeEl = $("#welcome");
-    const promptEl = $("#prompt");
-    const historyEl = $("#historyList");
-    const toastEl = $("#toast");
+        const particles = Array.from({ length: 45 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2 + 1,
+            speedX: (Math.random() - 0.5) * 0.6,
+            speedY: (Math.random() - 0.5) * 0.6,
+            opacity: Math.random() * 0.5 + 0.2
+        }));
 
-    let activeMode = "funny";
-    let chats = loadChats();
-    let activeChatId = null;
-    let attachedImage = null;
-    let searchEnabled = false;
-    let busy = false;
-    let recognition = null;
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
 
-    function loadChats() {
-      try {
-        const saved = JSON.parse(localStorage.getItem("rage_smp_ai_chats") || "[]");
-        return Array.isArray(saved) ? saved : [];
-      } catch {
-        return [];
-      }
-    }
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
 
-    function saveChats() {
-      try {
-        localStorage.setItem("rage_smp_ai_chats", JSON.stringify(chats));
-      } catch {
-        showToast("Browser storage is full. Some chats may not be saved.");
-      }
-      renderHistory();
-    }
+                ctx.fillStyle = `rgba(0, 243, 255, ${p.opacity})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
 
-    function makeId() {
-      return Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
-    }
-
-    function getActiveChat() {
-      return chats.find(chat => chat.id === activeChatId) || null;
-    }
-
-    function createChat() {
-      const chat = {
-        id: makeId(),
-        title: "New Chat",
-        mode: activeMode,
-        messages: [],
-        updatedAt: Date.now()
-      };
-
-      chats.unshift(chat);
-      activeChatId = chat.id;
-      saveChats();
-      renderMessages();
-      closeSidebarOnMobile();
-    }
-
-    function ensureChat() {
-      if (!getActiveChat()) createChat();
-      return getActiveChat();
-    }
-
-    function setMode(mode) {
-      if (!MODE_INFO[mode]) return;
-
-      activeMode = mode;
-
-      document.querySelectorAll(".mode-btn").forEach(button => {
-        button.classList.toggle("active", button.dataset.mode === mode);
-      });
-
-      const info = MODE_INFO[mode];
-      $("#activeModeText").textContent = `${info.icon} ${info.version} — ${info.name} Mode`;
-
-      const chat = getActiveChat();
-      if (chat) {
-        chat.mode = mode;
-        chat.updatedAt = Date.now();
-        saveChats();
-      }
-
-      closeSidebarOnMobile();
-    }
-
-    function renderHistory() {
-      historyEl.innerHTML = "";
-
-      if (!chats.length) {
-        const empty = document.createElement("div");
-        empty.textContent = "No chats yet";
-        empty.style.cssText = "padding:9px;color:#806d76;font-size:11px;";
-        historyEl.appendChild(empty);
-        return;
-      }
-
-      chats.slice(0, 30).forEach(chat => {
-        const row = document.createElement("div");
-        row.className = "history-item";
-
-        const open = document.createElement("button");
-        open.className = "history-open";
-        open.textContent = chat.title || "New Chat";
-        open.title = chat.title || "New Chat";
-        open.onclick = () => {
-          activeChatId = chat.id;
-          activeMode = chat.mode || "funny";
-          setMode(activeMode);
-          renderMessages();
-          closeSidebarOnMobile();
-        };
-
-        const del = document.createElement("button");
-        del.className = "history-delete";
-        del.textContent = "✕";
-        del.title = "Delete chat";
-        del.onclick = () => {
-          chats = chats.filter(item => item.id !== chat.id);
-          if (activeChatId === chat.id) activeChatId = null;
-          saveChats();
-          renderMessages();
-        };
-
-        row.append(open, del);
-        historyEl.appendChild(row);
-      });
-    }
-
-    function renderMessages() {
-      const chat = getActiveChat();
-      messagesEl.innerHTML = "";
-
-      const hasMessages = !!chat && chat.messages.length > 0;
-      welcomeEl.style.display = hasMessages ? "none" : "block";
-
-      if (!chat) return;
-
-      chat.messages.forEach((message, index) => {
-        const row = document.createElement("article");
-        row.className = `message ${message.role === "user" ? "user" : "assistant"}`;
-
-        const avatar = document.createElement("div");
-        avatar.className = "avatar";
-        avatar.textContent = message.role === "user" ? "👤" : "🤖";
-
-        const content = document.createElement("div");
-        content.className = "message-content";
-
-        const label = document.createElement("div");
-        label.className = "message-label";
-        label.textContent = message.role === "user" ? "You" : "RAGE SMP AI";
-
-        const text = document.createElement("div");
-        text.className = "message-text";
-        text.textContent = message.content || "";
-
-        content.append(label, text);
-
-        if (message.imageData) {
-          const image = document.createElement("img");
-          image.className = "message-image";
-          image.src = message.imageData;
-          image.alt = "User attached image";
-          content.appendChild(image);
+        // AUDIO SOUND EFFECTS ENGINE (Web Audio API)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(freq, type = 'sine', duration = 0.1) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
         }
 
-        if (message.role === "user") {
-          const actions = document.createElement("div");
-          actions.className = "message-actions";
+        // COPY IP UTILITY
+        function copyIP() {
+            navigator.clipboard.writeText('play.oderismc.fun');
+            playSound(600, 'triangle', 0.15);
+            alert('Server IP (play.oderismc.fun) copied to clipboard!');
+        }
 
-          const edit = document.createElement("button");
-          edit.textContent = "✏️ Edit";
-          edit.onclick = () => editMessage(index);
+        // SCROLL ROUTER
+        function scrollToSection(id) {
+            playSound(400, 'sine', 0.1);
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
 
-          actions.appendChild(edit);
-          content.appendChild(actions);
-        } else {
-          const actions = document.createElement("div");
-          actions.className = "message-actions";
+        // PAYMENT MODAL GATEWAY
+        function triggerPaymentModal(rank) {
+            playSound(200, 'sawtooth', 0.2);
+            document.getElementById('payment-modal').style.display = 'grid';
+        }
 
-          const copy = document.createElement("button");
-          copy.textContent = "📋 Copy";
-          copy.onclick = async () => {
-            try {
-              await navigator.clipboard.writeText(message.content || "");
-              showToast("Response copied.");
-            } catch {
-              showToast("Copy failed. Select the text and copy it manually.");
+        function closeModal() {
+            playSound(300, 'sine', 0.1);
+            document.getElementById('payment-modal').style.display = 'none';
+        }
+
+        // PLAYER AVATAR UPDATER
+        function updateAvatar(username) {
+            if (!username.trim()) return;
+            const img = document.getElementById('player-avatar');
+            img.src = `https://crafatar.com/avatars/${username}?overlay=true`;
+        }
+
+        function loginPlayer() {
+            const user = document.getElementById('mc-username').value;
+            if (user) {
+                playSound(500, 'sine', 0.15);
+                alert(`Welcome back, ${user}! Your ODERISMC status is synced.`);
             }
-          };
-
-          const regen = document.createElement("button");
-          regen.textContent = "🔄 Regenerate";
-          regen.onclick = () => regenerateResponse(index);
-
-          const read = document.createElement("button");
-          read.textContent = "🔊 Read";
-          read.onclick = () => speakText(message.content || "");
-
-          actions.append(copy, regen, read);
-          content.appendChild(actions);
         }
-
-        row.append(avatar, content);
-        messagesEl.appendChild(row);
-      });
-
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-    }
-
-    function showTyping() {
-      const row = document.createElement("article");
-      row.className = "message";
-      row.id = "typingRow";
-
-      const avatar = document.createElement("div");
-      avatar.className = "avatar";
-      avatar.textContent = "🤖";
-
-      const content = document.createElement("div");
-      content.className = "message-content";
-
-      const label = document.createElement("div");
-      label.className = "message-label";
-      label.textContent = "RAGE SMP AI is thinking";
-
-      const typing = document.createElement("div");
-      typing.className = "typing";
-      typing.innerHTML = "<span></span><span></span><span></span>";
-
-      content.append(label, typing);
-      row.append(avatar, content);
-      messagesEl.appendChild(row);
-      row.scrollIntoView({ behavior: "smooth", block: "end" });
-    }
-
-    function removeTyping() {
-      $("#typingRow")?.remove();
-    }
-
-    function showToast(message) {
-      toastEl.textContent = message;
-      toastEl.classList.add("show");
-      clearTimeout(showToast.timer);
-      showToast.timer = setTimeout(() => toastEl.classList.remove("show"), 2800);
-    }
-
-    function setBusy(value) {
-      busy = value;
-      $("#sendBtn").disabled = value;
-      $("#sendBtn").textContent = value ? "..." : "Send ↑";
-    }
-
-    function updateChatTitle(chat, firstMessage) {
-      if (!chat || chat.title !== "New Chat") return;
-      chat.title = firstMessage.slice(0, 38) || "New Chat";
-    }
-
-    async function sendMessage(textOverride = null, options = {}) {
-      if (busy) return;
-
-      const text = (textOverride ?? promptEl.value).trim();
-      if (!text && !attachedImage) {
-        showToast("Type a message first!");
-        return;
-      }
-
-      const chat = ensureChat();
-      const userMessage = {
-        role: "user",
-        content: text,
-        imageData: attachedImage?.dataUrl || null
-      };
-
-      if (!options.regenerate) {
-        chat.messages.push(userMessage);
-        updateChatTitle(chat, text || "Image question");
-      }
-
-      chat.mode = activeMode;
-      chat.updatedAt = Date.now();
-
-      const imageForRequest = attachedImage;
-      promptEl.value = "";
-      clearAttachment();
-      autoResize();
-      renderMessages();
-      saveChats();
-
-      setBusy(true);
-      showTyping();
-
-      try {
-        let reply;
-
-        if (API_URL) {
-          reply = await requestBackend(chat, imageForRequest);
-        } else {
-          await new Promise(resolve => setTimeout(resolve, 650));
-          reply = demoReply(text, activeMode);
-        }
-
-        removeTyping();
-
-        chat.messages.push({
-          role: "assistant",
-          content: reply
-        });
-
-        chat.updatedAt = Date.now();
-        saveChats();
-        renderMessages();
-      } catch (error) {
-        removeTyping();
-        chat.messages.push({
-          role: "assistant",
-          content: "I couldn't reach the AI service. Please check the backend connection and try again."
-        });
-        saveChats();
-        renderMessages();
-        console.error(error);
-      } finally {
-        setBusy(false);
-      }
-    }
-
-    async function requestBackend(chat, image) {
-      /*
-        Expected backend contract (customize to match your API):
-
-        POST API_URL
-        Content-Type: application/json
-
-        {
-          "message": "user message",
-          "mode": "funny",
-          "modeVersion": "RS 0.1",
-          "systemInstruction": "...",
-          "history": [{ "role": "user", "content": "..." }],
-          "image": {
-            "name": "screenshot.png",
-            "dataUrl": "data:image/png;base64,..."
-          },
-          "webSearch": true
-        }
-
-        The backend should return:
-        { "reply": "AI response text" }
-
-        Do not trust client-supplied Premium status or user identity.
-        Validate both on the server.
-      */
-
-      const info = MODE_INFO[activeMode];
-      const history = chat.messages.slice(-20).map(message => ({
-        role: message.role,
-        content: message.content
-      }));
-
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: history[history.length - 1]?.content || "",
-          mode: activeMode,
-          modeVersion: info.version,
-          systemInstruction: info.instruction,
-          serverIp: SERVER_IP,
-          history,
-          image: image ? {
-            name: image.name,
-            dataUrl: image.dataUrl
-          } : null,
-          webSearch: searchEnabled
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`Backend returned ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (!data || typeof data.reply !== "string") {
-        throw new Error("Invalid backend response");
-      }
-
-      return data.reply;
-    }
-
-    function demoReply(text, mode) {
-      const info = MODE_INFO[mode];
-      const lower = (text || "").toLowerCase();
-
-      if (lower.includes("join") && (lower.includes("rage") || lower.includes("server"))) {
-        return `To join RAGE SMP, use this server address:\n\n${SERVER_IP}\n\nIf you need help joining, visit the RAGE SMP Discord:\n${DISCORD_URL}\n\nThis is a demo response. Connect the AI backend for complete server instructions.`;
-      }
-
-      if (lower.includes("ip") || lower.includes("server address")) {
-        return `The RAGE SMP server address is:\n\n${SERVER_IP}\n\nFor help and updates, check the Discord:\n${DISCORD_URL}`;
-      }
-
-      if (lower.includes("lag") || lower.includes("fps")) {
-        return `Let's troubleshoot that, gamer. 🎮\n\n1. Lower render distance and simulation distance.\n2. Close unnecessary background applications.\n3. Check whether the lag is low FPS, network latency, or server TPS.\n4. If you're using mods or shaders, test without them to narrow down the cause.\n5. Check your connection and whether other players are experiencing the same issue.\n\nTell me your Minecraft version, whether it's FPS or ping lag, and when it happens.`;
-      }
-
-      if (lower.includes("pvp")) {
-        return `Minecraft PvP practice ideas ⚔️\n\n• Practice aiming and tracking in a safe practice world.\n• Learn spacing and timing for your version's combat system.\n• Keep your hotbar organized so important items are easy to reach.\n• Review what happened after a fight and identify one thing to improve.\n\nTell me your Minecraft edition and version for more specific tips.`;
-      }
-
-      const modeExtras = {
-        funny: "My circuits are ready, my gamer. 😂",
-        chill: "No rush. We can work through it together. 😎",
-        playfull: "AYOOO, let's get this quest started! 😈🎮",
-        minecraft: "Minecraft-focused mode selected. ⛏️"
-      };
-
-      return `${modeExtras[mode] || ""}\n\nYou said: "${text || "You attached an image"}"\n\nI'm currently running the frontend demo, so I don't have the full AI model connected yet. Set API_URL to your backend endpoint to enable real AI responses.`;
-    }
-
-    function editMessage(index) {
-      const chat = getActiveChat();
-      if (!chat) return;
-
-      const message = chat.messages[index];
-      if (!message || message.role !== "user") return;
-
-      promptEl.value = message.content || "";
-      promptEl.focus();
-
-      chat.messages = chat.messages.slice(0, index);
-      chat.updatedAt = Date.now();
-      saveChats();
-      renderMessages();
-      autoResize();
-
-      showToast("Message loaded for editing. Send it when ready.");
-    }
-
-    async function regenerateResponse(index) {
-      const chat = getActiveChat();
-      if (!chat || busy) return;
-
-      if (index !== chat.messages.length - 1 ||
-          chat.messages[index]?.role !== "assistant") {
-        showToast("Regenerate the latest AI response only.");
-        return;
-      }
-
-      chat.messages.pop();
-      const lastUserMessage = [...chat.messages].reverse().find(m => m.role === "user");
-
-      if (!lastUserMessage) {
-        renderMessages();
-        return;
-      }
-
-      // Keep the original user message and ask the backend to respond again.
-      const originalText = lastUserMessage.content;
-      promptEl.value = originalText;
-      await sendMessage(originalText, { regenerate: true });
-    }
-
-    function clearAttachment() {
-      attachedImage = null;
-      $("#imageInput").value = "";
-      $("#attachmentPreview").style.display = "none";
-      $("#attachmentImage").removeAttribute("src");
-    }
-
-    function autoResize() {
-      promptEl.style.height = "auto";
-      promptEl.style.height = Math.min(promptEl.scrollHeight, 180) + "px";
-    }
-
-    function speakText(text) {
-      if (!("speechSynthesis" in window)) {
-        showToast("Text-to-speech isn't supported in this browser.");
-        return;
-      }
-
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1;
-      window.speechSynthesis.speak(utterance);
-    }
-
-    function startVoiceInput() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-      if (!SpeechRecognition) {
-        showToast("Voice input isn't supported in this browser. Try a compatible browser.");
-        return;
-      }
-
-      if (recognition) {
-        recognition.stop();
-        recognition = null;
-        $("#voiceBtn").textContent = "🎙 Voice";
-        return;
-      }
-
-      recognition = new SpeechRecognition();
-      recognition.lang = "en-US";
-      recognition.interimResults = true;
-      recognition.continuous = false;
-
-      $("#voiceBtn").textContent = "⏹ Stop";
-
-      recognition.onresult = event => {
-        let transcript = "";
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
-        }
-        promptEl.value = transcript;
-        autoResize();
-      };
-
-      recognition.onerror = () => showToast("Voice input stopped or couldn't be recognized.");
-
-      recognition.onend = () => {
-        recognition = null;
-        $("#voiceBtn").textContent = "🎙 Voice";
-      };
-
-      recognition.start();
-    }
-
-    /* EVENTS */
-
-    $("#newChatBtn").addEventListener("click", createChat);
-
-    $("#modeList").addEventListener("click", event => {
-      const button = event.target.closest(".mode-btn");
-      if (button) setMode(button.dataset.mode);
-    });
-
-    $("#sendBtn").addEventListener("click", () => sendMessage());
-
-    promptEl.addEventListener("keydown", event => {
-      if (event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault();
-        sendMessage();
-      }
-    });
-
-    promptEl.addEventListener("input", autoResize);
-
-    document.querySelectorAll(".suggestion").forEach(button => {
-      button.addEventListener("click", () => sendMessage(button.dataset.prompt));
-    });
-
-    $("#imageBtn").addEventListener("click", () => {
-      /*
-        Premium gating must be verified by your backend.
-        This button currently allows local preview for UI testing only.
-      */
-      $("#imageInput").click();
-    });
-
-    $("#imageInput").addEventListener("change", event => {
-      const file = event.target.files?.[0];
-      if (!file) return;
-
-      if (!file.type.startsWith("image/")) {
-        showToast("Please select an image file.");
-        clearAttachment();
-        return;
-      }
-
-      if (file.size > 5 * 1024 * 1024) {
-        showToast("For this demo, images must be 5 MB or smaller.");
-        clearAttachment();
-        return;
-      }
-
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        attachedImage = {
-          name: file.name,
-          dataUrl: reader.result
-        };
-
-        $("#attachmentImage").src = reader.result;
-        $("#attachmentName").textContent = file.name;
-        $("#attachmentPreview").style.display = "flex";
-      };
-
-      reader.readAsDataURL(file);
-    });
-
-    $("#removeAttachment").addEventListener("click", clearAttachment);
-
-    $("#voiceBtn").addEventListener("click", startVoiceInput);
-
-    $("#speakBtn").addEventListener("click", () => {
-      const chat = getActiveChat();
-      const latest = chat?.messages.filter(m => m.role === "assistant").at(-1);
-
-      if (!latest) {
-        showToast("No AI response to read yet.");
-        return;
-      }
-
-      speakText(latest.content);
-    });
-
-    $("#searchBtn").addEventListener("click", () => {
-      searchEnabled = !searchEnabled;
-      $("#searchBtn").textContent = searchEnabled ? "🌐 Search: On" : "🌐 Search: Off";
-      showToast(
-        searchEnabled
-          ? "Search requested. Real web search requires backend integration."
-          : "Web search request turned off."
-      );
-    });
-
-    $("#accountBtn").addEventListener("click", () => {
-      showToast("Google sign-in isn't connected yet. Add Google OAuth to your backend.");
-    });
-
-    $("#mobileMenuBtn").addEventListener("click", () => {
-      $("#sidebar").classList.toggle("open");
-    });
-
-    function closeSidebarOnMobile() {
-      if (window.innerWidth <= 760) {
-        $("#sidebar").classList.remove("open");
-      }
-    }
-
-    // Initial setup
-    renderHistory();
-    renderMessages();
-    setMode("funny");
-  </script>
+    </script>
 </body>
 </html>
