@@ -11,7 +11,7 @@
     <style>
         :root {
             --bg-dark: #060911;
-            --bg-card: rgba(13, 20, 36, 0.75);
+            --bg-card: rgba(13, 20, 36, 0.8);
             --cyan-glow: #00f3ff;
             --blue-accent: #0066ff;
             --neon-red: #ff2255;
@@ -26,7 +26,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none !important; /* Managed by Red/Green Custom Cursor */
+            cursor: none !important; /* Managed by Dual Custom Cursor */
             font-family: 'Rajdhani', sans-serif;
             user-select: none;
         }
@@ -39,7 +39,7 @@
             position: relative;
         }
 
-        /* --- RED / GREEN COMBO CUSTOM CURSOR --- */
+        /* --- DUAL COLOR CUSTOM CURSOR --- */
         #cursor-dot {
             width: 8px;
             height: 8px;
@@ -93,9 +93,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 5%;
-            background: rgba(6, 9, 17, 0.85);
-            backdrop-filter: blur(12px);
+            padding: 18px 5%;
+            background: rgba(6, 9, 17, 0.9);
+            backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--border-cyber);
             position: sticky;
             top: 0;
@@ -106,11 +106,12 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            cursor: pointer;
         }
 
         .brand-logo {
-            width: 48px;
-            height: 48px;
+            width: 46px;
+            height: 46px;
             background: linear-gradient(135deg, var(--blue-accent), var(--cyan-glow));
             border-radius: 8px;
             display: grid;
@@ -124,7 +125,7 @@
 
         .brand-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 900;
             letter-spacing: 2px;
             background: linear-gradient(90deg, #fff, var(--cyan-glow));
@@ -134,32 +135,104 @@
 
         .nav-links {
             display: flex;
-            gap: 25px;
+            gap: 10px;
             align-items: center;
         }
 
         .nav-btn {
             background: transparent;
-            border: none;
+            border: 1px solid transparent;
             color: var(--text-light);
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
             padding: 8px 16px;
+            border-radius: 6px;
             transition: 0.3s;
-            position: relative;
         }
 
-        .nav-btn:hover {
+        .nav-btn:hover, .nav-btn.active {
             color: var(--cyan-glow);
+            border-color: var(--border-cyber);
+            background: rgba(0, 243, 255, 0.08);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
             text-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        /* FLOATING LEFT SIDE POP-UP BADGE */
+        .floating-left-claim {
+            position: fixed;
+            left: 0;
+            top: 40%;
+            z-index: 950;
+            background: rgba(13, 20, 36, 0.95);
+            border: 2px solid var(--neon-green);
+            border-left: none;
+            padding: 14px 18px;
+            border-radius: 0 14px 14px 0;
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 210px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            animation: pulseGlowLeft 3s infinite alternate;
+        }
+
+        @keyframes pulseGlowLeft {
+            0% { box-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
+            100% { box-shadow: 0 0 30px rgba(0, 243, 255, 0.6); }
+        }
+
+        .floating-left-claim:hover {
+            transform: translateX(6px);
+            border-color: var(--cyan-glow);
+            background: rgba(0, 255, 136, 0.15);
+        }
+
+        .floating-left-claim i {
+            font-size: 22px;
+            color: var(--neon-green);
+        }
+
+        .floating-left-text {
+            font-size: 11px;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.4;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .floating-left-text span {
+            color: var(--neon-green);
+            display: block;
+        }
+
+        /* MULTI-PAGE CONTROLLER SYSTEM */
+        .page-view {
+            display: none;
+            padding-bottom: 60px;
+        }
+
+        .page-view.active {
+            display: block;
+            animation: fadeInPage 0.4s ease-in-out;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* HERO SECTION */
         .hero {
             text-align: center;
-            padding: 60px 20px 40px;
+            padding: 70px 20px 40px;
             max-width: 1100px;
             margin: 0 auto;
         }
@@ -175,7 +248,7 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 13px;
             color: var(--cyan-glow);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
         }
 
@@ -192,10 +265,10 @@
         }
 
         .hero p {
-            font-size: 18px;
+            font-size: 19px;
             color: var(--text-dim);
-            max-width: 700px;
-            margin: 0 auto 30px;
+            max-width: 750px;
+            margin: 0 auto 35px;
             line-height: 1.6;
         }
 
@@ -204,7 +277,7 @@
             gap: 15px;
             background: rgba(13, 20, 36, 0.9);
             border: 1px solid var(--cyan-glow);
-            padding: 12px 25px;
+            padding: 14px 28px;
             border-radius: 12px;
             align-items: center;
             box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
@@ -221,10 +294,11 @@
             background: var(--cyan-glow);
             color: #000;
             border: none;
-            padding: 8px 18px;
+            padding: 9px 20px;
             border-radius: 6px;
             font-weight: 800;
             font-size: 14px;
+            font-family: 'Orbitron', sans-serif;
             transition: 0.3s;
         }
 
@@ -233,90 +307,88 @@
             box-shadow: 0 0 15px #fff;
         }
 
-        /* --- STANDOUT FREE WEBSITE SHOWCASE --- */
-        .free-website-section {
-            max-width: 1100px;
+        /* STATS COUNTER BAR */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        .free-web-card {
-            background: linear-gradient(135deg, rgba(255, 34, 85, 0.15), rgba(0, 255, 136, 0.15));
-            border: 2px solid transparent;
-            border-image: linear-gradient(90deg, var(--neon-red), var(--neon-green), var(--cyan-glow)) 1;
-            padding: 35px;
-            border-radius: 16px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 35px rgba(0, 255, 136, 0.25);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-cyber);
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
-            animation: pulseGlow 4s infinite alternate;
         }
 
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 25px rgba(255, 34, 85, 0.3); }
-            100% { box-shadow: 0 0 45px rgba(0, 255, 136, 0.4); }
-        }
-
-        .free-web-badge {
-            background: var(--neon-green);
-            color: #000;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
-        .free-web-card h2 {
+        .stat-num {
             font-family: 'Orbitron', sans-serif;
             font-size: 32px;
             font-weight: 900;
-            color: #fff;
-            margin-bottom: 12px;
+            color: var(--cyan-glow);
         }
 
-        .free-web-card p {
-            font-size: 17px;
-            color: #d1e2ff;
-            max-width: 750px;
-            margin-bottom: 25px;
-            line-height: 1.6;
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
         }
 
-        .free-web-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: linear-gradient(90deg, var(--neon-green), var(--cyan-glow));
-            color: #000;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 16px;
-            padding: 16px 36px;
-            border-radius: 8px;
-            text-decoration: none;
+        /* HOME FEATURE CARDS */
+        .home-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            margin: 30px auto 20px;
+            padding: 0 20px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-cyber);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: left;
             transition: 0.3s;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            backdrop-filter: blur(10px);
         }
 
-        .free-web-cta:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 0 35px rgba(0, 243, 255, 0.8);
-            background: #fff;
-            color: #000;
+        .feature-card:hover {
+            border-color: var(--cyan-glow);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 243, 255, 0.15);
+        }
+
+        .feature-card i {
+            font-size: 32px;
+            color: var(--cyan-glow);
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .feature-card p {
+            color: var(--text-dim);
+            font-size: 15px;
+            line-height: 1.5;
         }
 
         /* RANK STORE SECTION */
         .store-section {
             max-width: 1200px;
-            margin: 60px auto;
+            margin: 40px auto;
             padding: 0 20px;
         }
 
@@ -383,7 +455,8 @@
 
         .rank-price span {
             font-size: 16px;
-            color: var(--text-dim);
+            color: var(--neon-green);
+            font-weight: 700;
         }
 
         .rank-features {
@@ -422,6 +495,335 @@
         .buy-btn:hover {
             box-shadow: 0 0 20px var(--cyan-glow);
             background: #fff;
+        }
+
+        /* RULES & FAQ SECTION */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-cyber);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            color: var(--cyan-glow);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rules-list {
+            list-style: none;
+        }
+
+        .rules-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .rules-list li strong {
+            color: #fff;
+        }
+
+        /* SPEEDRUN PAGE */
+        .speedrun-section {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .speedrun-card {
+            background: linear-gradient(135deg, rgba(13, 20, 36, 0.9), rgba(0, 102, 255, 0.15));
+            border: 1px solid var(--cyan-glow);
+            border-radius: 16px;
+            padding: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .speedrun-info h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            color: var(--gold-accent);
+            margin-bottom: 10px;
+        }
+
+        .speedrun-info p {
+            color: var(--text-dim);
+            font-size: 16px;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        .prize-pool {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--neon-green);
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+        }
+
+        .leaderboard-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-cyber);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .leaderboard-box h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cyber-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .cyber-table th, .cyber-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .cyber-table th {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: var(--cyan-glow);
+            letter-spacing: 1px;
+        }
+
+        .cyber-table td {
+            font-size: 16px;
+            color: var(--text-light);
+        }
+
+        /* COMMUNITY & STAFF SECTION */
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .staff-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-cyber);
+            border-radius: 14px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .staff-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 2px solid var(--cyan-glow);
+        }
+
+        .staff-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .staff-role {
+            font-size: 13px;
+            color: var(--neon-green);
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* MODALS (GENERAL OVERLAY) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(4, 7, 13, 0.9);
+            backdrop-filter: blur(12px);
+            z-index: 10000;
+            display: none;
+            place-items: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: var(--bg-card);
+            border: 2px solid var(--neon-red);
+            padding: 35px;
+            border-radius: 20px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(255, 34, 85, 0.3);
+            position: relative;
+            animation: modalPop 0.3s ease;
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-icon {
+            font-size: 48px;
+            color: var(--neon-red);
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .modal-msg {
+            color: var(--text-dim);
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .modal-discord-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #5865F2;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .modal-discord-btn:hover {
+            background: #4752C4;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.6);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 22px;
+            transition: 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            color: #fff;
+        }
+
+        /* POPUP: FREE WEBSITE CLAIM MODAL */
+        #free-web-modal .modal-card {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.35);
+            text-align: left;
+        }
+
+        .free-web-badge {
+            display: inline-block;
+            background: var(--neon-green);
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            margin-bottom: 15px;
+        }
+
+        .claim-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: var(--cyan-glow);
+            letter-spacing: 1px;
+        }
+
+        .form-input {
+            background: rgba(6, 9, 17, 0.8);
+            border: 1px solid var(--border-cyber);
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .claim-submit-btn {
+            background: linear-gradient(90deg, var(--neon-green), var(--cyan-glow));
+            color: #000;
+            border: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .claim-submit-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 20px #fff;
         }
 
         /* FLOATING BOTTOM-MIDDLE LOGIN PILL */
@@ -482,124 +884,6 @@
             box-shadow: 0 0 10px #fff;
         }
 
-        /* MODAL (PAYMENT NOTICE) */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(4, 7, 13, 0.9);
-            backdrop-filter: blur(10px);
-            z-index: 10000;
-            display: none;
-            place-items: center;
-            padding: 20px;
-        }
-
-        .modal-card {
-            background: var(--bg-card);
-            border: 2px solid var(--neon-red);
-            padding: 35px;
-            border-radius: 20px;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 0 40px rgba(255, 34, 85, 0.3);
-            position: relative;
-        }
-
-        .modal-icon {
-            font-size: 48px;
-            color: var(--neon-red);
-            margin-bottom: 15px;
-        }
-
-        .modal-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 22px;
-            font-weight: 900;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-
-        .modal-msg {
-            color: var(--text-dim);
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .modal-discord-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #5865F2;
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 800;
-            padding: 12px 28px;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .modal-discord-btn:hover {
-            background: #4752C4;
-            box-shadow: 0 0 20px rgba(88, 101, 242, 0.6);
-        }
-
-        .modal-close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: transparent;
-            border: none;
-            color: var(--text-dim);
-            font-size: 20px;
-        }
-
-        /* SPEEDRUN CHALLENGE SECTION */
-        .speedrun-section {
-            max-width: 1100px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
-
-        .speedrun-card {
-            background: linear-gradient(135deg, rgba(13, 20, 36, 0.9), rgba(0, 102, 255, 0.15));
-            border: 1px solid var(--cyan-glow);
-            border-radius: 16px;
-            padding: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-
-        .speedrun-info h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 28px;
-            color: var(--gold-accent);
-            margin-bottom: 10px;
-        }
-
-        .speedrun-info p {
-            color: var(--text-dim);
-            font-size: 16px;
-            max-width: 600px;
-            line-height: 1.5;
-        }
-
-        .prize-pool {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 36px;
-            font-weight: 900;
-            color: var(--neon-green);
-            text-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
-        }
-
         /* FOOTER */
         footer {
             border-top: 1px solid var(--border-cyber);
@@ -607,183 +891,398 @@
             text-align: center;
             color: var(--text-dim);
             font-size: 14px;
+            line-height: 1.7;
         }
 
         footer strong {
             color: var(--cyan-glow);
         }
+
+        .ghost-credits {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .ghost-credits span {
+            color: var(--neon-green);
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 38px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .ip-box {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .speedrun-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .floating-left-claim {
+                top: auto;
+                bottom: 80px;
+                border-left: 2px solid var(--neon-green);
+                border-radius: 12px;
+                left: 15px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- CUSTOM DUAL CURSOR (RED / GREEN COMBO) -->
+    <!-- CUSTOM DUAL CURSOR -->
     <div id="cursor-dot"></div>
     <div id="cursor-ring"></div>
 
     <!-- CANVAS BACKGROUND -->
     <canvas id="bg-canvas"></canvas>
 
+    <!-- FLOATING LEFT SIDE POP-UP BADGE -->
+    <div class="floating-left-claim" onclick="openModal('free-web-modal')">
+        <i class="fas fa-ghost"></i>
+        <div class="floating-left-text">
+            Claim a Free Site
+            <span>Powered by YJDEV STUDIO's Ghost AI</span>
+        </div>
+    </div>
+
     <!-- HEADER NAVIGATION -->
     <header>
-        <div class="brand">
+        <div class="brand" onclick="switchPage('home')">
             <div class="brand-logo">O</div>
             <div class="brand-title">ODERISMC</div>
         </div>
         <div class="nav-links">
-            <button class="nav-btn" onclick="scrollToSection('free-web')">Free Website</button>
-            <button class="nav-btn" onclick="scrollToSection('store')">Ranks</button>
-            <button class="nav-btn" onclick="scrollToSection('speedrun')">100h Speedrun</button>
-            <a href="https://discord.gg/d7W62FeAXM" target="_blank" class="nav-btn" style="color: var(--cyan-glow);"><i class="fab font-discord"></i> Discord</a>
+            <button class="nav-btn active" id="nav-home" onclick="switchPage('home')">Home</button>
+            <button class="nav-btn" id="nav-store" onclick="switchPage('store')">Ranks & Store</button>
+            <button class="nav-btn" id="nav-rules" onclick="switchPage('rules')">Rules & FAQ</button>
+            <button class="nav-btn" id="nav-speedrun" onclick="switchPage('speedrun')">100h Speedrun</button>
+            <button class="nav-btn" id="nav-community" onclick="switchPage('community')">Community & Staff</button>
+            
+            <a href="https://discord.gg/d7W62FeAXM" target="_blank" class="nav-btn" style="color: var(--cyan-glow);">
+                <i class="fab fa-discord"></i> Discord
+            </a>
         </div>
     </header>
 
-    <!-- HERO SECTION -->
-    <section class="hero">
-        <div class="server-badge">
-            <i class="fas fa-signal"></i> 24/7 ONLINE • CROSS-PLAY JAVA & BEDROCK
+    <main>
+        <!-- ==========================================
+             PAGE 1: HOME VIEW
+             ========================================== -->
+        <section class="page-view active" id="page-home">
+            <div class="hero">
+                <div class="server-badge">
+                    <i class="fas fa-signal"></i> 24/7 ONLINE • CROSS-PLAY JAVA & BEDROCK
+                </div>
+                <h1>THE ULTIMATE CYBER SMP EXPERIENCE</h1>
+                <p>Join thousands of players in a high-octane survival economy featuring custom dungeons, keep inventory protection, and competitive speedrun events.</p>
+                
+                <div class="ip-box">
+                    <i class="fas fa-server" style="color: var(--cyan-glow);"></i>
+                    <span class="ip-text">play.oderismc.fun <span style="font-size: 12px; color: var(--text-dim);">(Port: 19142)</span></span>
+                    <button class="copy-btn" onclick="copyIP()">COPY IP</button>
+                </div>
+            </div>
+
+            <!-- LIVE STATS COUNTER -->
+            <div class="stats-bar">
+                <div class="stat-card">
+                    <div class="stat-num">1,250+</div>
+                    <div class="stat-label">Active Players</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">99.9%</div>
+                    <div class="stat-label">Uptime Ratio</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">$500K</div>
+                    <div class="stat-label">Event Rewards</div>
+                </div>
+            </div>
+
+            <!-- HOME FEATURE CARDS -->
+            <div class="home-features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Zero Lag Infrastructure</h3>
+                    <p>Hosted on dedicated high-frequency hardware ensuring minimal latency and butter-smooth cross-play combat.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Keep Inventory & Protection</h3>
+                    <p>Build without fear! Full land claiming protects your builds, and keep inventory is enabled across all survival worlds.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>Ghost AI Engine Integration</h3>
+                    <p>Powered by YJDEV STUDIOS. Need a custom site for your clan? Claim your free site directly via our floating popup launcher.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PAGE 2: RANK STORE VIEW (MONTHLY PRICING)
+             ========================================== -->
+        <section class="page-view" id="page-store">
+            <div class="store-section">
+                <h2 class="section-title">SERVER RANKS (MONTHLY SUBSCRIPTION)</h2>
+                <div class="ranks-grid">
+
+                    <!-- Hero Rank -->
+                    <div class="rank-card">
+                        <div class="rank-header">
+                            <div class="rank-name rank-hero">HERO</div>
+                            <div class="rank-price">₹30 <span>/ month</span></div>
+                        </div>
+                        <ul class="rank-features">
+                            <li><i class="fas fa-check"></i> Hero Prefix & Color Tag</li>
+                            <li><i class="fas fa-check"></i> /fly Command in Player Hubs</li>
+                            <li><i class="fas fa-check"></i> 3 Vault Claims</li>
+                            <li><i class="fas fa-check"></i> Kit Hero Access (24h Cooldown)</li>
+                        </ul>
+                        <button class="buy-btn" onclick="triggerPaymentModal('HERO')">SUBSCRIBE RANK</button>
+                    </div>
+
+                    <!-- Titan Rank -->
+                    <div class="rank-card">
+                        <div class="rank-header">
+                            <div class="rank-name rank-titan">TITAN</div>
+                            <div class="rank-price">₹60 <span>/ month</span></div>
+                        </div>
+                        <ul class="rank-features">
+                            <li><i class="fas fa-check"></i> Titan Prefix & Neon Tag</li>
+                            <li><i class="fas fa-check"></i> /feed & /heal Reduced Cooldowns</li>
+                            <li><i class="fas fa-check"></i> 5 Vault Claims</li>
+                            <li><i class="fas fa-check"></i> Kit Titan Access</li>
+                        </ul>
+                        <button class="buy-btn" onclick="triggerPaymentModal('TITAN')">SUBSCRIBE RANK</button>
+                    </div>
+
+                    <!-- Knight Rank -->
+                    <div class="rank-card">
+                        <div class="rank-header">
+                            <div class="rank-name rank-knight">KNIGHT</div>
+                            <div class="rank-price">₹100 <span>/ month</span></div>
+                        </div>
+                        <ul class="rank-features">
+                            <li><i class="fas fa-check"></i> Knight Title Badge</li>
+                            <li><i class="fas fa-check"></i> Priority Server Queue Access</li>
+                            <li><i class="fas fa-check"></i> 8 Vault Claims</li>
+                            <li><i class="fas fa-check"></i> Kit Knight Access</li>
+                        </ul>
+                        <button class="buy-btn" onclick="triggerPaymentModal('KNIGHT')">SUBSCRIBE RANK</button>
+                    </div>
+
+                    <!-- Champion Rank -->
+                    <div class="rank-card">
+                        <div class="rank-header">
+                            <div class="rank-name rank-champion">CHAMPION</div>
+                            <div class="rank-price">₹150 <span>/ month</span></div>
+                        </div>
+                        <ul class="rank-features">
+                            <li><i class="fas fa-check"></i> Gold Champion Glow Aura</li>
+                            <li><i class="fas fa-check"></i> Custom Particle Trails Effect</li>
+                            <li><i class="fas fa-check"></i> 12 Vault Claims</li>
+                            <li><i class="fas fa-check"></i> Kit Champion Access</li>
+                        </ul>
+                        <button class="buy-btn" onclick="triggerPaymentModal('CHAMPION')">SUBSCRIBE RANK</button>
+                    </div>
+
+                    <!-- Custom Rank -->
+                    <div class="rank-card">
+                        <div class="rank-header">
+                            <div class="rank-name rank-custom">CUSTOM</div>
+                            <div class="rank-price">₹200 <span>/ month</span></div>
+                        </div>
+                        <ul class="rank-features">
+                            <li><i class="fas fa-check"></i> Personalized Prefix Choice</li>
+                            <li><i class="fas fa-check"></i> Custom RGB Color Picker</li>
+                            <li><i class="fas fa-check"></i> 15 Vault Claims</li>
+                            <li><i class="fas fa-check"></i> Exclusive VIP Discord Role</li>
+                        </ul>
+                        <button class="buy-btn" onclick="triggerPaymentModal('CUSTOM')">SUBSCRIBE RANK</button>
+                    </div>
+
+                    <!-- Oderis Rank -->
+                    <div class="rank-card" style="border-color: var(--neon-green);">
+                        <div class="rank-header">
+                            <div class="rank-name rank-oderis">ODERIS</div>
+                            <div class="rank-price">₹250 <span>/ month</span></div>
+                        </div>
+                        <ul class="rank-features">
+                            <li><i class="fas fa-check"></i> Ultimate Oderis Animated Prefix</li>
+                            <li><i class="fas fa-check"></i> All In-Game Commands Unlocked</li>
+                            <li><i class="fas fa-check"></i> Unlimited Home Teleports</li>
+                            <li><i class="fas fa-check"></i> Exclusive Oderis God Kit</li>
+                        </ul>
+                        <button class="buy-btn" style="background: linear-gradient(90deg, var(--neon-green), var(--cyan-glow));" onclick="triggerPaymentModal('ODERIS')">SUBSCRIBE RANK</button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PAGE 3: RULES & FAQ VIEW
+             ========================================== -->
+        <section class="page-view" id="page-rules">
+            <div class="store-section">
+                <h2 class="section-title">SERVER RULES & FAQ</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3><i class="fas fa-gavel"></i> GENERAL RULES</h3>
+                        <ul class="rules-list">
+                            <li><strong>1. Respect All Players:</strong> Harassment, hate speech, or toxicity will result in an immediate temporary or permanent ban.</li>
+                            <li><strong>2. No Hacking / Cheating:</strong> Unfair advantage mods, x-ray, or auto-clickers are strictly prohibited.</li>
+                            <li><strong>3. No Griefing in Claimed Areas:</strong> Respect player claims and protected builds across all worlds.</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fas fa-plug"></i> CONNECTION GUIDE</h3>
+                        <ul class="rules-list">
+                            <li><strong>Java Edition IP:</strong> play.oderismc.fun (Default Port: 25565)</li>
+                            <li><strong>Bedrock / PE IP:</strong> play.oderismc.fun (Port: 19142)</li>
+                            <li><strong>Supported Versions:</strong> 1.18.x to 1.20.x Cross-Play</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PAGE 4: 100h SPEEDRUN EVENT VIEW
+             ========================================== -->
+        <section class="page-view" id="page-speedrun">
+            <div class="speedrun-section">
+                <div class="speedrun-card">
+                    <div class="speedrun-info">
+                        <h3><i class="fas fa-trophy"></i> 100-HOUR SPEEDRUN CHALLENGE</h3>
+                        <p>Clock 100 active playing hours on ODERISMC to earn a massive in-game economy payout!</p>
+                    </div>
+                    <div class="prize-pool">$500,000 CASH</div>
+                </div>
+
+                <!-- SPEEDRUN LEADERBOARD TABLE -->
+                <div class="leaderboard-box">
+                    <h3><i class="fas fa-crown" style="color: var(--gold-accent);"></i> LIVE LEADERBOARD</h3>
+                    <table class="cyber-table">
+                        <thead>
+                            <tr>
+                                <th>RANK</th>
+                                <th>PLAYER</th>
+                                <th>HOURS LOGGED</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#1</td>
+                                <td>ragebg.exe</td>
+                                <td>98.4 / 100 hrs</td>
+                                <td style="color: var(--neon-green);">In Progress</td>
+                            </tr>
+                            <tr>
+                                <td>#2</td>
+                                <td>CyberNinja_99</td>
+                                <td>82.1 / 100 hrs</td>
+                                <td style="color: var(--neon-green);">In Progress</td>
+                            </tr>
+                            <tr>
+                                <td>#3</td>
+                                <td>VortexPlayer</td>
+                                <td>64.5 / 100 hrs</td>
+                                <td style="color: var(--neon-green);">In Progress</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PAGE 5: COMMUNITY & STAFF VIEW
+             ========================================== -->
+        <section class="page-view" id="page-community">
+            <div class="store-section">
+                <h2 class="section-title">MEET THE TEAM</h2>
+                <div class="staff-grid">
+                    <div class="staff-card">
+                        <img src="https://crafatar.com/avatars/steve?overlay=true" class="staff-avatar" alt="Dev">
+                        <div class="staff-name">ragebg.exe</div>
+                        <div class="staff-role">Lead Developer</div>
+                    </div>
+                    <div class="staff-card">
+                        <img src="https://crafatar.com/avatars/alex?overlay=true" class="staff-avatar" alt="Admin">
+                        <div class="staff-name">Ghost_Admin</div>
+                        <div class="staff-role">Community Manager</div>
+                    </div>
+                    <div class="staff-card">
+                        <img src="https://crafatar.com/avatars/steve?overlay=true" class="staff-avatar" alt="Mod">
+                        <div class="staff-name">CyberGuard</div>
+                        <div class="staff-role">Head Moderator</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==========================================
+         POPUP 1: CLAIM FREE WEBSITE MODAL (GHOST AI)
+         ========================================== -->
+    <div class="modal-overlay" id="free-web-modal">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="closeModal('free-web-modal')">&times;</button>
+            <span class="free-web-badge"><i class="fas fa-ghost"></i> POWERED BY YJDEV STUDIO'S GHOST AI</span>
+            <h2 class="modal-title" style="text-align: left; color: #fff;">CLAIM A FREE WEBSITE</h2>
+            <p class="modal-msg" style="text-align: left; font-size: 15px; margin-bottom: 15px;">
+                Get a custom, high-speed web portal generated and tailored by Ghost AI v2.4 in under 2 hours! Connect directly with developer <strong>ragebg.exe</strong>.
+            </p>
+
+            <form class="claim-form" onsubmit="handleFreeWebSubmit(event)">
+                <div class="form-group">
+                    <label>DISCORD USERNAME / TAG</label>
+                    <input type="text" class="form-input" id="claim-discord" placeholder="e.g. ragebg.exe" required>
+                </div>
+                <div class="form-group">
+                    <label>WEBSITE CATEGORY</label>
+                    <input type="text" class="form-input" id="claim-type" placeholder="e.g. Minecraft Clan, Store, Gaming Channel" required>
+                </div>
+                <div class="form-group">
+                    <label>SPECIAL REQUIREMENTS (OPTIONAL)</label>
+                    <input type="text" class="form-input" id="claim-details" placeholder="Describe layout preferences, color themes, or features...">
+                </div>
+                <button type="submit" class="claim-submit-btn">
+                    <i class="fab fa-discord"></i> SUBMIT & CONNECT WITH GHOST AI
+                </button>
+            </form>
         </div>
-        <h1>THE ULTIMATE CYBER SMP EXPERIENCE</h1>
-        <p>Join thousands of players in a high-octane survival economy featuring custom dungeons, keep inventory protection, and competitive speedrun events.</p>
-        
-        <div class="ip-box">
-            <i class="fas fa-server" style="color: var(--cyan-glow);"></i>
-            <span class="ip-text">play.oderismc.fun <span style="font-size: 12px; color: var(--text-dim);">(Port: 19142)</span></span>
-            <button class="copy-btn" onclick="copyIP()">COPY IP</button>
-        </div>
-    </section>
-
-    <!-- STANDOUT FREE WEBSITE SHOWCASE SECTION -->
-    <section class="free-website-section" id="free-web">
-        <div class="free-web-card">
-            <div class="free-web-badge">POWERED BY YJDEV STUDIOS</div>
-            <h2>WANT A FREE CUSTOM WEBSITE?</h2>
-            <p>Get a high-performance, fully custom web application built in under 2 hours! Connect with lead developer <strong>ragebg.exe</strong> directly inside the official Discord developer portal.</p>
-            <a href="https://discord.gg/VhYXxUkCMg" target="_blank" class="free-web-cta">
-                <i class="fab fa-discord" style="font-size: 20px;"></i> CLAIM FREE WEBSITE NOW
-            </a>
-        </div>
-    </section>
-
-    <!-- RANK STORE SECTION -->
-    <section class="store-section" id="store">
-        <h2 class="section-title">SERVER RANKS</h2>
-        <div class="ranks-grid">
-
-            <!-- Hero Rank -->
-            <div class="rank-card">
-                <div class="rank-header">
-                    <div class="rank-name rank-hero">HERO</div>
-                    <div class="rank-price">₹30 <span>/ lifetime</span></div>
-                </div>
-                <ul class="rank-features">
-                    <li><i class="fas fa-check"></i> Hero Prefix & Color</li>
-                    <li><i class="fas fa-check"></i> /fly in Player Hubs</li>
-                    <li><i class="fas fa-check"></i> 3 Vault Claims</li>
-                    <li><i class="fas fa-check"></i> Kit Hero Access</li>
-                </ul>
-                <button class="buy-btn" onclick="triggerPaymentModal('HERO')">BUY RANK</button>
-            </div>
-
-            <!-- Titan Rank -->
-            <div class="rank-card">
-                <div class="rank-header">
-                    <div class="rank-name rank-titan">TITAN</div>
-                    <div class="rank-price">₹60 <span>/ lifetime</span></div>
-                </div>
-                <ul class="rank-features">
-                    <li><i class="fas fa-check"></i> Titan Prefix & Neon Tag</li>
-                    <li><i class="fas fa-check"></i> /feed & /heal Cooldowns</li>
-                    <li><i class="fas fa-check"></i> 5 Vault Claims</li>
-                    <li><i class="fas fa-check"></i> Kit Titan Access</li>
-                </ul>
-                <button class="buy-btn" onclick="triggerPaymentModal('TITAN')">BUY RANK</button>
-            </div>
-
-            <!-- Knight Rank -->
-            <div class="rank-card">
-                <div class="rank-header">
-                    <div class="rank-name rank-knight">KNIGHT</div>
-                    <div class="rank-price">₹100 <span>/ lifetime</span></div>
-                </div>
-                <ul class="rank-features">
-                    <li><i class="fas fa-check"></i> Knight Title Badge</li>
-                    <li><i class="fas fa-check"></i> Priority Server Queue</li>
-                    <li><i class="fas fa-check"></i> 8 Vault Claims</li>
-                    <li><i class="fas fa-check"></i> Kit Knight Access</li>
-                </ul>
-                <button class="buy-btn" onclick="triggerPaymentModal('KNIGHT')">BUY RANK</button>
-            </div>
-
-            <!-- Champion Rank -->
-            <div class="rank-card">
-                <div class="rank-header">
-                    <div class="rank-name rank-champion">CHAMPION</div>
-                    <div class="rank-price">₹150 <span>/ lifetime</span></div>
-                </div>
-                <ul class="rank-features">
-                    <li><i class="fas fa-check"></i> Gold Champion Aura</li>
-                    <li><i class="fas fa-check"></i> Custom Particle Trails</li>
-                    <li><i class="fas fa-check"></i> 12 Vault Claims</li>
-                    <li><i class="fas fa-check"></i> Kit Champion Access</li>
-                </ul>
-                <button class="buy-btn" onclick="triggerPaymentModal('CHAMPION')">BUY RANK</button>
-            </div>
-
-            <!-- Custom Rank -->
-            <div class="rank-card">
-                <div class="rank-header">
-                    <div class="rank-name rank-custom">CUSTOM</div>
-                    <div class="rank-price">₹200 <span>/ lifetime</span></div>
-                </div>
-                <ul class="rank-features">
-                    <li><i class="fas fa-check"></i> Personalized Prefix Name</li>
-                    <li><i class="fas fa-check"></i> Custom Color Code Picker</li>
-                    <li><i class="fas fa-check"></i> 15 Vault Claims</li>
-                    <li><i class="fas fa-check"></i> VIP Discord Role</li>
-                </ul>
-                <button class="buy-btn" onclick="triggerPaymentModal('CUSTOM')">BUY RANK</button>
-            </div>
-
-            <!-- Oderis Rank -->
-            <div class="rank-card" style="border-color: var(--neon-green);">
-                <div class="rank-header">
-                    <div class="rank-name rank-oderis">ODERIS</div>
-                    <div class="rank-price">₹250 <span>/ lifetime</span></div>
-                </div>
-                <ul class="rank-features">
-                    <li><i class="fas fa-check"></i> Ultimate Oderis Glow Prefix</li>
-                    <li><i class="fas fa-check"></i> All In-Game Commands Unlocked</li>
-                    <li><i class="fas fa-check"></i> Unlimited Home Teleports</li>
-                    <li><i class="fas fa-check"></i> Exclusive Oderis God Kit</li>
-                </ul>
-                <button class="buy-btn" style="background: linear-gradient(90deg, var(--neon-green), var(--cyan-glow));" onclick="triggerPaymentModal('ODERIS')">BUY RANK</button>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- 100-HOUR SPEEDRUN SECTION -->
-    <section class="speedrun-section" id="speedrun">
-        <div class="speedrun-card">
-            <div class="speedrun-info">
-                <h3><i class="fas fa-trophy"></i> 100-HOUR SPEEDRUN EVENT</h3>
-                <p>Clock 100 active playing hours on ODERISMC to instantly earn a massive in-game economy payout!</p>
-            </div>
-            <div class="prize-pool">$500,000 CASH</div>
-        </div>
-    </section>
-
-    <!-- FLOATING BOTTOM-MIDDLE LOGIN PILL -->
-    <div class="floating-login-container">
-        <img src="https://crafatar.com/avatars/steve?overlay=true" id="player-avatar" class="login-avatar" alt="Avatar">
-        <input type="text" id="mc-username" class="login-input" placeholder="Enter Minecraft IGN..." onchange="updateAvatar(this.value)">
-        <button class="login-submit-btn" onclick="loginPlayer()">CONNECT</button>
     </div>
 
-    <!-- PAYMENT MODAL -->
+    <!-- ==========================================
+         POPUP 2: PAYMENT NOTICE MODAL
+         ========================================== -->
     <div class="modal-overlay" id="payment-modal">
         <div class="modal-card">
-            <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+            <button class="modal-close-btn" onclick="closeModal('payment-modal')">&times;</button>
             <i class="fas fa-exclamation-triangle modal-icon"></i>
             <div class="modal-title">PAYMENT NOTICE</div>
             <div class="modal-msg">
@@ -795,15 +1294,81 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
+    <!-- FLOATING BOTTOM-MIDDLE LOGIN PILL -->
+    <div class="floating-login-container">
+        <img src="https://crafatar.com/avatars/steve?overlay=true" id="player-avatar" class="login-avatar" alt="Avatar">
+        <input type="text" id="mc-username" class="login-input" placeholder="Enter Minecraft IGN..." onchange="updateAvatar(this.value)">
+        <button class="login-submit-btn" onclick="loginPlayer()">CONNECT</button>
+    </div>
+
+    <!-- FOOTER WITH YJDEV STUDIOS & GHOST AI BRANDING -->
     <footer>
-        <p>&copy; 2026 <strong>ODERISMC Network</strong>. All Rights Reserved. Powered by <strong>YJDEV STUDIOS</strong>.</p>
-        <p style="margin-top: 8px; font-size: 12px; color: #556688;">Not affiliated with Mojang Studios or Microsoft.</p>
+        <div class="ghost-credits">
+            Made by <span>YJDEV STUDIOS</span>
+        </div>
+        <p style="font-size: 13px; color: var(--cyan-glow); margin-bottom: 12px;">Powered by <strong>Ghost AI v2.4</strong></p>
+        <p>&copy; 2026 <strong>ODERISMC Network</strong>. All Rights Reserved.</p>
+        <p style="margin-top: 6px; font-size: 12px; color: #556688;">Not affiliated with Mojang Studios or Microsoft.</p>
     </footer>
 
     <!-- INTERACTIVE SCRIPTS -->
     <script>
-        // RED / GREEN COMBO CURSOR ENGINE
+        // PAGE SWITCHER ENGINE (Multi-Page Navigation)
+        function switchPage(pageId) {
+            playSound(400, 'sine', 0.1);
+            
+            // Hide all page views
+            document.querySelectorAll('.page-view').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remove active state from nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected page
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // Highlight corresponding nav button
+            const targetNav = document.getElementById('nav-' + pageId);
+            if (targetNav) {
+                targetNav.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // MODAL HELPERS
+        function openModal(id) {
+            playSound(450, 'sine', 0.12);
+            document.getElementById(id).style.display = 'grid';
+        }
+
+        function closeModal(id) {
+            playSound(300, 'sine', 0.1);
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function triggerPaymentModal(rank) {
+            playSound(200, 'sawtooth', 0.2);
+            openModal('payment-modal');
+        }
+
+        // FREE WEB CLAIM SUBMISSION HANDLER
+        function handleFreeWebSubmit(e) {
+            e.preventDefault();
+            playSound(600, 'triangle', 0.2);
+            const discordUser = document.getElementById('claim-discord').value;
+            alert(`Claim Request submitted via Ghost AI v2.4 for ${discordUser}! Redirecting to developer portal...`);
+            closeModal('free-web-modal');
+            window.open('https://discord.gg/VhYXxUkCMg', '_blank');
+        }
+
+        // RED / GREEN DUAL CURSOR ENGINE
         const cursorDot = document.getElementById('cursor-dot');
         const cursorRing = document.getElementById('cursor-ring');
 
@@ -815,8 +1380,8 @@
             cursorRing.style.top = e.clientY + 'px';
         });
 
-        // Hover Effect on Interactive Elements
-        document.querySelectorAll('button, a, input, .rank-card').forEach(elem => {
+        // Interactive Elements Hover Effect
+        document.querySelectorAll('button, a, input, .rank-card, .feature-card, .brand, .floating-left-claim, .info-card').forEach(elem => {
             elem.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
             elem.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
         });
@@ -884,23 +1449,6 @@
             alert('Server IP (play.oderismc.fun) copied to clipboard!');
         }
 
-        // SCROLL ROUTER
-        function scrollToSection(id) {
-            playSound(400, 'sine', 0.1);
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // PAYMENT MODAL GATEWAY
-        function triggerPaymentModal(rank) {
-            playSound(200, 'sawtooth', 0.2);
-            document.getElementById('payment-modal').style.display = 'grid';
-        }
-
-        function closeModal() {
-            playSound(300, 'sine', 0.1);
-            document.getElementById('payment-modal').style.display = 'none';
-        }
-
         // PLAYER AVATAR UPDATER
         function updateAvatar(username) {
             if (!username.trim()) return;
@@ -912,7 +1460,7 @@
             const user = document.getElementById('mc-username').value;
             if (user) {
                 playSound(500, 'sine', 0.15);
-                alert(`Welcome back, ${user}! Your ODERISMC status is synced.`);
+                alert(`Welcome back, ${user}! Your ODERISMC profile status is synced.`);
             }
         }
     </script>
