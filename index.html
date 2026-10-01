@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ODERISMC | Cyber Network & Rank Store</title>
+    <title>ODERISMC | Cyber Network, Rank Store & Ghost AI v2.93</title>
     <!-- Font Awesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
@@ -17,9 +17,18 @@
             --neon-red: #ff1144;
             --neon-green: #00ff88;
             --gold-accent: #ffb700;
+            --purple-media: #a855f7;
+            --purple-light: #c084fc;
+            --ghost-glow: #00f0ff;
+            --ghost-bg: rgba(15, 23, 42, 0.95);
             --text-light: #f0f6ff;
             --text-dim: #8fa3c4;
             --border-cyber: rgba(0, 217, 255, 0.3);
+
+            /* Indian Flag Palette */
+            --flag-saffron: #FF9933;
+            --flag-white: #FFFFFF;
+            --flag-green: #138808;
         }
 
         * {
@@ -37,6 +46,63 @@
             overflow-x: hidden;
             min-height: 100vh;
             position: relative;
+        }
+
+        /* --- INDIAN FLAG GRADIENT UTILITIES --- */
+        .indian-flag-text {
+            background: linear-gradient(90deg, #FF9933 0%, #FFFFFF 50%, #138808 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            filter: drop-shadow(0 0 8px rgba(255, 153, 51, 0.4));
+        }
+
+        .indian-flag-card {
+            border: 2px solid transparent !important;
+            border-image: linear-gradient(135deg, #FF9933, #FFFFFF, #138808) 1 !important;
+            background: rgba(255, 153, 51, 0.05) !important;
+        }
+
+        .indian-flag-badge {
+            background: linear-gradient(90deg, rgba(255,153,51,0.2), rgba(255,255,255,0.2), rgba(19,136,8,0.2));
+            border: 1px solid #FF9933;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* --- PURPLE MEDIA UTILITIES --- */
+        .purple-media-text {
+            color: var(--purple-light) !important;
+            text-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
+        }
+
+        .purple-media-card {
+            border-color: var(--purple-media) !important;
+            background: rgba(168, 85, 247, 0.08) !important;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
+        }
+
+        .purple-media-badge {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid var(--purple-media);
+            color: var(--purple-light);
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Orbitron', sans-serif;
         }
 
         /* --- RED PIXEL SWORD / POINTER CURSOR --- */
@@ -78,13 +144,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 5%;
+            padding: 16px 4%;
             background: rgba(5, 8, 17, 0.92);
             backdrop-filter: blur(14px);
             border-bottom: 2px solid var(--border-cyber);
             position: sticky;
             top: 0;
             z-index: 100;
+            gap: 15px;
         }
 
         .brand {
@@ -123,8 +190,16 @@
 
         .nav-links {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .nav-btn {
@@ -135,7 +210,7 @@
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
-            padding: 8px 18px;
+            padding: 8px 14px;
             border-radius: 6px;
             transition: 0.3s;
         }
@@ -148,63 +223,99 @@
             text-shadow: 0 0 10px var(--cyan-glow);
         }
 
-        /* IMPROVED FLOATING LEFT SIDE POP-UP BADGE */
-        .floating-left-claim {
-            position: fixed;
-            left: 0;
-            top: 35%;
-            z-index: 950;
-            background: rgba(10, 16, 30, 0.95);
-            border: 2px solid var(--neon-green);
-            border-left: none;
-            padding: 14px 18px;
-            border-radius: 0 16px 16px 0;
+        /* GHOST AI BUTTON (HEADER FEATURE) */
+        .ghost-ai-trigger-btn {
+            background: linear-gradient(135deg, #00f0ff, #7000ff);
+            color: #ffffff !important;
+            border: 1px solid var(--ghost-glow);
+            font-weight: 900;
             font-family: 'Orbitron', sans-serif;
-            box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
-            display: flex;
+            font-size: 13px;
+            letter-spacing: 1px;
+            padding: 9px 18px;
+            border-radius: 8px;
+            box-shadow: 0 0 18px rgba(0, 240, 255, 0.4);
+            display: inline-flex;
             align-items: center;
-            gap: 14px;
-            max-width: 230px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            backdrop-filter: blur(12px);
-            animation: pulseGlowLeft 2.5s infinite alternate;
+            gap: 8px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes pulseGlowLeft {
-            0% { box-shadow: 0 0 15px rgba(0, 255, 136, 0.3); border-color: var(--neon-green); }
-            100% { box-shadow: 0 0 32px rgba(0, 243, 255, 0.7); border-color: var(--cyan-glow); }
+        .ghost-ai-trigger-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: rotate(45deg);
+            animation: ghostGlowSweep 3s infinite linear;
         }
 
-        .floating-left-claim:hover {
-            transform: translateX(8px);
-            background: rgba(0, 255, 136, 0.18);
+        @keyframes ghostGlowSweep {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
         }
 
-        .floating-icon {
-            font-size: 26px;
-            animation: floatGhost 2s infinite ease-in-out;
+        .ghost-ai-trigger-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 28px rgba(0, 240, 255, 0.8), 0 0 12px rgba(168, 85, 247, 0.8);
+            border-color: #ffffff;
         }
 
-        @keyframes floatGhost {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
-
-        .floating-left-text {
-            font-size: 11px;
+        /* DONATE BUTTON (RIGHT SIDE HEADER) */
+        .donate-btn {
+            background: linear-gradient(90deg, var(--neon-red), var(--gold-accent));
+            color: #ffffff !important;
+            border: none;
             font-weight: 800;
-            color: #fff;
-            line-height: 1.35;
             letter-spacing: 0.5px;
-            text-transform: uppercase;
+            padding: 9px 18px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(255, 17, 68, 0.4);
+            animation: donatePulse 2s infinite ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .floating-left-text span {
-            color: var(--neon-green);
-            display: block;
-            font-size: 10px;
-            margin-top: 2px;
+        .donate-btn:hover {
+            background: #ffffff;
+            color: #000000 !important;
+            box-shadow: 0 0 25px rgba(255, 183, 0, 0.9);
+            transform: translateY(-2px);
+            text-shadow: none !important;
+        }
+
+        @keyframes donatePulse {
+            0%, 100% { box-shadow: 0 0 12px rgba(255, 17, 68, 0.4); }
+            50% { box-shadow: 0 0 22px rgba(255, 183, 0, 0.8); }
+        }
+
+        /* SERVER STATUS BAR */
+        .server-status-bar {
+            background: rgba(0, 217, 255, 0.08);
+            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+            padding: 8px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-green);
         }
 
         /* PAGE VIEWS CONTROLLER */
@@ -386,9 +497,16 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 34px;
             font-weight: 900;
-            margin-bottom: 35px;
+            margin-bottom: 10px;
             color: #fff;
             letter-spacing: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-dim);
+            margin-bottom: 35px;
+            font-size: 16px;
         }
 
         .ranks-grid {
@@ -506,7 +624,7 @@
 
         .info-card h3 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 22px;
+            font-size: 20px;
             color: var(--cyan-glow);
             margin-bottom: 15px;
             display: flex;
@@ -522,15 +640,15 @@
             padding: 10px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             color: var(--text-dim);
-            font-size: 15px;
-            line-height: 1.5;
+            font-size: 14px;
+            line-height: 1.6;
         }
 
         .rules-list li strong {
             color: #fff;
         }
 
-        /* COMMUNITY & STAFF (EMOJI ONLY) */
+        /* STAFF GRID */
         .staff-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -550,7 +668,6 @@
         }
 
         .staff-card:hover {
-            border-color: var(--cyan-glow);
             transform: translateY(-4px);
         }
 
@@ -576,22 +693,6 @@
             text-transform: uppercase;
         }
 
-        .developer-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255, 17, 68, 0.15);
-            border: 1px solid var(--neon-red);
-            color: var(--neon-red);
-            font-size: 12px;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-top: 8px;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        /* CLOSED POSTS NOTICE CARD */
         .staff-closed-card {
             max-width: 1100px;
             margin: 0 auto;
@@ -614,6 +715,309 @@
             font-size: 15px;
         }
 
+        /* VOTE PAGE STYLING */
+        .vote-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .vote-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-cyber);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .vote-card:hover {
+            border-color: var(--cyan-glow);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 217, 255, 0.2);
+        }
+
+        .vote-card i {
+            font-size: 36px;
+            color: var(--cyan-glow);
+            margin-bottom: 12px;
+        }
+
+        .vote-btn {
+            width: 100%;
+            background: linear-gradient(90deg, var(--cyan-glow), var(--blue-accent));
+            border: none;
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .vote-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 15px #fff;
+        }
+
+        /* ==========================================
+           GHOST AI VERSION 2.93 TERMINAL STYLING
+           ========================================== */
+        .ghost-ai-container {
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .ghost-terminal-card {
+            background: var(--ghost-bg);
+            border: 2px solid var(--ghost-glow);
+            border-radius: 20px;
+            box-shadow: 0 0 45px rgba(0, 240, 255, 0.3), inset 0 0 25px rgba(0, 240, 255, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 620px;
+            backdrop-filter: blur(15px);
+        }
+
+        .ghost-terminal-header {
+            background: rgba(5, 10, 25, 0.95);
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-cyber);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ghost-identity {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .ghost-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00f0ff, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 18px var(--ghost-glow);
+            animation: ghostFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes ghostFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .ghost-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 19px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ghost-badge {
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.2), rgba(168, 85, 247, 0.2));
+            color: var(--ghost-glow);
+            border: 1px solid var(--ghost-glow);
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .ghost-chat-body {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            max-height: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .ghost-msg {
+            display: flex;
+            gap: 12px;
+            max-width: 88%;
+            animation: ghostMsgFade 0.3s ease-out;
+        }
+
+        @keyframes ghostMsgFade {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ghost-msg.user {
+            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .ghost-msg-bubble {
+            background: rgba(10, 20, 40, 0.92);
+            border: 1px solid var(--border-cyber);
+            border-radius: 14px;
+            padding: 15px 20px;
+            color: #ffffff;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .ghost-msg.user .ghost-msg-bubble {
+            background: linear-gradient(135deg, var(--blue-accent), #4f46e5);
+            border-color: rgba(255, 255, 255, 0.3);
+            border-bottom-right-radius: 2px;
+        }
+
+        .ghost-msg.ai .ghost-msg-bubble {
+            border-color: var(--ghost-glow);
+            box-shadow: 0 0 18px rgba(0, 240, 255, 0.12);
+            border-bottom-left-radius: 2px;
+        }
+
+        /* DYNAMIC NESTED SUB-QUESTION BUTTONS IN CHAT */
+        .sub-questions-container {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(0, 240, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sub-q-title {
+            font-size: 12px;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--gold-accent);
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .sub-q-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .sub-q-btn {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--cyan-glow);
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sub-q-btn:hover {
+            background: var(--cyan-glow);
+            color: #000;
+            box-shadow: 0 0 12px var(--cyan-glow);
+        }
+
+        .ghost-options-panel {
+            background: rgba(5, 10, 25, 0.96);
+            border-top: 1px solid var(--border-cyber);
+            padding: 20px;
+        }
+
+        .ghost-options-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ghost-options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 10px;
+        }
+
+        .ghost-opt-btn {
+            background: rgba(0, 240, 255, 0.06);
+            border: 1px solid rgba(0, 240, 255, 0.25);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 11px 14px;
+            border-radius: 10px;
+            text-align: left;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ghost-opt-btn i {
+            color: var(--ghost-glow);
+            font-size: 14px;
+        }
+
+        .ghost-opt-btn:hover {
+            background: rgba(0, 240, 255, 0.22);
+            border-color: var(--ghost-glow);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
+        /* TERMS ACCEPTANCE CHECKBOX & MODAL */
+        .terms-box {
+            background: rgba(5, 8, 17, 0.9);
+            border: 1px solid var(--border-cyber);
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            text-align: left;
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .terms-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+            font-size: 14px;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .terms-checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--cyan-glow);
+            cursor: pointer;
+        }
+
         /* MODALS (GENERAL OVERLAY) */
         .modal-overlay {
             position: fixed;
@@ -621,8 +1025,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(4, 7, 13, 0.92);
-            backdrop-filter: blur(12px);
+            background: rgba(4, 7, 13, 0.93);
+            backdrop-filter: blur(14px);
             z-index: 10000;
             display: none;
             place-items: center;
@@ -631,13 +1035,13 @@
 
         .modal-card {
             background: var(--bg-card);
-            border: 2px solid var(--neon-red);
+            border: 2px solid var(--border-cyber);
             padding: 35px;
             border-radius: 20px;
-            max-width: 520px;
+            max-width: 550px;
             width: 100%;
             text-align: center;
-            box-shadow: 0 0 40px rgba(255, 34, 85, 0.3);
+            box-shadow: 0 0 50px rgba(0, 217, 255, 0.3);
             position: relative;
             animation: modalPop 0.3s ease;
         }
@@ -648,7 +1052,7 @@
         }
 
         .modal-icon {
-            font-size: 48px;
+            font-size: 52px;
             color: var(--neon-red);
             margin-bottom: 15px;
         }
@@ -671,20 +1075,26 @@
         .modal-discord-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
-            background: #5865F2;
+            background: linear-gradient(90deg, #5865F2, #4752C4);
             color: #fff;
             font-family: 'Orbitron', sans-serif;
             font-weight: 800;
-            padding: 12px 28px;
-            border-radius: 8px;
+            padding: 14px 28px;
+            border-radius: 10px;
             text-decoration: none;
             transition: 0.3s;
+            width: 100%;
+            margin-top: 15px;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
         }
 
         .modal-discord-btn:hover {
-            background: #4752C4;
-            box-shadow: 0 0 20px rgba(88, 101, 242, 0.6);
+            background: #fff;
+            color: #5865F2;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
         }
 
         .modal-close-btn {
@@ -694,7 +1104,7 @@
             background: transparent;
             border: none;
             color: var(--text-dim);
-            font-size: 24px;
+            font-size: 26px;
             transition: 0.2s;
         }
 
@@ -702,80 +1112,57 @@
             color: #fff;
         }
 
-        /* POPUP: FREE WEBSITE CLAIM MODAL */
-        #free-web-modal .modal-card {
-            border-color: var(--neon-green);
-            box-shadow: 0 0 45px rgba(0, 255, 136, 0.35);
-            text-align: left;
+        /* REALISTIC ANIMATED PAYMENT GATEWAY STYLING */
+        .payment-progress-container {
+            margin: 20px 0;
+            text-align: center;
         }
 
-        .free-web-badge {
-            display: inline-block;
-            background: var(--neon-green);
-            color: #000;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            padding: 5px 14px;
+        .payment-spinner-ring {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border: 4px solid rgba(0, 217, 255, 0.15);
+            border-top: 4px solid var(--cyan-glow);
+            border-right: 4px solid var(--blue-accent);
+            border-radius: 50%;
+            animation: spinRing 1s linear infinite;
+            box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
+        }
+
+        @keyframes spinRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .payment-bar-outer {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            font-size: 11px;
-            margin-bottom: 15px;
-        }
-
-        .claim-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border-cyber);
             margin-top: 15px;
+            position: relative;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+        .payment-bar-inner {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--cyan-glow), var(--neon-green));
+            box-shadow: 0 0 15px var(--cyan-glow);
+            transition: width 0.3s ease;
         }
 
-        .form-group label {
-            font-family: 'Orbitron', sans-serif;
+        .payment-steps-list {
             font-size: 12px;
-            color: var(--cyan-glow);
+            color: var(--text-dim);
+            margin-top: 12px;
+            font-family: 'Orbitron', sans-serif;
             letter-spacing: 1px;
         }
 
-        .form-input {
-            background: rgba(5, 8, 17, 0.85);
-            border: 1px solid var(--border-cyber);
-            border-radius: 8px;
-            padding: 12px 15px;
-            color: #fff;
-            font-size: 15px;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        .form-input:focus {
-            border-color: var(--cyan-glow);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
-        }
-
-        .claim-submit-btn {
-            background: linear-gradient(90deg, var(--neon-green), var(--cyan-glow));
-            color: #000;
-            border: none;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 15px;
-            margin-top: 10px;
-            transition: 0.3s;
-        }
-
-        .claim-submit-btn:hover {
-            background: #fff;
-            box-shadow: 0 0 20px #fff;
-        }
-
-        /* FLOATING BOTTOM-MIDDLE LOGIN PILL (EMOJI AVATAR) */
+        /* FLOATING BOTTOM-MIDDLE LOGIN PILL */
         .floating-login-container {
             position: fixed;
             bottom: 20px;
@@ -828,6 +1215,26 @@
             box-shadow: 0 0 10px #fff;
         }
 
+        /* ODERISMC X YJDEV LINK STYLING */
+        .yjdev-link {
+            color: var(--cyan-glow);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-bottom: 1px dashed var(--cyan-glow);
+            padding-bottom: 2px;
+            transition: 0.3s;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .yjdev-link:hover {
+            color: #ffffff;
+            border-color: #ffffff;
+            text-shadow: 0 0 12px var(--cyan-glow);
+        }
+
         /* FOOTER */
         footer {
             border-top: 1px solid var(--border-cyber);
@@ -874,12 +1281,13 @@
                 justify-content: center;
             }
 
-            .floating-left-claim {
-                top: auto;
-                bottom: 80px;
-                border-left: 2px solid var(--neon-green);
-                border-radius: 12px;
-                left: 15px;
+            .header-actions {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .ghost-options-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -901,15 +1309,6 @@
     <!-- CANVAS BACKGROUND -->
     <canvas id="bg-canvas"></canvas>
 
-    <!-- FLOATING LEFT SIDE POP-UP BADGE -->
-    <div class="floating-left-claim" onclick="openModal('free-web-modal')">
-        <div class="floating-icon">👻</div>
-        <div class="floating-left-text">
-            Claim a Free Website
-            <span>Powered by YJDEV STUDIO's Ghost AI</span>
-        </div>
-    </div>
-
     <!-- HEADER NAVIGATION -->
     <header>
         <div class="brand" onclick="switchPage('home')">
@@ -919,17 +1318,43 @@
                 <span class="brand-subtitle">CYBER NETWORK</span>
             </div>
         </div>
+
+        <!-- MAIN NAV LINKS -->
         <div class="nav-links">
             <button class="nav-btn active" id="nav-home" onclick="switchPage('home')">Home</button>
             <button class="nav-btn" id="nav-store" onclick="switchPage('store')">Ranks & Store</button>
+            <button class="nav-btn" id="nav-vote" onclick="switchPage('vote')">Vote & Rewards</button>
             <button class="nav-btn" id="nav-rules" onclick="switchPage('rules')">Rules & FAQ</button>
+            <button class="nav-btn" id="nav-terms" onclick="switchPage('terms')">Terms & Policy</button>
             <button class="nav-btn" id="nav-community" onclick="switchPage('community')">Community & Staff</button>
             
             <a href="https://discord.gg/d7W62FeAXM" target="_blank" class="nav-btn" style="color: var(--cyan-glow);">
                 <i class="fab fa-discord"></i> Discord
             </a>
         </div>
+
+        <!-- HEADER RIGHT ACTIONS (GHOST AI BUTTON & DONATE BUTTON) -->
+        <div class="header-actions">
+            <!-- GHOST AI VERSION 2.93 BUTTON -->
+            <button class="ghost-ai-trigger-btn" onclick="openGhostAIPage()">
+                <i class="fas fa-ghost"></i> GHOST AI v2.93
+            </button>
+
+            <!-- DONATE BUTTON ON RIGHT SIDE -->
+            <button class="donate-btn" onclick="startRankPurchase('SERVER DONATION')">
+                <i class="fas fa-heart"></i> Donate to keep the server running forever with your Help!
+            </button>
+        </div>
     </header>
+
+    <!-- LIVE SERVER STATUS BAR -->
+    <div class="server-status-bar">
+        <span><span class="status-indicator"></span> SERVER STATUS: <strong style="color: var(--neon-green);">ONLINE</strong></span>
+        <span style="color: var(--text-dim);">|</span>
+        <span>PLAYERS ONLINE: <strong style="color: var(--cyan-glow);">142 / 500</strong></span>
+        <span style="color: var(--text-dim);">|</span>
+        <span>JAVA & BEDROCK CROSS-PLAY</span>
+    </div>
 
     <main>
         <!-- ==========================================
@@ -957,8 +1382,12 @@
                     <button class="action-btn" onclick="switchPage('store')">
                         <i class="fas fa-shopping-cart"></i> VIEW ALL RANKS
                     </button>
-                    <button class="action-btn" style="background: rgba(0,255,136,0.2); border: 1px solid var(--neon-green); color: var(--neon-green);" onclick="openModal('free-web-modal')">
-                        👻 FREE WEBSITE CLAIM
+                    <!-- HERO CTA FOR GHOST AI ASSISTANT -->
+                    <button class="action-btn" style="background: linear-gradient(90deg, #00f0ff, #7000ff); color: #fff;" onclick="openGhostAIPage()">
+                        <i class="fas fa-ghost"></i> ASK GHOST AI v2.93
+                    </button>
+                    <button class="action-btn" style="background: linear-gradient(90deg, var(--neon-red), var(--gold-accent)); color: #fff;" onclick="startRankPurchase('SERVER DONATION')">
+                        <i class="fas fa-heart"></i> DONATE NOW
                     </button>
                 </div>
             </div>
@@ -976,9 +1405,9 @@
                     <p>Build safely with full grief prevention claims. Keep inventory is active across all survival worlds.</p>
                 </div>
                 <div class="feature-card">
-                    <i class="fas fa-code"></i>
-                    <h3>Ghost AI Engine</h3>
-                    <p>Engineered by YJDEV STUDIOS. Need a website for your guild or stream? Request your free site directly on our platform!</p>
+                    <i class="fas fa-server"></i>
+                    <h3>YJDEV STUDIOS Hosting</h3>
+                    <p>Powered by high-performance cyber infrastructure engineered for maximum uptime, security, and low latency.</p>
                 </div>
             </div>
         </section>
@@ -989,6 +1418,8 @@
         <section class="page-view" id="page-store">
             <div class="store-section">
                 <h2 class="section-title">SERVER RANKS (MONTHLY SUBSCRIPTION)</h2>
+                <p class="section-subtitle">Support the network and unlock exclusive permissions, custom kits, and cosmetic perks!</p>
+                
                 <div class="ranks-grid">
 
                     <!-- Hero Rank -->
@@ -1003,7 +1434,7 @@
                             <li><i class="fas fa-check"></i> 3 Vault Claims</li>
                             <li><i class="fas fa-check"></i> Kit Hero Access</li>
                         </ul>
-                        <button class="buy-btn" onclick="triggerPaymentModal('HERO')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" onclick="startRankPurchase('HERO')">SUBSCRIBE RANK</button>
                     </div>
 
                     <!-- Titan Rank -->
@@ -1018,7 +1449,7 @@
                             <li><i class="fas fa-check"></i> 5 Vault Claims</li>
                             <li><i class="fas fa-check"></i> Kit Titan Access</li>
                         </ul>
-                        <button class="buy-btn" onclick="triggerPaymentModal('TITAN')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" onclick="startRankPurchase('TITAN')">SUBSCRIBE RANK</button>
                     </div>
 
                     <!-- Knight Rank -->
@@ -1033,7 +1464,7 @@
                             <li><i class="fas fa-check"></i> 8 Vault Claims</li>
                             <li><i class="fas fa-check"></i> Kit Knight Access</li>
                         </ul>
-                        <button class="buy-btn" onclick="triggerPaymentModal('KNIGHT')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" onclick="startRankPurchase('KNIGHT')">SUBSCRIBE RANK</button>
                     </div>
 
                     <!-- Champion Rank -->
@@ -1048,7 +1479,7 @@
                             <li><i class="fas fa-check"></i> 12 Vault Claims</li>
                             <li><i class="fas fa-check"></i> Kit Champion Access</li>
                         </ul>
-                        <button class="buy-btn" onclick="triggerPaymentModal('CHAMPION')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" onclick="startRankPurchase('CHAMPION')">SUBSCRIBE RANK</button>
                     </div>
 
                     <!-- Custom Rank -->
@@ -1063,7 +1494,7 @@
                             <li><i class="fas fa-check"></i> 15 Vault Claims</li>
                             <li><i class="fas fa-check"></i> VIP Discord Role</li>
                         </ul>
-                        <button class="buy-btn" onclick="triggerPaymentModal('CUSTOM')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" onclick="startRankPurchase('CUSTOM')">SUBSCRIBE RANK</button>
                     </div>
 
                     <!-- Oderis Rank -->
@@ -1078,7 +1509,7 @@
                             <li><i class="fas fa-check"></i> Unlimited Teleports</li>
                             <li><i class="fas fa-check"></i> Exclusive Oderis God Kit</li>
                         </ul>
-                        <button class="buy-btn" style="background: linear-gradient(90deg, var(--neon-green), var(--cyan-glow));" onclick="triggerPaymentModal('ODERIS')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" style="background: linear-gradient(90deg, var(--neon-green), var(--cyan-glow));" onclick="startRankPurchase('ODERIS')">SUBSCRIBE RANK</button>
                     </div>
 
                 </div>
@@ -1086,27 +1517,85 @@
         </section>
 
         <!-- ==========================================
-             PAGE 3: RULES & FAQ
+             PAGE 3: VOTE & REWARDS
+             ========================================== -->
+        <section class="page-view" id="page-vote">
+            <div class="store-section">
+                <h2 class="section-title">VOTE FOR ODERISMC</h2>
+                <p class="section-subtitle">Vote daily on top server lists to earn free vote keys, coins, and crate keys in-game!</p>
+                
+                <div class="vote-cards-grid">
+                    <div class="vote-card">
+                        <i class="fas fa-check-circle"></i>
+                        <h3 style="color:#fff; font-family:'Orbitron'; font-size:18px;">TopG Site #1</h3>
+                        <p style="color:var(--text-dim); font-size:13px; margin-top:5px;">Reward: 1x Vote Key + $1000 Coins</p>
+                        <button class="vote-btn" onclick="alert('Voting link opening...')">VOTE NOW</button>
+                    </div>
+                    <div class="vote-card">
+                        <i class="fas fa-star"></i>
+                        <h3 style="color:#fff; font-family:'Orbitron'; font-size:18px;">NameMC Site #2</h3>
+                        <p style="color:var(--text-dim); font-size:13px; margin-top:5px;">Reward: Exclusive Vote Cosmetic</p>
+                        <button class="vote-btn" onclick="alert('Voting link opening...')">VOTE NOW</button>
+                    </div>
+                    <div class="vote-card">
+                        <i class="fas fa-award"></i>
+                        <h3 style="color:#fff; font-family:'Orbitron'; font-size:18px;">Minecraft-MP #3</h3>
+                        <p style="color:var(--text-dim); font-size:13px; margin-top:5px;">Reward: 1x Rare Crate Key</p>
+                        <button class="vote-btn" onclick="alert('Voting link opening...')">VOTE NOW</button>
+                    </div>
+                    <div class="vote-card">
+                        <i class="fas fa-trophy"></i>
+                        <h3 style="color:#fff; font-family:'Orbitron'; font-size:18px;">PlanetMinecraft #4</h3>
+                        <p style="color:var(--text-dim); font-size:13px; margin-top:5px;">Reward: 2x Vote Keys + XP Boost</p>
+                        <button class="vote-btn" onclick="alert('Voting link opening...')">VOTE NOW</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PAGE 4: EXPANDED RULES & FAQ
              ========================================== -->
         <section class="page-view" id="page-rules">
             <div class="store-section">
-                <h2 class="section-title">SERVER RULES & FAQ</h2>
+                <h2 class="section-title">EXPANDED SERVER RULES & CODE OF CONDUCT</h2>
+                <p class="section-subtitle">Please read all server rules carefully. Ignorance of rules is not an excuse for violations.</p>
                 <div class="info-grid">
                     <div class="info-card">
-                        <h3><i class="fas fa-gavel"></i> GENERAL RULES</h3>
+                        <h3><i class="fas fa-gavel"></i> 1. CHAT & COMMUNITY RULES</h3>
                         <ul class="rules-list">
-                            <li><strong>1. Fair Play:</strong> Cheating, x-ray, or exploit mods are strictly prohibited.</li>
-                            <li><strong>2. Respect Everyone:</strong> Keep chat friendly and non-toxic.</li>
-                            <li><strong>3. Land Claims:</strong> Respect player land protections across all realms.</li>
+                            <li><strong>1.1 Respect All Players:</strong> Severe toxicity, hate speech, racism, sexism, or discrimination will result in instant permanent muted/banned status.</li>
+                            <li><strong>1.2 No Spamming:</strong> Fast repetitive messages, all-caps spam, or character floods are strictly blocked.</li>
+                            <li><strong>1.3 No Advertising:</strong> Promoting other Minecraft servers, Discord servers, or commercial links is forbidden.</li>
+                            <li><strong>1.4 Staff Impersonation:</strong> Falsely claiming to be an Owner, Admin, or Moderator will lead to an immediate network ban.</li>
                         </ul>
                     </div>
 
                     <div class="info-card">
-                        <h3><i class="fas fa-plug"></i> CONNECTION DETAILS</h3>
+                        <h3><i class="fas fa-shield-alt"></i> 2. GAMEPLAY & FAIR PLAY</h3>
                         <ul class="rules-list">
-                            <li><strong>Java Server IP:</strong> play.oderismc.fun</li>
-                            <li><strong>Bedrock / PE IP:</strong> play.oderismc.fun (Port: 19142)</li>
-                            <li><strong>Supported Versions:</strong> 1.18.x to 1.20.x</li>
+                            <li><strong>2.1 Zero Tolerance Hacking:</strong> Use of X-Ray, Fly, KillAura, Speed, Auto-clickers (>15 CPS), or modified clients is permanently bannable.</li>
+                            <li><strong>2.2 Exploits & Duping:</strong> Exploiting server bugs, item duplication, or map glitches will result in complete account wipes and IP bans.</li>
+                            <li><strong>2.3 Allowed Mods:</strong> OptiFine, Sodium, Minimaps (without player radar), and purely aesthetic HUD mods are allowed.</li>
+                            <li><strong>2.4 AFK Farms:</strong> Auto-clicker AFK farming is prohibited. Passive mob farms within reasonable chunk limits are allowed.</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fas fa-map-marked-alt"></i> 3. CLAIMS & GRIEF PREVENTION</h3>
+                        <ul class="rules-list">
+                            <li><strong>3.1 Land Claim Safety:</strong> Players must protect their builds using the claim system. Griefing unclaimed builds is frowned upon, but claimed land is 100% protected.</li>
+                            <li><strong>3.2 Claim Surround Griefing:</strong> Lava-casting, water-grieving, or building obtrusive structures right outside someone's claim boundary is strictly punishable.</li>
+                            <li><strong>3.3 Portal Trapping:</strong> Trapping Nether or End portals to permanently kill players is prohibited.</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fas fa-coins"></i> 4. ECONOMY & TRADING RULES</h3>
+                        <ul class="rules-list">
+                            <li><strong>4.1 Scamming Policy:</strong> In-game currency or item scamming during official auctions or direct trades is punishable by item rollback.</li>
+                            <li><strong>4.2 Real-Money Trading (RMT):</strong> Trading in-game cash or items for real money outside the official server store is strictly forbidden.</li>
+                            <li><strong>4.3 Chargeback Protection:</strong> Fraudulent billing chargebacks trigger automated IP bans across the entire OderisMC network.</li>
                         </ul>
                     </div>
                 </div>
@@ -1114,48 +1603,99 @@
         </section>
 
         <!-- ==========================================
-             PAGE 4: COMMUNITY & STAFF (EMOJIS ONLY)
+             PAGE 5: EXPANDED TERMS & CONDITIONS
+             ========================================== -->
+        <section class="page-view" id="page-terms">
+            <div class="store-section">
+                <h2 class="section-title">EXPANDED TERMS & CONDITIONS & LEGAL POLICY</h2>
+                <p class="section-subtitle">Official payment policy, virtual goods agreement, privacy rules, and network service terms.</p>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3><i class="fas fa-file-contract"></i> 1. ACCEPTANCE & SERVICE TERMS</h3>
+                        <ul class="rules-list">
+                            <li><strong>1.1 Binding Agreement:</strong> By accessing the ODERISMC server or making a transaction, you agree to comply with all terms herein.</li>
+                            <li><strong>1.2 Digital Intangibles:</strong> All rank subscriptions, virtual coins, keys, and cosmetics are intangible digital perks with zero real-world monetary value.</li>
+                            <li><strong>1.3 Subscription Validity:</strong> Purchased rank subscriptions remain active for exactly 30 calendar days from the moment of activation.</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fas fa-ban"></i> 2. STRICT REFUND & CHARGEBACK POLICY</h3>
+                        <ul class="rules-list">
+                            <li><strong>2.1 Non-Refundable Sales:</strong> All sales completed on the ODERISMC store or via manual payment are strictly final and non-refundable.</li>
+                            <li><strong>2.2 Anti-Fraud & Disputes:</strong> Opening an unauthorized payment dispute or chargeback will immediately trigger a permanent network-wide IP ban.</li>
+                            <li><strong>2.3 Rule Enforcement Exemption:</strong> Buying a rank does NOT grant immunity from server rules. Banned players forfeit rank access without refund.</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fas fa-university"></i> 3. MANUAL PAYMENT & GATEWAY SERVICE</h3>
+                        <ul class="rules-list">
+                            <li><strong>3.1 Automated Gateway Status:</strong> If automated online gateways (such as FamPay or UPI portals) fail to connect due to network isolation, payments must be processed manually.</li>
+                            <li><strong>3.2 Manual Processing Time:</strong> Manual payments conducted via Discord Support Tickets are verified within 1 to 12 hours by designated server owners.</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fas fa-microchip"></i> 4. INTELLECTUAL PROPERTY & NETWORK HOSTING</h3>
+                        <ul class="rules-list">
+                            <li><strong>4.1 Brand Ownership:</strong> ODERISMC name, logos, and custom graphics are protected property of ODERISMC and YJDEV STUDIOS.</li>
+                            <li><strong>4.2 Server Hosting:</strong> Web systems and server clusters are maintained and engineered by <strong>YJDEV STUDIOS</strong> led by YUVRAJ_THELEGEND.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PAGE 6: COMMUNITY & STAFF (WITH INDIAN FLAG & PURPLE MEDIA)
              ========================================== -->
         <section class="page-view" id="page-community">
             <div class="store-section">
                 <h2 class="section-title">OFFICIAL NETWORK STAFF</h2>
-                
+                <p class="section-subtitle">Meet the team managing and operating the ODERISMC Cyber Network!</p>
+
                 <div class="staff-grid">
-                    <!-- Owner 1 -->
-                    <div class="staff-card">
+                    <!-- Owner 1 (Indian Flag Styled) -->
+                    <div class="staff-card indian-flag-card">
                         <span class="staff-emoji-avatar">👑</span>
-                        <div class="staff-name">Sakarw_al142</div>
-                        <div class="staff-role">Server Owner</div>
+                        <div class="staff-name indian-flag-text">Sakarw_al142</div>
+                        <div class="staff-role" style="color: var(--flag-saffron);">Server Owner</div>
+                        <div class="indian-flag-badge">🇮🇳 Network Owner</div>
                     </div>
 
-                    <!-- Owner 2 -->
-                    <div class="staff-card">
+                    <!-- Owner 2 (Indian Flag Styled) -->
+                    <div class="staff-card indian-flag-card">
                         <span class="staff-emoji-avatar">👑</span>
-                        <div class="staff-name">King_Oderis</div>
-                        <div class="staff-role">Server Owner</div>
+                        <div class="staff-name indian-flag-text">King_Oderis</div>
+                        <div class="staff-role" style="color: var(--flag-saffron);">Server Owner</div>
+                        <div class="indian-flag-badge">🇮🇳 Network Owner</div>
                     </div>
 
-                    <!-- Owner 3 -->
-                    <div class="staff-card">
+                    <!-- Owner 3 (Indian Flag Styled) -->
+                    <div class="staff-card indian-flag-card">
                         <span class="staff-emoji-avatar">👑</span>
-                        <div class="staff-name">Ayushggs</div>
-                        <div class="staff-role">Server Owner</div>
+                        <div class="staff-name indian-flag-text">Ayushggs</div>
+                        <div class="staff-role" style="color: var(--flag-saffron);">Server Owner</div>
+                        <div class="indian-flag-badge">🇮🇳 Network Owner</div>
                     </div>
 
-                    <!-- Media -->
-                    <div class="staff-card">
+                    <!-- Media (Purple Styled) -->
+                    <div class="staff-card purple-media-card">
                         <span class="staff-emoji-avatar">🎥</span>
-                        <div class="staff-name">NamanGamerz26</div>
-                        <div class="staff-role" style="color: var(--cyan-glow);">Media / Creator</div>
+                        <div class="staff-name purple-media-text">NamanGamerz26</div>
+                        <div class="staff-role purple-media-text">Media / Creator</div>
+                        <div class="purple-media-badge">🎬 Official Media</div>
                     </div>
 
-                    <!-- Developer (Custom Developer Emoji Badge) -->
-                    <div class="staff-card" style="border-color: var(--neon-red); background: rgba(255,17,68,0.06);">
+                    <!-- Developer: YUVRAJ_THELEGEND (Indian Flag Styled & Website Developer) -->
+                    <div class="staff-card indian-flag-card">
                         <span class="staff-emoji-avatar">👑💻⚡</span>
-                        <div class="staff-name">YUVRAJ_THELEGEND</div>
-                        <div class="staff-role" style="color: var(--neon-red);">Lead Developer</div>
-                        <div class="developer-badge">
-                            🔥 aka ragebg.exe
+                        <div class="staff-name indian-flag-text">YUVRAJ_THELEGEND</div>
+                        <div class="staff-role" style="color: var(--flag-saffron);">Website Developer</div>
+                        <div class="indian-flag-badge">
+                            🇮🇳 aka ragebg.exe
                         </div>
                     </div>
                 </div>
@@ -1168,58 +1708,178 @@
 
             </div>
         </section>
+
+        <!-- ==========================================
+             PAGE 7: ODERISMC X YJDEV LINK
+             ========================================== -->
+        <section class="page-view" id="page-partnership">
+            <div class="hero">
+                <div class="banner-wrapper" style="border-color: var(--cyan-glow);">
+                    <div class="banner-crown">⚡</div>
+                    <div class="banner-logo-text" style="font-size: 38px;">ODERISMC x YJDEV STUDIOS</div>
+                </div>
+
+                <h1 style="font-family: 'Orbitron', sans-serif; font-size: 28px; color: var(--cyan-glow); margin-bottom: 20px; text-shadow: 0 0 15px rgba(0,217,255,0.6);">
+                    Website of OderisMC and hosted by YJDEV STUDIOS
+                </h1>
+
+                <p style="font-size: 18px; color: var(--text-dim); max-width: 700px; margin: 0 auto 30px;">
+                    This official web platform and server network ecosystem are operated, hosted, and powered by <strong>YJDEV STUDIOS</strong> infrastructure under lead developer <strong>YUVRAJ_THELEGEND</strong> (ragebg.exe).
+                </p>
+
+                <button class="action-btn" onclick="switchPage('home')">
+                    <i class="fas fa-arrow-left"></i> RETURN TO HOME
+                </button>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PAGE 8: GHOST AI VERSION 2.93 INTERACTIVE PAGE
+             ========================================== -->
+        <section class="page-view" id="page-ghost-ai">
+            <div class="ghost-ai-container">
+                <div class="ghost-terminal-card">
+                    <!-- GHOST AI TERMINAL HEADER -->
+                    <div class="ghost-terminal-header">
+                        <div class="ghost-identity">
+                            <div class="ghost-avatar">👻</div>
+                            <div>
+                                <div class="ghost-title">GHOST AI <span class="ghost-badge">v2.93 ONLINE</span></div>
+                                <div style="font-size: 12px; color: var(--text-dim);">ODERISMC Smart Interactive Knowledge Assistant</div>
+                            </div>
+                        </div>
+                        <button class="copy-btn" style="padding: 6px 12px; font-size: 11px;" onclick="clearGhostChat()">
+                            <i class="fas fa-trash"></i> CLEAR CHAT
+                        </button>
+                    </div>
+
+                    <!-- GHOST CHAT FEED AREA -->
+                    <div class="ghost-chat-body" id="ghost-chat-feed">
+                        <div class="ghost-msg ai">
+                            <div class="ghost-avatar" style="width: 32px; height: 32px; font-size: 16px;">👻</div>
+                            <div class="ghost-msg-bubble">
+                                <strong style="color: var(--ghost-glow);">GHOST AI v2.93:</strong> Welcome player! 👋 I am upgraded to Version 2.93 with interactive nested questions! Click any primary query below to open detailed answers along with related sub-questions:
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INTERACTIVE CLICK OPTIONS PANEL -->
+                    <div class="ghost-options-panel">
+                        <div class="ghost-options-label">
+                            <span><i class="fas fa-list-check"></i> SELECT A MAIN TOPIC TO ASK:</span>
+                            <span style="color: var(--neon-green);">v2.93 Dynamic Q&A Engine</span>
+                        </div>
+                        <div class="ghost-options-grid">
+                            <button class="ghost-opt-btn" onclick="askGhostAI('owners')">
+                                <i class="fas fa-crown"></i> Who's the owner?
+                            </button>
+                            <button class="ghost-opt-btn" onclick="askGhostAI('ip')">
+                                <i class="fas fa-server"></i> Server IP & Port Details
+                            </button>
+                            <button class="ghost-opt-btn" onclick="askGhostAI('ranks')">
+                                <i class="fas fa-gem"></i> How to Buy Ranks & Prices
+                            </button>
+                            <button class="ghost-opt-btn" onclick="askGhostAI('rules')">
+                                <i class="fas fa-shield-alt"></i> Server Rules & Fair Play
+                            </button>
+                            <button class="ghost-opt-btn" onclick="askGhostAI('dev')">
+                                <i class="fas fa-code"></i> Who built this Website?
+                            </button>
+                            <button class="ghost-opt-btn" onclick="askGhostAI('crossplay')">
+                                <i class="fas fa-gamepad"></i> How Cross-Play Works
+                            </button>
+                            <button class="ghost-opt-btn" onclick="askGhostAI('discord')">
+                                <i class="fab fa-discord"></i> Discord Community Link
+                            </button>
+                            <button class="ghost-opt-btn" onclick="askGhostAI('rewards')">
+                                <i class="fas fa-gift"></i> How to Get Free Rewards
+                            </button>
+                            <button class="ghost-opt-btn" onclick="askGhostAI('payment_help')">
+                                <i class="fas fa-credit-card"></i> Payment & Manual Gateway Help
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- ==========================================
-         POPUP 1: CLAIM FREE WEBSITE MODAL (GHOST AI)
+         STEP 1 MODAL: EXPANDED TERMS & CONDITIONS ACCEPTANCE
          ========================================== -->
-    <div class="modal-overlay" id="free-web-modal">
+    <div class="modal-overlay" id="terms-modal">
         <div class="modal-card">
-            <button class="modal-close-btn" onclick="closeModal('free-web-modal')">&times;</button>
-            <span class="free-web-badge"><i class="fas fa-ghost"></i> POWERED BY YJDEV STUDIO'S GHOST AI</span>
-            <h2 class="modal-title" style="text-align: left; color: #fff;">CLAIM A FREE WEBSITE</h2>
-            <p class="modal-msg" style="text-align: left; font-size: 15px; margin-bottom: 15px;">
-                Get a custom high-performance web site generated and tailored by Ghost AI v2.4! Connect directly with Lead Developer <strong>YUVRAJ_THELEGEND (ragebg.exe)</strong>.
+            <button class="modal-close-btn" onclick="closeModal('terms-modal')">&times;</button>
+            <i class="fas fa-shield-halved modal-icon" style="color: var(--cyan-glow);"></i>
+            <div class="modal-title" id="terms-modal-rank-title">ACCEPT TERMS & CONDITIONS</div>
+            <p style="color: var(--text-dim); font-size: 14px; margin-bottom: 15px;">
+                Before starting rank payments, please review and accept our store terms:
             </p>
 
-            <form class="claim-form" onsubmit="handleFreeWebSubmit(event)">
-                <div class="form-group">
-                    <label>DISCORD USERNAME / TAG</label>
-                    <input type="text" class="form-input" id="claim-discord" placeholder="e.g. ragebg.exe" required>
-                </div>
-                <div class="form-group">
-                    <label>WEBSITE TYPE</label>
-                    <input type="text" class="form-input" id="claim-type" placeholder="e.g. Clan Website, Personal Gaming Channel, Store" required>
-                </div>
-                <div class="form-group">
-                    <label>REQUIREMENTS / PREFERENCES</label>
-                    <input type="text" class="form-input" id="claim-details" placeholder="Describe color themes or special features needed...">
-                </div>
-                <button type="submit" class="claim-submit-btn">
-                    <i class="fab fa-discord"></i> SUBMIT & CONNECT WITH DEVELOPER
-                </button>
-            </form>
+            <div class="terms-box">
+                <p>1. <strong>Non-Refundable Sales:</strong> All rank subscriptions and digital goods are strictly non-refundable.</p>
+                <p>2. <strong>30-Day Subscription Duration:</strong> Ranks remain active for 30 consecutive calendar days from activation.</p>
+                <p>3. <strong>Anti-Chargeback Enforcement:</strong> Any payment dispute or chargeback triggers an instant permanent IP ban across all ODERISMC servers and Discord.</p>
+                <p>4. <strong>Rule Enforcement:</strong> Ranks do not grant immunity from server rules. Rule violations resulting in mutes or bans will not be refunded.</p>
+                <p>5. <strong>Manual Fallback Policy:</strong> If automated payment gateways fail to connect, players must process transactions manually through Discord Support Tickets.</p>
+            </div>
+
+            <label class="terms-checkbox-label">
+                <input type="checkbox" id="accept-terms-checkbox" onchange="togglePaymentButton()">
+                <span>I have read and accept all Terms & Conditions</span>
+            </label>
+
+            <button class="buy-btn" id="proceed-payment-btn" style="opacity: 0.5; cursor: not-allowed;" disabled onclick="confirmTermsAndProceed()">
+                PROCEED TO PAYMENT
+            </button>
         </div>
     </div>
 
     <!-- ==========================================
-         POPUP 2: PAYMENT NOTICE MODAL
+         STEP 2 MODAL: REALISTIC 9-12 SEC ANIMATED PAYMENT SYSTEM
          ========================================== -->
     <div class="modal-overlay" id="payment-modal">
         <div class="modal-card">
             <button class="modal-close-btn" onclick="closeModal('payment-modal')">&times;</button>
-            <i class="fas fa-exclamation-triangle modal-icon"></i>
-            <div class="modal-title">PAYMENT NOTICE</div>
-            <div class="modal-msg">
-                OderisMC is not accepting automatic rankup payments at this moment. Please try again later or open a ticket in our official Discord server.
+            
+            <!-- STATE 1: ANIMATED REALISTIC PAYMENT PROCESSING (9-12 SECONDS) -->
+            <div id="payment-loading-state">
+                <div class="payment-spinner-ring"></div>
+                <div class="modal-title" style="color: var(--cyan-glow); letter-spacing: 1px;">CONNECTING TO PAYMENT GATEWAY</div>
+                
+                <div class="payment-bar-outer">
+                    <div class="payment-bar-inner" id="payment-progress-bar"></div>
+                </div>
+
+                <div class="payment-steps-list" id="payment-status-text">
+                    [1/4] Initializing Secure 256-Bit SSL Tunnel...
+                </div>
             </div>
-            <a href="https://discord.gg/d7W62FeAXM" target="_blank" class="modal-discord-btn">
-                <i class="fab fa-discord"></i> JOIN DISCORD SERVER
-            </a>
+
+            <!-- STATE 2: PAYMENT FAILED NOTICE (REQUESTED EXACT FAILURE MSG & MANUAL WAY) -->
+            <div id="payment-failed-state" style="display: none;">
+                <i class="fas fa-exclamation-triangle modal-icon" style="color: var(--neon-red); filter: drop-shadow(0 0 15px var(--neon-red));"></i>
+                <div class="modal-title" style="color: var(--neon-red); font-size: 22px;">GATEWAY CONNECTION FAILED</div>
+                
+                <!-- EXACT REQUIRED FAILURE MESSAGE -->
+                <div style="background: rgba(255, 17, 68, 0.12); border: 2px dashed var(--neon-red); border-radius: 12px; padding: 18px; margin: 15px 0;">
+                    <p id="payment-failed-text" style="font-size: 17px; font-weight: 900; color: #ffffff; line-height: 1.5; font-family: 'Orbitron', sans-serif;">
+                        Can't Connect to a Active Gateway. Failed...! try Manual Way of Payment!
+                    </p>
+                </div>
+
+                <p style="color: var(--text-dim); font-size: 14px; margin-bottom: 20px; line-height: 1.5;">
+                    The online automated FamPay / UPI payment tunnel could not locate an active gateway host. Please join our official Discord server and open a <strong>#payment-ticket</strong> to buy your rank manually!
+                </p>
+
+                <a href="https://discord.gg/d7W62FeAXM" target="_blank" class="modal-discord-btn">
+                    <i class="fab fa-discord"></i> TRY MANUAL WAY OF PAYMENT ON DISCORD
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- FLOATING BOTTOM-MIDDLE LOGIN PILL (EMOJI ONLY) -->
+    <!-- FLOATING BOTTOM-MIDDLE LOGIN PILL -->
     <div class="floating-login-container">
         <span class="login-emoji-avatar">🎮</span>
         <input type="text" id="mc-username" class="login-input" placeholder="Enter Minecraft IGN...">
@@ -1231,7 +1891,9 @@
         <div class="ghost-credits">
             Made by <span>YJDEV STUDIOS</span>
         </div>
-        <p style="font-size: 13px; color: var(--cyan-glow); margin-bottom: 8px;">Powered by <strong>Ghost AI v2.4</strong></p>
+        <p style="font-size: 13px; color: var(--cyan-glow); margin-bottom: 8px;">
+            <a href="javascript:void(0)" onclick="switchPage('partnership')" class="yjdev-link">OderisMC x YJDEV STUDIOS</a>
+        </p>
         <p>&copy; 2026 <strong>ODERISMC Network</strong>. All Rights Reserved.</p>
     </footer>
 
@@ -1246,7 +1908,7 @@
         });
 
         // Hover Effect Triggering
-        document.querySelectorAll('button, a, input, .rank-card, .feature-card, .brand, .floating-left-claim, .info-card, .staff-card').forEach(elem => {
+        document.querySelectorAll('button, a, input, .rank-card, .feature-card, .brand, .info-card, .staff-card, .vote-card, .ghost-opt-btn, .sub-q-btn').forEach(elem => {
             elem.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
             elem.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
         });
@@ -1276,30 +1938,340 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // MODALS
-        function openModal(id) {
-            playSound(450, 'sine', 0.12);
-            document.getElementById(id).style.display = 'grid';
+        // DIRECT UNLISTED GHOST AI PAGE TRIGGER
+        function openGhostAIPage() {
+            switchPage('ghost-ai');
+            playSound(600, 'sawtooth', 0.15);
+        }
+
+        /* ======================================================
+           GHOST AI VERSION 2.93 INTERACTIVE KNOWLEDGE BASE
+           INCLUDES DYNAMIC NESTED SUB-QUESTIONS FOR ALL TOPICS
+           ====================================================== */
+        const ghostKnowledgeV293 = {
+            owners: {
+                question: "Who's the owner?",
+                answer: "👑 <strong>Server Owners:</strong><br>• <strong>Sakarw_al142</strong> (Network Owner)<br>• <strong>King_Oderis</strong> (Network Owner)<br>• <strong>Ayushggs</strong> (Network Owner)<br><br>🎥 <strong>Media Creator:</strong> NamanGamerz26<br>💻 <strong>Website & System Developer:</strong> YUVRAJ_THELEGEND (ragebg.exe)",
+                subQuestions: [
+                    { label: "Who is Sakarw_al142?", key: "owner_sakarwal" },
+                    { label: "Who is King_Oderis?", key: "owner_king" },
+                    { label: "Who is Ayushggs?", key: "owner_ayush" },
+                    { label: "Who is NamanGamerz26?", key: "media_naman" },
+                    { label: "Who is YUVRAJ_THELEGEND?", key: "dev_yuvraj" }
+                ]
+            },
+            owner_sakarwal: {
+                question: "Who is Sakarw_al142?",
+                answer: "👑 <strong>Sakarw_al142</strong> is one of the lead Founders & Network Owners of OderisMC. He manages server hosting, plugin configurations, and main administration.",
+                subQuestions: [
+                    { label: "Back to Owner Questions", key: "owners" },
+                    { label: "Who built the website?", key: "dev" }
+                ]
+            },
+            owner_king: {
+                question: "Who is King_Oderis?",
+                answer: "👑 <strong>King_Oderis</strong> is the co-owner and namesake of OderisMC, leading gameplay event management and player experience across all realms.",
+                subQuestions: [
+                    { label: "Back to Owner Questions", key: "owners" }
+                ]
+            },
+            owner_ayush: {
+                question: "Who is Ayushggs?",
+                answer: "👑 <strong>Ayushggs</strong> is a server owner overseeing community support, moderation, and store sales operations.",
+                subQuestions: [
+                    { label: "Back to Owner Questions", key: "owners" }
+                ]
+            },
+            media_naman: {
+                question: "Who is NamanGamerz26?",
+                answer: "🎥 <strong>NamanGamerz26</strong> is the Official Media Creator for OderisMC, producing YouTube videos, live streams, and trailers for the network.",
+                subQuestions: [
+                    { label: "Back to Owner Questions", key: "owners" }
+                ]
+            },
+            dev_yuvraj: {
+                question: "Who is YUVRAJ_THELEGEND?",
+                answer: "💻 <strong>YUVRAJ_THELEGEND</strong> (aka ragebg.exe) is the Master Website Developer & Tech Architect behind OderisMC, powered by <strong>YJDEV STUDIOS</strong>.",
+                subQuestions: [
+                    { label: "Learn more about YJDEV STUDIOS", key: "dev" }
+                ]
+            },
+            ip: {
+                question: "Server IP & Port Details",
+                answer: "🎮 <strong>Java IP:</strong> <code>play.oderismc.fun</code><br>🔌 <strong>Bedrock / PE IP:</strong> <code>play.oderismc.fun</code> (Port: <code>19142</code>)<br>⚡ <strong>Supported Versions:</strong> 1.18.x up to 1.20.x!",
+                subQuestions: [
+                    { label: "How to join on Java?", key: "ip_java" },
+                    { label: "How to join on PE/Bedrock?", key: "ip_bedrock" },
+                    { label: "What is the server port?", key: "ip_port" }
+                ]
+            },
+            ip_java: {
+                question: "How to join on Java Edition?",
+                answer: "🖥️ Launch Minecraft Java Edition (1.18 - 1.20) -> Multiplayer -> Add Server -> Server Address: <code>play.oderismc.fun</code> -> Done -> Join!",
+                subQuestions: [{ label: "Back to IP Details", key: "ip" }]
+            },
+            ip_bedrock: {
+                question: "How to join on Bedrock / Mobile?",
+                answer: "📱 Open Minecraft PE / Bedrock -> Play -> Servers -> Add Server -> Server Name: <code>OderisMC</code> -> IP: <code>play.oderismc.fun</code> -> Port: <code>19142</code> -> Save & Join!",
+                subQuestions: [{ label: "Back to IP Details", key: "ip" }]
+            },
+            ip_port: {
+                question: "What is the server port?",
+                answer: "🔌 Default Bedrock Port is <strong>19142</strong>. Java Edition uses default port 25565 (no port typing needed).",
+                subQuestions: [{ label: "Back to IP Details", key: "ip" }]
+            },
+            ranks: {
+                question: "How to Buy Ranks & Prices",
+                answer: "💎 <strong>Server Ranks (Monthly):</strong><br>• Hero: ₹30 | Titan: ₹60<br>• Knight: ₹100 | Champion: ₹150<br>• Custom Rank: ₹200 | Oderis God: ₹250",
+                subQuestions: [
+                    { label: "What perks does Hero have?", key: "rank_hero" },
+                    { label: "What perks does Oderis God have?", key: "rank_oderis" },
+                    { label: "How long do ranks last?", key: "rank_duration" }
+                ]
+            },
+            rank_hero: {
+                question: "What perks does Hero rank have?",
+                answer: "🟢 Hero Rank gives: Hero Prefix, /fly in Hub, 3 Vault Claims, and Kit Hero Access for only ₹30/mo!",
+                subQuestions: [{ label: "Back to Ranks Overview", key: "ranks" }]
+            },
+            rank_oderis: {
+                question: "What perks does Oderis God rank have?",
+                answer: "🌟 Oderis Rank is the ultimate tier: Animated Tag, All In-game Perks, Unlimited Teleports, and God Kit for ₹250/mo!",
+                subQuestions: [{ label: "Back to Ranks Overview", key: "ranks" }]
+            },
+            rank_duration: {
+                question: "How long do ranks last?",
+                answer: "⏱️ All ranks purchased on OderisMC are active for 30 consecutive calendar days from activation.",
+                subQuestions: [{ label: "Back to Ranks Overview", key: "ranks" }]
+            },
+            rules: {
+                question: "Server Rules & Fair Play",
+                answer: "📜 <strong>Main Rules:</strong><br>1️⃣ No Hacking/X-Ray<br>2️⃣ No Toxicity or Spam<br>3️⃣ Protect builds with Land Claims<br>4️⃣ No Real-Money Scamming",
+                subQuestions: [
+                    { label: "Are Minimaps allowed?", key: "rule_mods" },
+                    { label: "What happens if I cheat?", key: "rule_cheat" }
+                ]
+            },
+            rule_mods: {
+                question: "Are Minimaps allowed?",
+                answer: "🧭 Minimaps without entity radar are allowed. Modded clients with built-in X-Ray or KillAura are strictly forbidden.",
+                subQuestions: [{ label: "Back to Rules", key: "rules" }]
+            },
+            rule_cheat: {
+                question: "What happens if I cheat?",
+                answer: "🔨 Cheating or exploiting leads to an instant permanent IP ban across all realms.",
+                subQuestions: [{ label: "Back to Rules", key: "rules" }]
+            },
+            dev: {
+                question: "Who built this Website?",
+                answer: "⚡ Built and hosted by <strong>YJDEV STUDIOS</strong> led by <strong>YUVRAJ_THELEGEND</strong> (ragebg.exe).",
+                subQuestions: [
+                    { label: "What is YJDEV STUDIOS?", key: "dev_yjdev" }
+                ]
+            },
+            dev_yjdev: {
+                question: "What is YJDEV STUDIOS?",
+                answer: "🚀 YJDEV STUDIOS is an independent digital game development studio & web engineering group creating web apps, game prototypes, and cyber platforms.",
+                subQuestions: [{ label: "Back to Web Dev Info", key: "dev" }]
+            },
+            crossplay: {
+                question: "How Cross-Play Works",
+                answer: "🌍 Java & Bedrock players play together in the exact same world seamlessly using GeyserMC technology!",
+                subQuestions: [
+                    { label: "Can Mobile play with PC?", key: "cross_mobile" }
+                ]
+            },
+            cross_mobile: {
+                question: "Can Mobile play with PC?",
+                answer: "YES! iOS, Android, Windows 10/11, and Java Edition players share the same world and economy.",
+                subQuestions: [{ label: "Back to Crossplay Info", key: "crossplay" }]
+            },
+            discord: {
+                question: "Discord Community Link",
+                answer: "💬 Join our community at: <a href='https://discord.gg/d7W62FeAXM' target='_blank' style='color:var(--cyan-glow); font-weight:bold;'>https://discord.gg/d7W62FeAXM</a>",
+                subQuestions: [{ label: "How to open a support ticket?", key: "disc_ticket" }]
+            },
+            disc_ticket: {
+                question: "How to open a support ticket?",
+                answer: "🎫 Join the Discord -> Go to <strong>#support-ticket</strong> channel -> Click 'Create Ticket' to speak with staff directly!",
+                subQuestions: [{ label: "Back to Discord Info", key: "discord" }]
+            },
+            rewards: {
+                question: "How to Get Free Rewards",
+                answer: "🎁 Vote daily on top server lists to receive free Vote Keys, cash, and crate keys in-game!",
+                subQuestions: [{ label: "Where to Vote?", key: "vote_where" }]
+            },
+            vote_where: {
+                question: "Where to Vote?",
+                answer: "⭐ Click on the <strong>Vote & Rewards</strong> page on this website to cast daily votes!",
+                subQuestions: [{ label: "Back to Rewards Info", key: "rewards" }]
+            },
+            payment_help: {
+                question: "Payment & Manual Gateway Help",
+                answer: "💳 If automated gateway fails with error: <em>'Can't Connect to a Active Gateway'</em>, you can complete payment manually via Discord!",
+                subQuestions: [
+                    { label: "How does Manual Payment work?", key: "pay_manual_work" }
+                ]
+            },
+            pay_manual_work: {
+                question: "How does Manual Payment work?",
+                answer: "📩 Join our Discord -> Open a Ticket in <strong>#payment-ticket</strong> -> Share rank name & IGN -> Pay directly via UPI/FamPay ID provided by Sakarw_al142 or YUVRAJ_THELEGEND -> Get rank activated instantly!",
+                subQuestions: [{ label: "Back to Payment Help", key: "payment_help" }]
+            }
+        };
+
+        function askGhostAI(key) {
+            const topic = ghostKnowledgeV293[key];
+            if (!topic) return;
+
+            playSound(550, 'triangle', 0.1);
+
+            const feed = document.getElementById('ghost-chat-feed');
+
+            // 1. User Question Bubble
+            const userMsg = document.createElement('div');
+            userMsg.className = 'ghost-msg user';
+            userMsg.innerHTML = `<div class="ghost-msg-bubble">${topic.question}</div>`;
+            feed.appendChild(userMsg);
+
+            // 2. AI Response Bubble with Sub-Questions
+            setTimeout(() => {
+                playSound(700, 'sine', 0.12);
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'ghost-msg ai';
+
+                let subHtml = '';
+                if (topic.subQuestions && topic.subQuestions.length > 0) {
+                    subHtml = `
+                        <div class="sub-questions-container">
+                            <div class="sub-q-title"><i class="fas fa-sitemap"></i> RELATED QUESTIONS / FOLLOW-UPS:</div>
+                            <div class="sub-q-grid">
+                                ${topic.subQuestions.map(sub => `
+                                    <button class="sub-q-btn" onclick="askGhostAI('${sub.key}')">
+                                        <i class="fas fa-chevron-right"></i> ${sub.label}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                aiMsg.innerHTML = `
+                    <div class="ghost-avatar" style="width: 32px; height: 32px; font-size: 16px;">👻</div>
+                    <div class="ghost-msg-bubble">
+                        <strong style="color: var(--ghost-glow);">GHOST AI v2.93:</strong><br>${topic.answer}
+                        ${subHtml}
+                    </div>
+                `;
+                feed.appendChild(aiMsg);
+                feed.scrollTop = feed.scrollHeight;
+            }, 200);
+
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        function clearGhostChat() {
+            playSound(300, 'sawtooth', 0.15);
+            const feed = document.getElementById('ghost-chat-feed');
+            feed.innerHTML = `
+                <div class="ghost-msg ai">
+                    <div class="ghost-avatar" style="width: 32px; height: 32px; font-size: 16px;">👻</div>
+                    <div class="ghost-msg-bubble">
+                        <strong style="color: var(--ghost-glow);">GHOST AI v2.93:</strong> Chat history cleared. Click any option below to start a new question!
+                    </div>
+                </div>
+            `;
+        }
+
+        // RANK PAYMENT & TERMS MODAL FLOW WITH REALISTIC 9-12 SEC ANIMATION
+        let currentSelectedRank = '';
+        let paymentTimer = null;
+
+        function startRankPurchase(rankName) {
+            playSound(200, 'sawtooth', 0.15);
+            currentSelectedRank = rankName;
+            
+            // Reset terms checkbox and button
+            document.getElementById('accept-terms-checkbox').checked = false;
+            document.getElementById('terms-modal-rank-title').innerText = `PURCHASE ${rankName} RANK`;
+            togglePaymentButton();
+            
+            // Show Terms Acceptance Modal first
+            document.getElementById('terms-modal').style.display = 'grid';
+        }
+
+        function togglePaymentButton() {
+            const checkbox = document.getElementById('accept-terms-checkbox');
+            const btn = document.getElementById('proceed-payment-btn');
+            
+            if (checkbox.checked) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            } else {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            }
+        }
+
+        function confirmTermsAndProceed() {
+            closeModal('terms-modal');
+            triggerPaymentModal(currentSelectedRank);
         }
 
         function closeModal(id) {
             playSound(300, 'sine', 0.1);
             document.getElementById(id).style.display = 'none';
+            if (paymentTimer) clearInterval(paymentTimer);
         }
 
+        /* REALISTIC ANIMATED PAYMENT GATEWAY SIMULATION (RUNS FOR EXACTLY 10 SECONDS [9-12 SEC RANGE]) */
         function triggerPaymentModal(rank) {
             playSound(200, 'sawtooth', 0.2);
-            openModal('payment-modal');
-        }
+            
+            // Reset modal states
+            document.getElementById('payment-loading-state').style.display = 'block';
+            document.getElementById('payment-failed-state').style.display = 'none';
+            document.getElementById('payment-modal').style.display = 'grid';
 
-        // FREE WEB CLAIM HANDLER
-        function handleFreeWebSubmit(e) {
-            e.preventDefault();
-            playSound(600, 'triangle', 0.2);
-            const discordUser = document.getElementById('claim-discord').value;
-            alert(`Website Request Submitted for ${discordUser}! Redirecting to YJDEV STUDIOS developer portal...`);
-            closeModal('free-web-modal');
-            window.open('https://discord.gg/VhYXxUkCMg', '_blank');
+            const progressBar = document.getElementById('payment-progress-bar');
+            const statusText = document.getElementById('payment-status-text');
+            
+            progressBar.style.width = '0%';
+            statusText.innerText = '[1/4] Initializing Secure 256-Bit SSL Tunnel...';
+
+            let progress = 0;
+            const totalTimeMs = 10000; // 10 seconds total duration
+            const intervalMs = 100;
+            const steps = totalTimeMs / intervalMs;
+            const increment = 100 / steps;
+
+            if (paymentTimer) clearInterval(paymentTimer);
+
+            paymentTimer = setInterval(() => {
+                progress += increment;
+                if (progress > 100) progress = 100;
+
+                progressBar.style.width = progress + '%';
+
+                // Update Status text based on elapsed percentage (9-12 sec process)
+                if (progress < 25) {
+                    statusText.innerText = '[1/4] Initializing Secure 256-Bit SSL Gateway Tunnel...';
+                } else if (progress < 50) {
+                    statusText.innerText = '[2/4] Connecting to Active FamPay / UPI Gateway Node...';
+                } else if (progress < 75) {
+                    statusText.innerText = '[3/4] Handshaking Payment Server & Verifying Tokens...';
+                } else if (progress < 98) {
+                    statusText.innerText = '[4/4] Awaiting Gateway Confirmation & Ping Response...';
+                } else {
+                    // REACHED 10 SECONDS -> FAIL WITH EXACT REQUESTED MESSAGE
+                    clearInterval(paymentTimer);
+                    playSound(150, 'sawtooth', 0.3);
+                    document.getElementById('payment-loading-state').style.display = 'none';
+                    document.getElementById('payment-failed-state').style.display = 'block';
+                }
+            }, intervalMs);
         }
 
         // CANVAS BACKGROUND PARTICLES
