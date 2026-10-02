@@ -266,35 +266,6 @@
             border-color: #ffffff;
         }
 
-        /* DONATE BUTTON (RIGHT SIDE HEADER) */
-        .donate-btn {
-            background: linear-gradient(90deg, var(--neon-red), var(--gold-accent));
-            color: #ffffff !important;
-            border: none;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            padding: 9px 18px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(255, 17, 68, 0.4);
-            animation: donatePulse 2s infinite ease-in-out;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .donate-btn:hover {
-            background: #ffffff;
-            color: #000000 !important;
-            box-shadow: 0 0 25px rgba(255, 183, 0, 0.9);
-            transform: translateY(-2px);
-            text-shadow: none !important;
-        }
-
-        @keyframes donatePulse {
-            0%, 100% { box-shadow: 0 0 12px rgba(255, 17, 68, 0.4); }
-            50% { box-shadow: 0 0 22px rgba(255, 183, 0, 0.8); }
-        }
-
         /* SERVER STATUS BAR */
         .server-status-bar {
             background: rgba(0, 217, 255, 0.08);
@@ -1333,16 +1304,11 @@
             </a>
         </div>
 
-        <!-- HEADER RIGHT ACTIONS (GHOST AI BUTTON & DONATE BUTTON) -->
+        <!-- HEADER RIGHT ACTIONS (GHOST AI BUTTON) -->
         <div class="header-actions">
             <!-- GHOST AI VERSION 2.93 BUTTON -->
             <button class="ghost-ai-trigger-btn" onclick="openGhostAIPage()">
                 <i class="fas fa-ghost"></i> GHOST AI v2.93
-            </button>
-
-            <!-- DONATE BUTTON ON RIGHT SIDE -->
-            <button class="donate-btn" onclick="startRankPurchase('SERVER DONATION')">
-                <i class="fas fa-heart"></i> Donate to keep the server running forever with your Help!
             </button>
         </div>
     </header>
@@ -1385,9 +1351,6 @@
                     <!-- HERO CTA FOR GHOST AI ASSISTANT -->
                     <button class="action-btn" style="background: linear-gradient(90deg, #00f0ff, #7000ff); color: #fff;" onclick="openGhostAIPage()">
                         <i class="fas fa-ghost"></i> ASK GHOST AI v2.93
-                    </button>
-                    <button class="action-btn" style="background: linear-gradient(90deg, var(--neon-red), var(--gold-accent)); color: #fff;" onclick="startRankPurchase('SERVER DONATION')">
-                        <i class="fas fa-heart"></i> DONATE NOW
                     </button>
                 </div>
             </div>
