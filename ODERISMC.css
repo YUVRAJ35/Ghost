@@ -25,7 +25,42 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Rajdhani', sans-serif;
-            user-select: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body, button, input, textarea, select {
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        /* Keep text selectable so inputs/comments/login forms behave normally. */
+        body {
+            user-select: text;
+        }
+
+        /* Interactive elements must always remain clickable. */
+        button,
+        a,
+        input,
+        textarea,
+        select,
+        [role="button"] {
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        input,
+        textarea,
+        select {
+            cursor: text;
+            user-select: text;
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
         }
 
         body {
@@ -1195,4 +1230,111 @@
             .banner-logo-text { font-size: 42px; }
             .banner-logo-subtext { font-size: 22px; }
             .nav-links { flex-wrap: wrap; justify-content: center; }
+        }
+
+
+        /* =========================================================
+           ODERISMC — INTERACTION / CLICK-SAFETY OVERRIDES
+           ========================================================= */
+
+        /* Never let decorative layers steal mouse/touch input. */
+        #bg-canvas,
+        #custom-pixel-cursor,
+        .background,
+        .particles,
+        .particle-layer {
+            pointer-events: none !important;
+        }
+
+        /* The page itself remains interactive. */
+        body,
+        main,
+        header,
+        footer,
+        .page-view,
+        .hero,
+        .store-section,
+        .info-grid,
+        .staff-grid,
+        .vote-cards-grid,
+        .ghost-ai-container {
+            pointer-events: auto;
+        }
+
+        /* Buttons and links need a real hit area and visible pointer. */
+        button,
+        a,
+        .nav-btn,
+        .header-auth-btn,
+        .ghost-ai-trigger-btn,
+        .copy-btn,
+        .action-btn,
+        .buy-btn,
+        .vote-btn,
+        .ghost-opt-btn,
+        .comment-action-btn,
+        .auth-tab-btn,
+        .modal-close-btn,
+        .brand {
+            position: relative;
+            cursor: pointer !important;
+            pointer-events: auto !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Inputs must accept typing/selection. */
+        input,
+        textarea,
+        select {
+            cursor: text !important;
+            pointer-events: auto !important;
+            user-select: text !important;
+            -webkit-user-select: text !important;
+        }
+
+        /* Only an actually-open modal should intercept the page. */
+        .modal-overlay {
+            pointer-events: none;
+        }
+
+        .modal-overlay[style*="display: grid"],
+        .modal-overlay[style*="display:grid"],
+        .modal-overlay.active,
+        .modal-overlay.show {
+            pointer-events: auto;
+        }
+
+        /* Prevent accidental full-page invisible pseudo-elements from
+           becoming click blockers on decorative containers. */
+        .banner-wrapper::before,
+        .banner-wrapper::after,
+        .feature-card::before,
+        .feature-card::after,
+        .rank-card::before,
+        .rank-card::after {
+            pointer-events: none;
+        }
+
+        /* Make keyboard focus visible. */
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--cyan-glow);
+            outline-offset: 3px;
+        }
+
+        @media (max-width: 768px) {
+            button,
+            a,
+            input,
+            textarea,
+            select {
+                min-height: 44px;
+            }
+
+            .nav-btn {
+                min-height: 42px;
+            }
         }
