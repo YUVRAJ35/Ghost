@@ -35,7 +35,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none !important; /* Managed by Custom Pixel Cursor */
             font-family: 'Rajdhani', sans-serif;
             user-select: none;
         }
@@ -105,29 +104,6 @@
             font-family: 'Orbitron', sans-serif;
         }
 
-        /* --- RED PIXEL SWORD / POINTER CURSOR --- */
-        #custom-pixel-cursor {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 28px;
-            height: 28px;
-            pointer-events: none;
-            z-index: 999999;
-            transform: translate(-2px, -2px);
-            transition: transform 0.04s ease-out;
-            filter: drop-shadow(0 0 8px rgba(255, 17, 68, 0.9));
-        }
-
-        #custom-pixel-cursor svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .cursor-hover #custom-pixel-cursor {
-            transform: scale(1.25) translate(-2px, -2px);
-            filter: drop-shadow(0 0 14px var(--neon-red)) drop-shadow(0 0 6px var(--gold-accent));
-        }
 
         /* BACKGROUND CANVAS */
         #bg-canvas {
@@ -1586,14 +1562,6 @@
 </head>
 <body>
 
-    <!-- CUSTOM RAGE SMP RED PIXEL SWORD CURSOR -->
-    <div id="custom-pixel-cursor">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 0V22L6 16L11 26L16 24L11 14L18 14L0 0Z" fill="#ff1144"/>
-            <path d="M2 3V18L6 14L10 22L12 21L8 13L14 13L2 3Z" fill="#0d0004"/>
-            <path d="M4 6L8 10L6 11L4 6Z" fill="#ff2255"/>
-        </svg>
-    </div>
 
     <!-- CANVAS BACKGROUND -->
     <canvas id="bg-canvas"></canvas>
@@ -2372,7 +2340,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none !important; /* Managed by Custom Pixel Cursor */
             font-family: 'Rajdhani', sans-serif;
             user-select: none;
         }
@@ -2442,29 +2409,6 @@
             font-family: 'Orbitron', sans-serif;
         }
 
-        /* --- RED PIXEL SWORD / POINTER CURSOR --- */
-        #custom-pixel-cursor {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 28px;
-            height: 28px;
-            pointer-events: none;
-            z-index: 999999;
-            transform: translate(-2px, -2px);
-            transition: transform 0.04s ease-out;
-            filter: drop-shadow(0 0 8px rgba(255, 17, 68, 0.9));
-        }
-
-        #custom-pixel-cursor svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .cursor-hover #custom-pixel-cursor {
-            transform: scale(1.25) translate(-2px, -2px);
-            filter: drop-shadow(0 0 14px var(--neon-red)) drop-shadow(0 0 6px var(--gold-accent));
-        }
 
         /* BACKGROUND CANVAS */
         #bg-canvas {
@@ -3572,14 +3516,6 @@
 </head>
 <body>
 
-    <!-- CUSTOM RAGE SMP RED PIXEL SWORD CURSOR -->
-    <div id="custom-pixel-cursor">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)">
-            <path d="M0 0V22L6 16L11 26L16 24L11 14L18 14L0 0Z" fill="#ff1144"/>
-            <path d="M2 3V18L6 14L10 22L12 21L8 13L14 13L2 3Z" fill="#0d0004"/>
-            <path d="M4 6L8 10L6 11L4 6Z" fill="#ff2255"/>
-        </svg>
-    </div>
 
     <!-- CANVAS BACKGROUND -->
     <canvas id="bg-canvas"></canvas>
@@ -4276,11 +4212,6 @@
         /* ======================================================
            3. UI NAVIGATION & AUDIO CONTROLLER
            ====================================================== */
-        const pixelCursor = document.getElementById('custom-pixel-cursor');
-        document.addEventListener('mousemove', (e) => {
-            pixelCursor.style.left = e.clientX + 'px';
-            pixelCursor.style.top = e.clientY + 'px';
-        });
 
         function switchPage(pageId) {
             playSound(400, 'sine', 0.1);
