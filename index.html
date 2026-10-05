@@ -3,196 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ODERISMC | Cyber Network & Live Management</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="ODERISMC.css">
+
+    <title>OderisMC | Under Development</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #111d35 0%,
+                    #060911 45%,
+                    #020308 100%
+                );
+
+            color: #f0f6ff;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            width: min(90%, 750px);
+            text-align: center;
+            padding: 55px 35px;
+
+            background: rgba(13, 20, 36, 0.75);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 24px;
+
+            box-shadow:
+                0 0 50px rgba(0, 243, 255, 0.12),
+                inset 0 0 30px rgba(0, 243, 255, 0.03);
+
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            font-size: clamp(42px, 8vw, 76px);
+            font-weight: 900;
+            letter-spacing: 4px;
+
+            background: linear-gradient(
+                90deg,
+                #ffffff,
+                #00f3ff
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            margin-bottom: 25px;
+        }
+
+        .status {
+            display: inline-block;
+
+            padding: 9px 18px;
+            margin-bottom: 25px;
+
+            border: 1px solid #00f3ff;
+            border-radius: 30px;
+
+            color: #00f3ff;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+
+            box-shadow:
+                0 0 15px rgba(0, 243, 255, 0.2);
+        }
+
+        h1 {
+            font-size: clamp(28px, 5vw, 48px);
+            margin-bottom: 18px;
+        }
+
+        p {
+            color: #8ba0c2;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .studio {
+            margin-top: 28px;
+
+            color: #00f3ff;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .soon {
+            margin-top: 35px;
+
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-right: 8px;
+
+            background: #00ff88;
+            border-radius: 50%;
+
+            box-shadow: 0 0 12px #00ff88;
+
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.35;
+                transform: scale(0.7);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 22px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-    <!-- RED CURSOR ELEMENT -->
-    <div id="red-cursor"></div>
+    <main class="container">
 
-    <!-- ADMIN BAR -->
-    <div id="admin-toolbar" class="admin-toolbar">
-        <span><i class="fas fa-user-shield"></i> ADMIN LOGGED IN (YUVRAJ_THELEGEND)</span>
-        <div>
-            <button id="admin-edit-toggle-btn" class="admin-toolbar-btn" onclick="toggleAdminEditMode()">ENABLE LIVE EDIT</button>
-            <button class="admin-toolbar-btn" style="background:#00f3ff;" onclick="openAddEventModal()">+ ADD LIVE EVENT</button>
-        </div>
-    </div>
-
-    <!-- BACKGROUND CANVAS -->
-    <canvas id="bg-canvas"></canvas>
-
-    <!-- HEADER -->
-    <header>
-        <div class="brand" onclick="switchPage('home')">
-            <span class="brand-logo-crown">👑</span>
-            <div class="brand-title-box">
-                <span class="brand-title" data-editable-id="site-title">ODERISMC</span>
-                <span class="brand-subtitle" data-editable-id="site-subtitle">CYBER NETWORK</span>
-            </div>
+        <div class="status">
+            <span class="pulse"></span>
+            Under Development
         </div>
 
-        <div class="nav-links">
-            <button class="nav-btn active" id="nav-home" onclick="switchPage('home')">Home</button>
-            <button class="nav-btn" id="nav-store" onclick="switchPage('store')">Ranks & Store</button>
-            <button class="nav-btn" id="nav-comments" onclick="switchPage('comments')">Community Wall</button>
-            <button class="nav-btn" id="nav-vote" onclick="switchPage('vote')">Vote & Rewards</button>
-            <button class="nav-btn" id="nav-rules" onclick="switchPage('rules')">Rules & FAQ</button>
-            <button class="nav-btn" id="nav-community" onclick="switchPage('community')">Staff Team</button>
+        <div class="logo">
+            ODERISMC
         </div>
 
-        <div class="header-actions">
-            <div id="header-auth-container">
-                <button class="header-auth-btn" onclick="openAuthModal('login')">
-                    <i class="fas fa-user-lock"></i> SIGN IN / SIGN UP
-                </button>
-            </div>
-            <button class="ghost-ai-trigger-btn" onclick="openGhostAIPage()">
-                <i class="fas fa-ghost"></i> GHOST AI v2.93
-            </button>
+        <h1>
+            We'll Be Back Soon!
+        </h1>
+
+        <p>
+            OderisMC is currently under development
+            under <strong>YJDEV STUDIOS</strong>.
+            We're working behind the scenes to bring
+            the network back better than ever.
+        </p>
+
+        <div class="studio">
+            YJDEV STUDIOS
         </div>
-    </header>
 
-    <main>
-        <!-- PAGE 1: HOME VIEW -->
-        <section class="page-view active" id="page-home">
-            <div class="hero">
-                <div class="banner-wrapper">
-                    <div class="banner-crown">👑</div>
-                    <div class="banner-logo-text" data-editable-id="hero-banner-title">ODERIS</div>
-                    <div class="banner-logo-subtext" data-editable-id="hero-banner-sub">MC</div>
-                </div>
+        <div class="soon">
+            ⚡ Stay Tuned • Coming Back Soon ⚡
+        </div>
 
-                <p data-editable-id="hero-description">Experience cross-play Survival Economy at its peak. Join custom dungeons, land claiming, rank rewards, and intense cyber survival!</p>
-                
-                <div class="ip-box">
-                    <i class="fas fa-server" style="color: var(--cyan-glow);"></i>
-                    <span class="ip-text">play.oderismc.fun <span style="font-size: 12px; color: var(--text-dim);">(Port: 19142)</span></span>
-                    <button class="copy-btn" onclick="copyIP()">COPY IP</button>
-                </div>
-            </div>
-
-            <!-- LIVE EVENTS SECTION -->
-            <div class="events-section">
-                <h2 class="section-title">UPCOMING LIVE EVENTS</h2>
-                <div class="events-grid" id="live-events-container">
-                    <!-- Events populated dynamically via JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 2: STORE VIEW -->
-        <section class="page-view" id="page-store">
-            <div class="store-section">
-                <h2 class="section-title" data-editable-id="store-title">SERVER RANKS</h2>
-                <div class="ranks-grid">
-                    <div class="rank-card">
-                        <div class="rank-header">
-                            <div class="rank-name rank-hero">HERO</div>
-                            <div class="rank-price">₹30 <span>/ month</span></div>
-                        </div>
-                        <button class="buy-btn" onclick="alert('Rank Selected!')">SUBSCRIBE RANK</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 3: COMMUNITY WALL VIEW -->
-        <section class="page-view" id="page-comments">
-            <div class="store-section">
-                <h2 class="section-title">COMMUNITY WALL & LIVE COMMENTS</h2>
-                <div class="comments-container">
-                    <div class="comment-form-box">
-                        <textarea id="comment-input-text" class="comment-input-textarea" placeholder="Write a comment or feedback for OderisMC..."></textarea>
-                        <div class="comment-form-actions">
-                            <div id="comment-active-user-display">Log in to post!</div>
-                            <button class="action-btn" onclick="handlePostComment()">
-                                <i class="fas fa-paper-plane"></i> POST COMMENT
-                            </button>
-                        </div>
-                    </div>
-                    <div class="comments-feed-list" id="comments-feed-list"></div>
-                </div>
-            </div>
-        </section>
     </main>
 
-    <!-- AUTHENTICATION MODAL -->
-    <div id="auth-modal" class="modal-overlay">
-        <div class="modal-card">
-            <button class="modal-close-btn" onclick="closeModal('auth-modal')">&times;</button>
-            <div class="auth-tab-group">
-                <button id="tab-login-btn" class="auth-tab-btn active" onclick="switchAuthTab('login')">LOGIN</button>
-                <button id="tab-signup-btn" class="auth-tab-btn" onclick="switchAuthTab('signup')">SIGN UP</button>
-                <button id="tab-admin-btn" class="auth-tab-btn" onclick="switchAuthTab('admin')">ADMIN</button>
-            </div>
-
-            <!-- LOGIN FORM -->
-            <form id="auth-login-form" onsubmit="handleLoginSubmit(event)">
-                <div class="auth-input-group">
-                    <label class="auth-label">Username</label>
-                    <input type="text" id="login-username" class="auth-input" placeholder="Enter username" required>
-                </div>
-                <div class="auth-input-group">
-                    <label class="auth-label">Password</label>
-                    <input type="password" id="login-password" class="auth-input" placeholder="Enter password" required>
-                </div>
-                <div id="login-status-msg" class="auth-status-msg"></div>
-                <button type="submit" class="buy-btn">SIGN IN</button>
-            </form>
-
-            <!-- SIGNUP FORM -->
-            <form id="auth-signup-form" style="display:none;" onsubmit="handleSignupSubmit(event)">
-                <div class="auth-input-group">
-                    <label class="auth-label">Create Username</label>
-                    <input type="text" id="signup-username" class="auth-input" placeholder="Choose username" required>
-                </div>
-                <div class="auth-input-group">
-                    <label class="auth-label">Create Password</label>
-                    <input type="password" id="signup-password" class="auth-input" placeholder="Choose password" required>
-                </div>
-                <div id="signup-status-msg" class="auth-status-msg"></div>
-                <button type="submit" class="buy-btn">CREATE ACCOUNT</button>
-            </form>
-
-            <!-- STEALTH ADMIN LOGIN FORM (Username hidden) -->
-            <form id="auth-admin-form" style="display:none;" onsubmit="handleAdminLoginSubmit(event)">
-                <div class="auth-input-group">
-                    <label class="auth-label">Admin Security Key</label>
-                    <input type="password" id="admin-pass-key" class="auth-input" placeholder="Enter Admin Passcode" required>
-                </div>
-                <div id="admin-status-msg" class="auth-status-msg"></div>
-                <button type="submit" class="buy-btn" style="background:var(--neon-red); color:#fff;">AUTHORIZE ADMIN ACCESS</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ADD LIVE EVENT MODAL -->
-    <div id="event-modal" class="modal-overlay">
-        <div class="modal-card">
-            <button class="modal-close-btn" onclick="closeModal('event-modal')">&times;</button>
-            <h3 style="font-family:'Orbitron'; color:#fff; margin-bottom:15px;">ADD LIVE EVENT</h3>
-            <form onsubmit="handleAddLiveEventSubmit(event)">
-                <div class="auth-input-group">
-                    <input type="text" id="event-title-input" class="auth-input" placeholder="Event Title" required>
-                </div>
-                <div class="auth-input-group">
-                    <input type="text" id="event-date-input" class="auth-input" placeholder="Date & Time (e.g. Sunday 8 PM)" required>
-                </div>
-                <div class="auth-input-group">
-                    <input type="text" id="event-badge-input" class="auth-input" placeholder="Badge Tag (e.g. TOURNAMENT / LIVE)">
-                </div>
-                <div class="auth-input-group">
-                    <textarea id="event-desc-input" class="auth-input" placeholder="Event Description"></textarea>
-                </div>
-                <button type="submit" class="buy-btn">PUBLISH EVENT</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="ODERISMC.js"></script>
 </body>
 </html>
