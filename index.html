@@ -510,6 +510,43 @@
             font-family: 'Orbitron', sans-serif;
         }
 
+        /* HOME FEATURE CARDS */
+        .home-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-cyber);
+            border-radius: 14px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .feature-card i {
+            font-size: 36px;
+            color: var(--cyan-glow);
+            margin-bottom: 12px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: var(--text-dim);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
         /* COMMENTS SECTION */
         .comments-section {
             max-width: 1100px;
@@ -1425,7 +1462,7 @@
             <button class="nav-btn" id="nav-community" onclick="switchPage('community')">Community & Staff</button>
             <button class="nav-btn" id="nav-admin" style="display: none; color: var(--neon-red);" onclick="switchPage('admin')"><i class="fas fa-user-shield"></i> Admin Panel</button>
             
-            <a href="https://discord.gg/d7W62FeAXM" target="_blank" class="nav-btn" style="color: var(--cyan-glow);">
+            <a href="https://discord.gg/d7W62FeAXM" target="_blank" class="nav-btn" style="color: var(--cyan-glow); text-decoration: none;">
                 <i class="fab fa-discord"></i> Discord
             </a>
         </div>
@@ -1559,7 +1596,7 @@
                             <li><i class="fas fa-check"></i> 3 Vault Claims</li>
                             <li><i class="fas fa-check"></i> Kit Hero Access</li>
                         </ul>
-                        <button class="buy-btn" onclick="startRankPurchase('HERO')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" onclick="startRankPurchase('HERO', 30)">SUBSCRIBE RANK</button>
                     </div>
 
                     <div class="rank-card">
@@ -1573,7 +1610,7 @@
                             <li><i class="fas fa-check"></i> 5 Vault Claims</li>
                             <li><i class="fas fa-check"></i> Kit Titan Access</li>
                         </ul>
-                        <button class="buy-btn" onclick="startRankPurchase('TITAN')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" onclick="startRankPurchase('TITAN', 60)">SUBSCRIBE RANK</button>
                     </div>
 
                     <div class="rank-card">
@@ -1587,7 +1624,7 @@
                             <li><i class="fas fa-check"></i> 8 Vault Claims</li>
                             <li><i class="fas fa-check"></i> Kit Knight Access</li>
                         </ul>
-                        <button class="buy-btn" onclick="startRankPurchase('KNIGHT')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" onclick="startRankPurchase('KNIGHT', 100)">SUBSCRIBE RANK</button>
                     </div>
 
                     <div class="rank-card">
@@ -1601,7 +1638,7 @@
                             <li><i class="fas fa-check"></i> 12 Vault Claims</li>
                             <li><i class="fas fa-check"></i> Kit Champion Access</li>
                         </ul>
-                        <button class="buy-btn" onclick="startRankPurchase('CHAMPION')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" onclick="startRankPurchase('CHAMPION', 150)">SUBSCRIBE RANK</button>
                     </div>
 
                     <div class="rank-card">
@@ -1615,7 +1652,7 @@
                             <li><i class="fas fa-check"></i> 15 Vault Claims</li>
                             <li><i class="fas fa-check"></i> VIP Discord Role</li>
                         </ul>
-                        <button class="buy-btn" onclick="startRankPurchase('CUSTOM')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" onclick="startRankPurchase('CUSTOM', 200)">SUBSCRIBE RANK</button>
                     </div>
 
                     <div class="rank-card" style="border-color: var(--neon-green);">
@@ -1629,7 +1666,7 @@
                             <li><i class="fas fa-check"></i> Unlimited Teleports</li>
                             <li><i class="fas fa-check"></i> Exclusive Oderis God Kit</li>
                         </ul>
-                        <button class="buy-btn" style="background: linear-gradient(90deg, var(--neon-green), var(--cyan-glow));" onclick="startRankPurchase('ODERIS')">SUBSCRIBE RANK</button>
+                        <button class="buy-btn" style="background: linear-gradient(90deg, var(--neon-green), var(--cyan-glow));" onclick="startRankPurchase('ODERIS', 250)">SUBSCRIBE RANK</button>
                     </div>
                 </div>
             </div>
@@ -1800,9 +1837,9 @@
                 </p>
 
                 <div class="admin-tab-group">
-                    <button class="admin-tab-btn active" onclick="switchAdminTab('events')"><i class="fas fa-calendar-plus"></i> Add Live Event</button>
-                    <button class="admin-tab-btn" onclick="switchAdminTab('comments')"><i class="fas fa-comments"></i> Delete Comments</button>
-                    <button class="admin-tab-btn" onclick="switchAdminTab('codes')"><i class="fas fa-key"></i> Claimed Kit Codes</button>
+                    <button class="admin-tab-btn active" id="btn-tab-events" onclick="switchAdminTab('events')"><i class="fas fa-calendar-plus"></i> Add Live Event</button>
+                    <button class="admin-tab-btn" id="btn-tab-comments" onclick="switchAdminTab('comments')"><i class="fas fa-comments"></i> Delete Comments</button>
+                    <button class="admin-tab-btn" id="btn-tab-codes" onclick="switchAdminTab('codes')"><i class="fas fa-key"></i> Claimed Kit Codes</button>
                 </div>
 
                 <!-- ADMIN TAB 1: ADD LIVE EVENT -->
@@ -1923,7 +1960,7 @@
             </div>
 
             <p style="font-size: 14px; color: var(--gold-accent); margin-bottom: 15px;" id="wheel-status-text">Spins remaining today: 2 Free Spins</p>
-            <button class="gold-btn" style="width: 100%; justify-content: center;" onclick="spinWheelAction()">SPIN NOW!</button>
+            <button class="gold-btn" id="spin-wheel-btn" style="width: 100%; justify-content: center;" onclick="spinWheelAction()">SPIN NOW!</button>
         </div>
     </div>
 
@@ -2064,7 +2101,7 @@
                 return;
             }
 
-            appData.currentUser = { username: user, role: 'player' };
+            appData.currentUser = { username: user, role: appData.users[user].role || 'player' };
             saveData();
             updateUIState();
             closeModal('auth-modal');
@@ -2124,6 +2161,9 @@
                 document.getElementById('user-coin-balance').innerText = 0;
                 document.getElementById('user-streak-count').innerText = 0;
             }
+
+            renderEvents();
+            renderComments();
         }
 
         function copyIP() {
@@ -2131,8 +2171,527 @@
             alert("IP play.oderismc.fun copied to clipboard!");
         }
 
+        // --- DAILY REWARDS & COINS ENGINE ---
+        function claimDailyReward() {
+            if (!appData.currentUser) {
+                alert("Please Login/Sign up to claim daily rewards!");
+                openAuthModal();
+                return;
+            }
+
+            const username = appData.currentUser.username;
+            const uData = appData.users[username];
+            const todayStr = new Date().toDateString();
+
+            if (uData.lastClaimDate === todayStr) {
+                alert("You have already claimed your daily reward today! Come back tomorrow.");
+                return;
+            }
+
+            uData.streak = (uData.streak || 0) + 1;
+            const reward = Math.min(25 + (uData.streak * 5), 120);
+            uData.coins = (uData.coins || 0) + reward;
+            uData.lastClaimDate = todayStr;
+
+            saveData();
+            updateUIState();
+            alert(`🎉 Daily Claim Successful!\nReceived: +${reward} Coins!\nCurrent Streak: ${uData.streak} Days`);
+        }
+
+        // --- SPIN THE WHEEL MECHANIC ---
+        const prizes = [10, 25, 50, 100, 5, 200, 15, 30];
+        let currentWheelAngle = 0;
+        let isSpinning = false;
+
+        function openSpinWheel() {
+            if (!appData.currentUser) {
+                alert("Please Login/Sign Up to access Spin Wheel!");
+                openAuthModal();
+                return;
+            }
+            document.getElementById('wheel-modal').style.display = 'grid';
+            updateWheelStatus();
+            drawWheel();
+        }
+
+        function updateWheelStatus() {
+            const username = appData.currentUser.username;
+            const uData = appData.users[username];
+            const todayStr = new Date().toDateString();
+
+            if (uData.lastSpinDate !== todayStr) {
+                uData.spinsToday = 0;
+                uData.lastSpinDate = todayStr;
+                saveData();
+            }
+
+            const freeRemaining = Math.max(0, 2 - uData.spinsToday);
+            const statusTxt = document.getElementById('wheel-status-text');
+            if (freeRemaining > 0) {
+                statusTxt.innerText = `Spins remaining today: ${freeRemaining} Free Spins`;
+            } else {
+                statusTxt.innerText = `Free spins used. Cost per extra spin: 20 Coins`;
+            }
+        }
+
+        function drawWheel() {
+            const canvas = document.getElementById('wheel-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const numSlices = prizes.length;
+            const arc = (2 * Math.PI) / numSlices;
+            const colors = ['#00d9ff', '#ff1144', '#00ff88', '#ffb700', '#a855f7', '#0066ff', '#ff8800', '#138808'];
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < numSlices; i++) {
+                const angle = i * arc;
+                ctx.beginPath();
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.moveTo(140, 140);
+                ctx.arc(140, 140, 136, angle, angle + arc);
+                ctx.lineTo(140, 140);
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "#050811";
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(140, 140);
+                ctx.rotate(angle + arc / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 14px Orbitron";
+                ctx.fillText(prizes[i] + " 🪙", 120, 5);
+                ctx.restore();
+            }
+        }
+
+        function spinWheelAction() {
+            if (isSpinning) return;
+            const username = appData.currentUser.username;
+            const uData = appData.users[username];
+            const todayStr = new Date().toDateString();
+
+            if (uData.lastSpinDate !== todayStr) {
+                uData.spinsToday = 0;
+                uData.lastSpinDate = todayStr;
+            }
+
+            if (uData.spinsToday >= 2 && uData.coins < 20) {
+                alert("You don't have enough coins! Extra spins cost 20 Coins.");
+                return;
+            }
+
+            if (uData.spinsToday >= 2) {
+                uData.coins -= 20;
+            }
+            uData.spinsToday++;
+
+            isSpinning = true;
+            const winningIndex = Math.floor(Math.random() * prizes.length);
+            const sliceDegrees = 360 / prizes.length;
+            const targetRotation = (360 * 5) + (360 - (winningIndex * sliceDegrees) - (sliceDegrees / 2));
+            
+            const canvas = document.getElementById('wheel-canvas');
+            canvas.style.transform = `rotate(${currentWheelAngle + targetRotation}deg)`;
+            currentWheelAngle += targetRotation;
+
+            setTimeout(() => {
+                const prize = prizes[winningIndex];
+                uData.coins = (uData.coins || 0) + prize;
+                saveData();
+                updateUIState();
+                updateWheelStatus();
+                isSpinning = false;
+                alert(`🎊 Spin Complete!\nYou won +${prize} Coins!`);
+            }, 4000);
+        }
+
+        // --- SHOP & PURCHASE SYSTEM ---
+        function openCoinsShop() {
+            if (!appData.currentUser) {
+                alert("Please Login/Sign Up to open the Coins Shop!");
+                openAuthModal();
+                return;
+            }
+            document.getElementById('kit-code-result').style.display = 'none';
+            document.getElementById('coins-shop-modal').style.display = 'grid';
+        }
+
+        function buyHeroKitWithCoins() {
+            const username = appData.currentUser.username;
+            const uData = appData.users[username];
+
+            if (uData.coins < 20000) {
+                alert(`Insufficient Coins! You have ${uData.coins} Coins (Need 20,000 Coins).`);
+                return;
+            }
+
+            uData.coins -= 20000;
+            const randomCode = "HERO-ODERIS-" + Math.floor(1000 + Math.random() * 9000);
+            appData.claimedCodes.push({
+                user: username,
+                code: randomCode,
+                date: new Date().toLocaleString()
+            });
+
+            saveData();
+            updateUIState();
+
+            document.getElementById('generated-code-text').innerText = randomCode;
+            document.getElementById('kit-code-result').style.display = 'block';
+        }
+
+        function buyItemWithCoins(itemName, cost) {
+            const username = appData.currentUser.username;
+            const uData = appData.users[username];
+
+            if (uData.coins < cost) {
+                alert(`Insufficient Coins! You need ${cost} Coins.`);
+                return;
+            }
+
+            uData.coins -= cost;
+            saveData();
+            updateUIState();
+            alert(`✅ Successfully purchased ${itemName} for ${cost} Coins! Contact Server Owner on Discord or in-game to claim.`);
+        }
+
+        function startRankPurchase(rankName, price) {
+            if (!appData.currentUser) {
+                alert(`Sign up or login to subscribe to the ${rankName} Rank!`);
+                openAuthModal();
+                return;
+            }
+            alert(`📌 To purchase ${rankName} Rank (₹${price}/mo):\n\n1. Join our Discord: discord.gg/d7W62FeAXM\n2. Open a Support Ticket in #store-support.\n3. Mention your Username: ${appData.currentUser.username}`);
+        }
+
+        // --- LIVE EVENTS ENGINE ---
+        function renderEvents() {
+            const container = document.getElementById('events-feed');
+            if (!container) return;
+            container.innerHTML = '';
+
+            appData.events.forEach(ev => {
+                const card = document.createElement('div');
+                card.className = 'event-card';
+                card.innerHTML = `
+                    <span class="event-tag">LIVE EVENT</span>
+                    <div class="event-title">${ev.title}</div>
+                    <div class="event-desc">${ev.desc}</div>
+                    <div class="event-date"><i class="fas fa-clock"></i> ${ev.date}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- COMMENTS ENGINE ---
+        function submitComment() {
+            if (!appData.currentUser) {
+                alert("Please Login/Sign Up to post a comment!");
+                openAuthModal();
+                return;
+            }
+
+            const input = document.getElementById('comment-input');
+            const text = input.value.trim();
+            if (!text) {
+                alert("Please write a comment before posting!");
+                return;
+            }
+
+            const username = appData.currentUser.username;
+            const uData = appData.users[username];
+            const todayStr = new Date().toDateString();
+
+            if (uData.lastCommentDate !== todayStr) {
+                uData.commentsToday = 0;
+                uData.lastCommentDate = todayStr;
+            }
+
+            if (uData.commentsToday >= 2 && appData.currentUser.role !== 'admin') {
+                alert("You have reached your limit of 2 comments per day!");
+                return;
+            }
+
+            uData.commentsToday++;
+            const newComment = {
+                id: Date.now(),
+                author: username,
+                text: text,
+                date: new Date().toLocaleDateString()
+            };
+
+            appData.comments.unshift(newComment);
+            saveData();
+            input.value = '';
+            renderComments();
+            if (appData.currentUser.role === 'admin') renderAdminComments();
+            alert("Comment posted successfully!");
+        }
+
+        function renderComments() {
+            const list = document.getElementById('comments-list');
+            if (!list) return;
+            list.innerHTML = '';
+
+            if (appData.comments.length === 0) {
+                list.innerHTML = `<p style="color:var(--text-dim); text-align:center;">No comments yet. Be the first to leave a review!</p>`;
+                return;
+            }
+
+            appData.comments.forEach(c => {
+                const item = document.createElement('div');
+                item.className = 'comment-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="comment-user-info">
+                            <span class="comment-author">${c.author}</span>
+                            <span class="comment-date">${c.date}</span>
+                        </div>
+                        <div class="comment-body">${c.text}</div>
+                    </div>
+                    ${appData.currentUser && appData.currentUser.role === 'admin' ? 
+                        `<button class="admin-delete-btn" onclick="deleteComment(${c.id})"><i class="fas fa-trash"></i> DELETE</button>` : ''}
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function deleteComment(id) {
+            appData.comments = appData.comments.filter(c => c.id !== id);
+            saveData();
+            renderComments();
+            renderAdminComments();
+        }
+
+        // --- ADMIN DASHBOARD FUNCTIONS ---
+        function switchAdminTab(tab) {
+            ['events', 'comments', 'codes'].forEach(t => {
+                document.getElementById('admin-tab-' + t).style.display = (t === tab ? 'block' : 'none');
+                document.getElementById('btn-tab-' + t).classList.toggle('active', t === tab);
+            });
+
+            if (tab === 'comments') renderAdminComments();
+            if (tab === 'codes') renderAdminCodes();
+        }
+
+        function adminAddEvent() {
+            const title = document.getElementById('admin-event-title').value.trim();
+            const desc = document.getElementById('admin-event-desc').value.trim();
+            const date = document.getElementById('admin-event-date').value.trim();
+
+            if (!title || !desc || !date) {
+                alert("Please fill in all event fields!");
+                return;
+            }
+
+            appData.events.unshift({ id: Date.now(), title, desc, date });
+            saveData();
+            renderEvents();
+            document.getElementById('admin-event-title').value = '';
+            document.getElementById('admin-event-desc').value = '';
+            document.getElementById('admin-event-date').value = '';
+            alert("Live Event published successfully!");
+        }
+
+        function renderAdminComments() {
+            const feed = document.getElementById('admin-comments-feed');
+            if (!feed) return;
+            feed.innerHTML = '';
+
+            appData.comments.forEach(c => {
+                const item = document.createElement('div');
+                item.className = 'comment-item';
+                item.innerHTML = `
+                    <div>
+                        <strong style="color:var(--cyan-glow);">${c.author}</strong> <span style="font-size:11px; color:var(--text-dim);">${c.date}</span>
+                        <p style="margin-top:4px; font-size:13px; color:#fff;">${c.text}</p>
+                    </div>
+                    <button class="admin-delete-btn" onclick="deleteComment(${c.id})"><i class="fas fa-trash"></i> DELETE</button>
+                `;
+                feed.appendChild(item);
+            });
+        }
+
+        function renderAdminCodes() {
+            const feed = document.getElementById('admin-codes-feed');
+            if (!feed) return;
+            feed.innerHTML = '';
+
+            if (appData.claimedCodes.length === 0) {
+                feed.innerHTML = `<p style="color:var(--text-dim);">No Hero Kit codes generated yet.</p>`;
+                return;
+            }
+
+            appData.claimedCodes.forEach(item => {
+                const box = document.createElement('div');
+                box.className = 'comment-item';
+                box.innerHTML = `
+                    <div>
+                        <span style="color:var(--neon-green); font-family:'Orbitron'; font-weight:800;">${item.code}</span>
+                        <p style="color:var(--text-dim); font-size:12px; margin-top:2px;">User: ${item.user} | Claimed: ${item.date}</p>
+                    </div>
+                `;
+                feed.appendChild(box);
+            });
+        }
+
+        // --- GHOST AI KNOWLEDGE BASE & CHAT ENGINE ---
+        const ghostAnswers = {
+            owners: {
+                text: "The OderisMC Cyber Network is owned and operated by Sakarw_al142, King_Oderis, and Ayushggs! Official Media is led by NamanGamerz26, and the website was engineered by YUVRAJ_THELEGEND.",
+                subQ: ["What are their roles?", "How do I contact owners?"]
+            },
+            ip: {
+                text: "🌐 **Server IP & Connection Details:**\n• Java IP: play.oderismc.fun\n• Bedrock IP: play.oderismc.fun\n• Bedrock Port: 19142",
+                subQ: ["Is Bedrock supported?", "What versions work?"]
+            },
+            ranks: {
+                text: "💎 **Server Ranks Available:**\n• HERO (₹30/mo)\n• TITAN (₹60/mo)\n• KNIGHT (₹100/mo)\n• CHAMPION (₹150/mo)\n• CUSTOM (₹200/mo)\n• ODERIS (₹250/mo)\nVisit the Ranks & Store page to subscribe!",
+                subQ: ["What perks does Hero rank give?", "Can I get ranks for free?"]
+            },
+            rules: {
+                text: "🛡️ **Core Server Rules:**\n1. No hacking or modified clients (X-Ray, Fly, Auto-clicker >15 CPS).\n2. No toxic chat or advertising.\n3. Respect land claims.\n4. No duping or glitch exploitation.",
+                subQ: ["Are Minimaps allowed?", "What if I get scammed?"]
+            },
+            dev: {
+                text: "⚡ This web application was built and designed by **YUVRAJ_THELEGEND** (aka ragebg.exe) under **YJDEV STUDIOS**!",
+                subQ: ["What is YJDEV STUDIOS?", "How to report site bugs?"]
+            },
+            crossplay: {
+                text: "🎮 **Java & Bedrock Cross-Play:**\nOderisMC seamlessly links Java Edition and Bedrock Edition players together on the exact same survival server world!",
+                subQ: ["Can Bedrock join claims?", "How to link Discord?"]
+            }
+        };
+
+        function askGhostAI(key) {
+            const data = ghostAnswers[key];
+            if (!data) return;
+
+            appendGhostMessage("user", getTopicTitle(key));
+            setTimeout(() => {
+                appendGhostAIMessage(data.text, data.subQ);
+            }, 300);
+        }
+
+        function askGhostSubQ(text) {
+            appendGhostMessage("user", text);
+            setTimeout(() => {
+                appendGhostAIMessage(`Here is additional detail on "${text}": You can open a support ticket on our official Discord (discord.gg/d7W62FeAXM) for step-by-step guidance!`, []);
+            }, 300);
+        }
+
+        function getTopicTitle(key) {
+            const titles = {
+                owners: "Who's the owner?",
+                ip: "Server IP & Port Details",
+                ranks: "How to Buy Ranks & Prices",
+                rules: "Server Rules & Fair Play",
+                dev: "Who built this Website?",
+                crossplay: "How Cross-Play Works"
+            };
+            return titles[key] || key;
+        }
+
+        function appendGhostMessage(role, text) {
+            const feed = document.getElementById('ghost-chat-feed');
+            const msg = document.createElement('div');
+            msg.className = `ghost-msg ${role}`;
+            msg.innerHTML = `
+                <div class="ghost-avatar" style="width:32px; height:32px; font-size:16px;">${role === 'user' ? '🎮' : '👻'}</div>
+                <div class="ghost-msg-bubble">${text}</div>
+            `;
+            feed.appendChild(msg);
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        function appendGhostAIMessage(text, subQuestions) {
+            const feed = document.getElementById('ghost-chat-feed');
+            const msg = document.createElement('div');
+            msg.className = 'ghost-msg ai';
+
+            let subHTML = '';
+            if (subQuestions && subQuestions.length > 0) {
+                subHTML = `
+                    <div class="sub-questions-container">
+                        <div class="sub-q-title">EXPLORE FURTHER:</div>
+                        <div class="sub-q-grid">
+                            ${subQuestions.map(q => `<button class="sub-q-btn" onclick="askGhostSubQ('${q}')"><i class="fas fa-chevron-right"></i> ${q}</button>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            msg.innerHTML = `
+                <div class="ghost-avatar" style="width:32px; height:32px; font-size:16px;">👻</div>
+                <div class="ghost-msg-bubble">
+                    <strong style="color:var(--ghost-glow);">GHOST AI:</strong> ${text}
+                    ${subHTML}
+                </div>
+            `;
+            feed.appendChild(msg);
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        function clearGhostChat() {
+            const feed = document.getElementById('ghost-chat-feed');
+            feed.innerHTML = `
+                <div class="ghost-msg ai">
+                    <div class="ghost-avatar" style="width: 32px; height: 32px; font-size: 16px;">👻</div>
+                    <div class="ghost-msg-bubble">
+                        <strong style="color: var(--ghost-glow);">GHOST AI v2.93:</strong> Welcome player! 👋 Click any main topic below to ask questions or explore sub-questions:
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- BACKGROUND CANVAS STARFIELD ANIMATION ---
+        function initBgCanvas() {
+            const canvas = document.getElementById('bg-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            const stars = Array.from({ length: 60 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                speed: 0.2 + Math.random() * 0.5
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "rgba(0, 217, 255, 0.6)";
+
+                stars.forEach(s => {
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    s.y -= s.speed;
+                    if (s.y < 0) {
+                        s.y = canvas.height;
+                        s.x = Math.random() * canvas.width;
+                    }
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // INITIALIZATION ON DOM READY
         window.addEventListener('DOMContentLoaded', () => {
             updateUIState();
+            initBgCanvas();
         });
     </script>
 </body>
