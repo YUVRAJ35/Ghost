@@ -1,10 +1,47 @@
 /**
  * OderisMC Cyber Network Interactive Scripts
  * Handles Dual Cursor, Particle Canvas, Minotar Head Fetching,
- * Ghost AI v2.93 Interactive Engine, and Payment Modal Simulation.
+ * Ghost AI v2.93 Interactive Engine (with Persistent Memory),
+ * and Payment Modal & Purchase History Storage.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+
+  /* ==========================================
+     0. CENTRAL STORAGE ENGINE (LOCALSTORAGE)
+     ========================================== */
+  const STORAGE_KEYS = {
+    CHAT_HISTORY: 'oderis_chat_history_v1',
+    PURCHASE_LOGS: 'oderis_purchase_logs_v1',
+    LAST_USERNAME: 'oderis_saved_username_v1',
+    STATS: 'oderis_system_stats_v1'
+  };
+
+  const DB = {
+    get: (key, fallback = null) => {
+      try {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : fallback;
+      } catch (e) {
+        console.warn('Storage read failed:', e);
+        return fallback;
+      }
+    },
+    set: (key, value) => {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (e) {
+        console.warn('Storage write failed:', e);
+      }
+    },
+    remove: (key) => {
+      try {
+        localStorage.removeItem(key);
+      } catch (e) {
+        console.warn('Storage delete failed:', e);
+      }
+    }
+  };
 
   /* ==========================================
      1. DUAL CUSTOM CURSOR EFFECT
@@ -137,12 +174,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ==========================================
-     4. COPY SERVER IP BUTTON
+     4. COPY SERVER IP BUTTON + COUNTER TRACKER
      ========================================== */
   const copyIpBtn = document.getElementById('copy-ip-btn');
   if (copyIpBtn) {
     copyIpBtn.addEventListener('click', () => {
       const serverIP = 'play.oderismc.net';
+
+      // Update persistent copy count statistic
+      const stats = DB.get(STORAGE_KEYS.STATS, { copyCount: 0 });
+      stats.copyCount += 1;
+      stats.lastCopied = new Date().toISOString();
+      DB.set(STORAGE_KEYS.STATS, stats);
+
       navigator.clipboard.writeText(serverIP).then(() => {
         const originalText = copyIpBtn.innerText;
         copyIpBtn.innerText = 'IP Copied to Clipboard!';
@@ -158,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================
-     5. PAYMENT MODAL SIMULATION
+     5. PAYMENT MODAL SIMULATION & ORDER PERSISTENCE
      ========================================== */
   const modalOverlay = document.getElementById('payment-modal');
   const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -166,6 +210,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalRankPrice = document.getElementById('modal-rank-price');
   const buyButtons = document.querySelectorAll('.buy-rank-btn');
   const paymentForm = document.getElementById('payment-form');
+  const usernameInput = document.getElementById('mc-username');
+
+  // Pre-fill username if previously stored in memory
+  if (usernameInput) {
+    const savedName = DB.get(STORAGE_KEYS.LAST_USERNAME, '');
+    if (savedName) usernameInput.value = savedName;
+  }
 
   buyButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -174,6 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (modalRankTitle && modalRankPrice && modalOverlay) {
         modalRankTitle.innerText = `Checkout [${rank}] Rank`;
         modalRankPrice.innerText = `Total Amount: $${price}`;
+        modalOverlay.setAttribute('data-selected-rank', rank);
+        modalOverlay.setAttribute('data-selected-price', price);
         modalOverlay.classList.add('active');
       }
     });
@@ -194,21 +247,39 @@ document.addEventListener('DOMContentLoaded', () => {
   if (paymentForm) {
     paymentForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const usernameInput = document.getElementById('mc-username');
       const submitBtn = document.getElementById('pay-submit-btn');
 
       if (usernameInput && submitBtn) {
         const username = usernameInput.value.trim();
         if (!username) return;
 
+        const rank = modalOverlay.getAttribute('data-selected-rank') || 'Rank';
+        const price = modalOverlay.getAttribute('data-selected-price') || '0.00';
+
         submitBtn.disabled = true;
         submitBtn.innerText = 'Processing Gateway...';
 
         setTimeout(() => {
-          alert(`Success! [${username}] has been credited with the rank on play.oderismc.net.`);
+          // Save last used username
+          DB.set(STORAGE_KEYS.LAST_USERNAME, username);
+
+          // Save order to persistent purchase log
+          const newTransaction = {
+            transactionId: 'ODR-' + Math.floor(100000 + Math.random() * 900000),
+            username: username,
+            rank: rank,
+            price: price,
+            timestamp: new Date().toISOString()
+          };
+
+          const purchases = DB.get(STORAGE_KEYS.PURCHASE_LOGS, []);
+          purchases.push(newTransaction);
+          DB.set(STORAGE_KEYS.PURCHASE_LOGS, purchases);
+
+          alert(`Success! [${username}] has been credited with the ${rank} rank on play.oderismc.net.\n\nTransaction ID: ${newTransaction.transactionId}`);
+
           submitBtn.disabled = false;
           submitBtn.innerText = 'Complete Purchase';
-          usernameInput.value = '';
           modalOverlay.classList.remove('active');
         }, 1500);
       }
@@ -216,50 +287,95 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================
-     6. GHOST AI v2.93 INTERACTIVE ENGINE
+     6. GHOST AI v2.93 INTERACTIVE ENGINE (PERSISTENT CHAT)
      ========================================== */
   const chatMessages = document.getElementById('chat-messages');
   const chatForm = document.getElementById('chat-form');
   const chatInput = document.getElementById('chat-input');
   const chipButtons = document.querySelectorAll('.chip');
+  const clearChatBtn = document.getElementById('clear-chat-btn');
 
   const ghostKnowledge = [
     { keywords: ['ip', 'address', 'connect', 'join'], response: 'The official server IP is **play.oderismc.net**! Join us on version 1.16 through 1.20+.' },
     { keywords: ['vip', 'rank', 'mvp', 'oderis', 'god', 'store', 'perk'], response: 'Ranks range from VIP ($4.99) to GOD ($49.99). All ranks include /fly abilities, cosmetics, and priority server queue access.' },
     { keywords: ['owner', 'yuvraj', 'developer', 'yjdev'], response: 'OderisMC was created and built by lead developer YuvrajBudhwar under YJDEV STUDIOS.' },
     { keywords: ['bedwars', 'game', 'mode', 'pvp', 'skyblock'], response: 'We feature custom Bedwars with special knockback physics, fast-paced Skyblock, and custom aura-based combat mechanics!' },
-    { keywords: ['staff', 'apply', 'admin', 'mod'], response: 'Staff applications open periodically on our official Discord community server.' }
+    { keywords: ['staff', 'apply', 'admin', 'mod'], response: 'Staff applications open periodically on our official Discord community server.' },
+    { keywords: ['history', 'purchases', 'orders', 'bought'], response: () => {
+      const logs = DB.get(STORAGE_KEYS.PURCHASE_LOGS, []);
+      if (logs.length === 0) return "You don't have any saved store purchases on this device yet!";
+      const last = logs[logs.length - 1];
+      return `Found ${logs.length} stored transaction(s). Latest purchase: [${last.rank}] for ${last.username} (ID: ${last.transactionId}).`;
+    }}
   ];
 
-  function addMessage(text, sender) {
+  function addMessage(text, sender, saveToStorage = true) {
     if (!chatMessages) return;
     const bubble = document.createElement('div');
     bubble.className = `chat-bubble ${sender}`;
     bubble.innerText = text;
     chatMessages.appendChild(bubble);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    if (saveToStorage) {
+      const currentHistory = DB.get(STORAGE_KEYS.CHAT_HISTORY, []);
+      currentHistory.push({
+        text: text,
+        sender: sender,
+        timestamp: new Date().toISOString()
+      });
+      DB.set(STORAGE_KEYS.CHAT_HISTORY, currentHistory);
+    }
+  }
+
+  function loadSavedChatHistory() {
+    const savedMessages = DB.get(STORAGE_KEYS.CHAT_HISTORY, []);
+    if (savedMessages.length > 0 && chatMessages) {
+      chatMessages.innerHTML = ''; // Clear default markup
+      savedMessages.forEach(msg => {
+        addMessage(msg.text, msg.sender, false);
+      });
+    }
+  }
+
+  function clearChatHistory() {
+    DB.remove(STORAGE_KEYS.CHAT_HISTORY);
+    if (chatMessages) {
+      chatMessages.innerHTML = '';
+      addMessage('Ghost AI v2.93 memory cleared. How can I help you today?', 'ai', false);
+    }
   }
 
   function generateGhostResponse(userQuery) {
     const query = userQuery.toLowerCase();
+
+    if (query === '/clear' || query === 'clear chat') {
+      clearChatHistory();
+      return null;
+    }
+
     for (let k of ghostKnowledge) {
       if (k.keywords.some(kw => query.includes(kw))) {
-        return k.response;
+        return typeof k.response === 'function' ? k.response() : k.response;
       }
     }
-    return "Ghost AI v2.93: I am listening! You can ask me about the server IP (play.oderismc.net), rank pricing, game modes, or leadership team details.";
+    return "Ghost AI v2.93: I am listening! You can ask me about the server IP (play.oderismc.net), rank pricing, game modes, your purchase history, or type '/clear' to reset this chat.";
   }
 
   function handleUserSubmit(message) {
     if (!message) return;
-    addMessage(message, 'user');
+    addMessage(message, 'user', true);
 
-    // Simulate AI thinking delay
     setTimeout(() => {
       const response = generateGhostResponse(message);
-      addMessage(response, 'ai');
+      if (response) {
+        addMessage(response, 'ai', true);
+      }
     }, 600);
   }
+
+  // Restore previous chat memory upon page load
+  loadSavedChatHistory();
 
   if (chatForm && chatInput) {
     chatForm.addEventListener('submit', (e) => {
@@ -270,6 +386,10 @@ document.addEventListener('DOMContentLoaded', () => {
         chatInput.value = '';
       }
     });
+  }
+
+  if (clearChatBtn) {
+    clearChatBtn.addEventListener('click', clearChatHistory);
   }
 
   chipButtons.forEach((chip) => {
