@@ -25,7 +25,6 @@
             --text-dim: #8fa3c4;
             --border-cyber: rgba(0, 217, 255, 0.3);
 
-            /* Indian Flag Palette */
             --flag-saffron: #FF9933;
             --flag-white: #FFFFFF;
             --flag-green: #138808;
@@ -81,7 +80,6 @@
             font-family: 'Orbitron', sans-serif;
         }
 
-        /* --- PURPLE MEDIA UTILITIES --- */
         .purple-media-text {
             color: var(--purple-light) !important;
             text-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
@@ -108,16 +106,6 @@
             font-family: 'Orbitron', sans-serif;
         }
 
-        /* BACKGROUND CANVAS */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
         /* HEADER & NAVIGATION */
         header {
             display: flex;
@@ -137,7 +125,6 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            cursor: pointer;
         }
 
         .brand-logo-crown {
@@ -202,7 +189,6 @@
             text-shadow: 0 0 10px var(--cyan-glow);
         }
 
-        /* GHOST AI BUTTON */
         .ghost-ai-trigger-btn {
             background: linear-gradient(135deg, #00f0ff, #7000ff);
             color: #ffffff !important;
@@ -218,8 +204,6 @@
             align-items: center;
             gap: 8px;
             transition: 0.3s;
-            position: relative;
-            overflow: hidden;
         }
 
         .ghost-ai-trigger-btn:hover {
@@ -228,7 +212,6 @@
             border-color: #ffffff;
         }
 
-        /* SERVER STATUS BAR */
         .server-status-bar {
             background: rgba(0, 217, 255, 0.08);
             border-bottom: 1px solid rgba(0, 217, 255, 0.2);
@@ -251,7 +234,6 @@
             box-shadow: 0 0 10px var(--neon-green);
         }
 
-        /* PAGE VIEWS CONTROLLER */
         .page-view {
             display: none;
             padding-bottom: 70px;
@@ -267,7 +249,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ODERISMC HERO & CUSTOM BANNER */
         .hero {
             text-align: center;
             padding: 50px 20px 30px;
@@ -373,66 +354,6 @@
             transform: translateY(-2px);
         }
 
-        /* --- DAY COUNTER & ODERISMC COINS SYSTEM STYLING --- */
-        .coins-banner-card {
-            background: linear-gradient(135deg, rgba(255, 183, 0, 0.15), rgba(10, 16, 30, 0.9));
-            border: 2px solid var(--gold-accent);
-            border-radius: 18px;
-            padding: 25px;
-            max-width: 1100px;
-            margin: 25px auto 35px;
-            box-shadow: 0 0 30px rgba(255, 183, 0, 0.25);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .coins-title-box {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .coins-icon-badge {
-            font-size: 42px;
-            filter: drop-shadow(0 0 10px var(--gold-accent));
-        }
-
-        .coins-info-text h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px;
-            color: var(--gold-accent);
-        }
-
-        .coins-info-text p {
-            font-size: 14px;
-            color: var(--text-dim);
-            margin-top: 4px;
-        }
-
-        .coins-metrics-group {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .coin-pill {
-            background: rgba(5, 8, 17, 0.8);
-            border: 1px solid var(--gold-accent);
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            font-weight: 800;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
         .gold-btn {
             background: linear-gradient(90deg, var(--gold-accent), #ff8800);
             color: #000;
@@ -453,7 +374,6 @@
             transform: translateY(-2px);
         }
 
-        /* LIVE EVENTS CONTAINER & STATUS BADGES */
         .events-container {
             max-width: 1100px;
             margin: 30px auto;
@@ -489,23 +409,9 @@
             letter-spacing: 1px;
         }
 
-        .event-tag.status-live {
-            background: var(--neon-green);
-            color: #000;
-            box-shadow: 0 0 10px var(--neon-green);
-        }
-
-        .event-tag.status-starting_soon {
-            background: var(--gold-accent);
-            color: #000;
-            box-shadow: 0 0 10px var(--gold-accent);
-        }
-
-        .event-tag.status-ended {
-            background: rgba(255, 17, 68, 0.2);
-            border: 1px solid var(--neon-red);
-            color: var(--neon-red);
-        }
+        .event-tag.status-live { background: var(--neon-green); color: #000; box-shadow: 0 0 10px var(--neon-green); }
+        .event-tag.status-starting_soon { background: var(--gold-accent); color: #000; box-shadow: 0 0 10px var(--gold-accent); }
+        .event-tag.status-ended { background: rgba(255, 17, 68, 0.2); border: 1px solid var(--neon-red); color: var(--neon-red); }
 
         .event-title {
             font-family: 'Orbitron', sans-serif;
@@ -528,7 +434,6 @@
             font-family: 'Orbitron', sans-serif;
         }
 
-        /* HOME FEATURE CARDS */
         .home-features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -565,7 +470,6 @@
             line-height: 1.5;
         }
 
-        /* UPDATE LOGS SECTION */
         .logs-container {
             max-width: 1100px;
             margin: 30px auto;
@@ -640,7 +544,6 @@
             margin-top: 3px;
         }
 
-        /* COMMENTS SECTION */
         .comments-section {
             max-width: 1100px;
             margin: 40px auto;
@@ -720,13 +623,6 @@
             gap: 15px;
         }
 
-        .comment-user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
-        }
-
         .comment-author {
             font-family: 'Orbitron', sans-serif;
             font-size: 14px;
@@ -776,69 +672,6 @@
             box-shadow: 0 0 10px var(--cyan-glow);
         }
 
-        /* SPIN THE WHEEL MODAL */
-        .wheel-container {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 20px auto;
-        }
-
-        .wheel-canvas {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 4px solid var(--gold-accent);
-            box-shadow: 0 0 25px rgba(255, 183, 0, 0.4);
-            transition: transform 4s cubic-bezier(0.15, 0.9, 0.2, 1);
-        }
-
-        .wheel-pointer {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 14px solid transparent;
-            border-right: 14px solid transparent;
-            border-top: 24px solid var(--neon-red);
-            z-index: 10;
-            filter: drop-shadow(0 0 8px var(--neon-red));
-        }
-
-        /* COINS STORE MODAL */
-        .coins-shop-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .coins-shop-card {
-            background: rgba(5, 10, 25, 0.9);
-            border: 1px solid var(--gold-accent);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .coins-shop-card h4 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-
-        .coins-shop-price {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            color: var(--gold-accent);
-            font-weight: 800;
-            margin: 10px 0;
-        }
-
-        /* --- ADMIN CONTROL PANEL STYLING --- */
         .admin-panel-card {
             background: var(--bg-card);
             border: 2px solid var(--neon-red);
@@ -898,7 +731,6 @@
             border-color: var(--neon-red);
         }
 
-        /* RANK STORE SECTION */
         .store-section {
             max-width: 1200px;
             margin: 40px auto;
@@ -1017,7 +849,6 @@
             background: #fff;
         }
 
-        /* RULES & FAQ */
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -1061,7 +892,6 @@
             color: #fff;
         }
 
-        /* STAFF GRID */
         .staff-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1080,9 +910,7 @@
             transition: 0.3s;
         }
 
-        .staff-card:hover {
-            transform: translateY(-4px);
-        }
+        .staff-card:hover { transform: translateY(-4px); }
 
         .staff-emoji-avatar {
             font-size: 48px;
@@ -1128,7 +956,6 @@
             font-size: 15px;
         }
 
-        /* VOTE PAGE STYLING */
         .vote-cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1177,7 +1004,7 @@
             box-shadow: 0 0 15px #fff;
         }
 
-        /* GHOST AI TERMINAL STYLING */
+        /* GHOST AI TERMINAL */
         .ghost-ai-container {
             max-width: 950px;
             margin: 30px auto;
@@ -1301,49 +1128,6 @@
             border-bottom-left-radius: 2px;
         }
 
-        .sub-questions-container {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px dashed rgba(0, 240, 255, 0.3);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .sub-q-title {
-            font-size: 12px;
-            font-family: 'Orbitron', sans-serif;
-            color: var(--gold-accent);
-            letter-spacing: 1px;
-            font-weight: 700;
-        }
-
-        .sub-q-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .sub-q-btn {
-            background: rgba(0, 240, 255, 0.1);
-            border: 1px solid var(--cyan-glow);
-            color: #ffffff;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 6px 12px;
-            border-radius: 8px;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .sub-q-btn:hover {
-            background: var(--cyan-glow);
-            color: #000;
-            box-shadow: 0 0 12px var(--cyan-glow);
-        }
-
         .ghost-options-panel {
             background: rgba(5, 10, 25, 0.96);
             border-top: 1px solid var(--border-cyber);
@@ -1389,7 +1173,7 @@
             transform: translateY(-2px);
         }
 
-        /* MODALS (GENERAL OVERLAY) */
+        /* MODALS */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -1441,11 +1225,9 @@
             transition: 0.2s;
         }
 
-        .modal-close-btn:hover {
-            color: #fff;
-        }
+        .modal-close-btn:hover { color: #fff; }
 
-        /* FLOATING BOTTOM LOGIN / AUTH BAR */
+        /* FLOATING AUTH BAR */
         .floating-auth-container {
             position: fixed;
             bottom: 20px;
@@ -1490,7 +1272,40 @@
             box-shadow: 0 0 10px #fff;
         }
 
-        /* FOOTER */
+        /* YJDEV MAINTENANCE OVERLAY */
+        #maintenance-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, #0a1128 0%, #03060d 100%);
+            z-index: 99999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .m-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--neon-red);
+            text-shadow: 0 0 25px var(--neon-red);
+            margin-bottom: 10px;
+        }
+
+        .m-sub {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: var(--cyan-glow);
+            letter-spacing: 4px;
+            margin-bottom: 25px;
+        }
+
         footer {
             border-top: 1px solid var(--border-cyber);
             padding: 40px 20px 100px;
@@ -1500,9 +1315,7 @@
             line-height: 1.7;
         }
 
-        footer strong {
-            color: var(--cyan-glow);
-        }
+        footer strong { color: var(--cyan-glow); }
 
         .ghost-credits {
             font-family: 'Orbitron', sans-serif;
@@ -1512,9 +1325,7 @@
             margin-bottom: 6px;
         }
 
-        .ghost-credits span {
-            color: var(--neon-green);
-        }
+        .ghost-credits span { color: var(--neon-green); }
 
         .yjdev-link {
             color: var(--cyan-glow);
@@ -1533,10 +1344,7 @@
         }
 
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-            }
+            header { flex-direction: column; gap: 15px; }
             .banner-logo-text { font-size: 42px; }
             .banner-logo-subtext { font-size: 22px; }
             .nav-links { justify-content: center; }
@@ -1546,8 +1354,19 @@
 </head>
 <body>
 
-    <!-- CANVAS BACKGROUND -->
-    <canvas id="bg-canvas"></canvas>
+    <!-- YJDEV MAINTENANCE OVERLAY -->
+    <div id="maintenance-screen">
+        <div style="font-size: 80px; margin-bottom: 15px; filter: drop-shadow(0 0 20px var(--neon-red));">⚠️</div>
+        <div class="m-title">UNDER MAINTENANCE</div>
+        <div class="m-sub">YJDEV STUDIOS CYBER NETWORK</div>
+        <p style="max-width: 600px; color: var(--text-dim); font-size: 16px; margin-bottom: 30px; line-height: 1.6;">
+            The OderisMC Network website is currently undergoing planned system upgrades & maintenance.
+            <br>Admins can log in below to access the management panel.
+        </p>
+        <button class="gold-btn" style="background: linear-gradient(90deg, var(--neon-red), #ff5500); color: #fff;" onclick="openAuthModal()">
+            <i class="fas fa-user-shield"></i> ADMIN LOGIN
+        </button>
+    </div>
 
     <!-- HEADER NAVIGATION -->
     <header>
@@ -1591,7 +1410,7 @@
     </div>
 
     <main>
-        <!-- PAGE 1: HOME VIEW & COINS SYSTEM -->
+        <!-- PAGE 1: HOME VIEW -->
         <section class="page-view active" id="page-home">
             <div class="hero">
                 <div class="banner-wrapper">
@@ -1615,24 +1434,6 @@
                     <button class="action-btn" style="background: linear-gradient(90deg, #00f0ff, #7000ff); color: #fff;" onclick="openGhostAIPage()">
                         <i class="fas fa-ghost"></i> ASK GHOST AI v2.93
                     </button>
-                </div>
-            </div>
-
-            <!-- ODERISMC COINS & DAY STREAK BANNER -->
-            <div class="coins-banner-card">
-                <div class="coins-title-box">
-                    <span class="coins-icon-badge">🪙</span>
-                    <div class="coins-info-text">
-                        <h3>OderisMC Coins <span style="font-size: 12px; color: var(--cyan-glow);">powered by YJDEV STUDIOS</span></h3>
-                        <p>Daily Streak: <strong>+5 Coins/day bonus</strong> (Base 25, Capped at 120/day). Collect 20,000 Coins to claim a <strong>FREE HERO KIT</strong> in-game!</p>
-                    </div>
-                </div>
-                <div class="coins-metrics-group">
-                    <div class="coin-pill"><i class="fas fa-coins" style="color: var(--gold-accent);"></i> <span id="user-coin-balance">0</span> Coins</div>
-                    <div class="coin-pill"><i class="fas fa-fire" style="color: var(--neon-red);"></i> Day <span id="user-streak-count">0</span> Streak</div>
-                    <button class="gold-btn" onclick="claimDailyReward()"><i class="fas fa-gift"></i> CLAIM DAILY</button>
-                    <button class="gold-btn" style="background: linear-gradient(90deg, var(--cyan-glow), var(--blue-accent)); color: #000;" onclick="openSpinWheel()"><i class="fas fa-dharmachakra"></i> SPIN WHEEL</button>
-                    <button class="gold-btn" style="background: linear-gradient(90deg, #00ff88, #00ccff); color: #000;" onclick="openCoinsShop()"><i class="fas fa-store"></i> COINS SHOP</button>
                 </div>
             </div>
 
@@ -1670,7 +1471,7 @@
                         <i class="fas fa-comments" style="color: var(--cyan-glow);"></i> PLAYER COMMENTS & FEEDBACK
                     </h2>
                     <p style="color: var(--text-dim); font-size: 14px; margin-bottom: 20px;">
-                        Leave a comment! (Limit: Max 2 comments/day per player. Deleted by Admin only).
+                        Leave a comment! (Limit: Max 2 comments/day per player).
                     </p>
 
                     <div class="comment-input-box">
@@ -1688,12 +1489,9 @@
         <!-- PAGE: UPDATE LOGS VIEW -->
         <section class="page-view" id="page-logs">
             <div class="store-section">
-                <h2 class="section-title"><i class="fas fa-history" style="color: var(--cyan-glow);"></i> NETWORK UPDATE LOGS & PATCH NOTES</h2>
+                <h2 class="section-title"><i class="fas fa-history" style="color: var(--cyan-glow);"></i> NETWORK UPDATE LOGS</h2>
                 <p class="section-subtitle">Stay up-to-date with the latest server changes, performance updates, and new features!</p>
-
-                <div class="logs-container" id="logs-feed">
-                    <!-- Logs rendered dynamically -->
-                </div>
+                <div class="logs-container" id="logs-feed"></div>
             </div>
         </section>
 
@@ -1795,26 +1593,26 @@
         <section class="page-view" id="page-vote">
             <div class="store-section">
                 <h2 class="section-title">VOTE FOR ODERISMC</h2>
-                <p class="section-subtitle">Vote daily on top server lists to earn free vote keys, coins, and crate keys in-game!</p>
+                <p class="section-subtitle">Vote daily on top server lists to earn free vote keys and rewards in-game!</p>
                 
                 <div class="vote-cards-grid">
                     <div class="vote-card">
                         <i class="fas fa-check-circle"></i>
                         <h3 style="color:#fff; font-family:'Orbitron'; font-size:18px;">TopG Site #1</h3>
-                        <p style="color:var(--text-dim); font-size:13px; margin-top:5px;">Reward: 1x Vote Key + $1000 Coins</p>
-                        <a href="https://topg.org/minecraft-servers/server-686255" target="_blank" rel="noopener noreferrer" class="vote-btn" style="display: block; text-decoration: none; text-align: center;">VOTE NOW</a>
+                        <p style="color:var(--text-dim); font-size:13px; margin-top:5px;">Reward: 1x Vote Key + Bonus Claim</p>
+                        <a href="https://topg.org/minecraft-servers/server-686255" target="_blank" class="vote-btn" style="display: block; text-decoration: none; text-align: center;">VOTE NOW</a>
                     </div>
                     <div class="vote-card">
                         <i class="fas fa-award"></i>
                         <h3 style="color:#fff; font-family:'Orbitron'; font-size:18px;">Minecraft-MP Site #2</h3>
                         <p style="color:var(--text-dim); font-size:13px; margin-top:5px;">Reward: 1x Rare Crate Key</p>
-                        <a href="https://minecraft-mp.com/server/364153/vote/" target="_blank" rel="noopener noreferrer" class="vote-btn" style="display: block; text-decoration: none; text-align: center;">VOTE NOW</a>
+                        <a href="https://minecraft-mp.com/server/364153/vote/" target="_blank" class="vote-btn" style="display: block; text-decoration: none; text-align: center;">VOTE NOW</a>
                     </div>
                     <div class="vote-card">
                         <i class="fas fa-bolt"></i>
                         <h3 style="color:#fff; font-family:'Orbitron'; font-size:18px;">Minecraft.buzz Site #3</h3>
                         <p style="color:var(--text-dim); font-size:13px; margin-top:5px;">Reward: 2x Vote Keys + XP Boost</p>
-                        <a href="https://minecraft.buzz/vote/oderis-mc" target="_blank" rel="noopener noreferrer" class="vote-btn" style="display: block; text-decoration: none; text-align: center;">VOTE NOW</a>
+                        <a href="https://minecraft.buzz/vote/oderis-mc" target="_blank" class="vote-btn" style="display: block; text-decoration: none; text-align: center;">VOTE NOW</a>
                     </div>
                 </div>
             </div>
@@ -1823,44 +1621,20 @@
         <!-- PAGE 4: RULES & FAQ -->
         <section class="page-view" id="page-rules">
             <div class="store-section">
-                <h2 class="section-title">EXPANDED SERVER RULES & CODE OF CONDUCT</h2>
-                <p class="section-subtitle">Please read all server rules carefully. Ignorance of rules is not an excuse for violations.</p>
+                <h2 class="section-title">SERVER RULES & CODE OF CONDUCT</h2>
                 <div class="info-grid">
                     <div class="info-card">
                         <h3><i class="fas fa-gavel"></i> 1. CHAT & COMMUNITY RULES</h3>
                         <ul class="rules-list">
-                            <li><strong>1.1 Respect All Players:</strong> Severe toxicity, hate speech, racism, sexism, or discrimination will result in instant permanent muted/banned status.</li>
-                            <li><strong>1.2 No Spamming:</strong> Fast repetitive messages, all-caps spam, or character floods are strictly blocked.</li>
-                            <li><strong>1.3 No Advertising:</strong> Promoting other Minecraft servers, Discord servers, or commercial links is forbidden.</li>
-                            <li><strong>1.4 Staff Impersonation:</strong> Falsely claiming to be an Owner, Admin, or Moderator will lead to an immediate network ban.</li>
+                            <li><strong>1.1 Respect All Players:</strong> Severe toxicity, hate speech, racism, or sexism leads to permanent mutes/bans.</li>
+                            <li><strong>1.2 No Advertising:</strong> Promoting other Minecraft or Discord servers is strictly forbidden.</li>
                         </ul>
                     </div>
-
                     <div class="info-card">
                         <h3><i class="fas fa-shield-alt"></i> 2. GAMEPLAY & FAIR PLAY</h3>
                         <ul class="rules-list">
-                            <li><strong>2.1 Zero Tolerance Hacking:</strong> Use of X-Ray, Fly, KillAura, Speed, Auto-clickers (>15 CPS), or modified clients is permanently bannable.</li>
-                            <li><strong>2.2 Exploits & Duping:</strong> Exploiting server bugs, item duplication, or map glitches will result in complete account wipes and IP bans.</li>
-                            <li><strong>2.3 Allowed Mods:</strong> OptiFine, Sodium, Minimaps (without player radar), and purely aesthetic HUD mods are allowed.</li>
-                            <li><strong>2.4 AFK Farms:</strong> Auto-clicker AFK farming is prohibited. Passive mob farms within reasonable chunk limits are allowed.</li>
-                        </ul>
-                    </div>
-
-                    <div class="info-card">
-                        <h3><i class="fas fa-map-marked-alt"></i> 3. CLAIMS & GRIEF PREVENTION</h3>
-                        <ul class="rules-list">
-                            <li><strong>3.1 Land Claim Safety:</strong> Players must protect their builds using the claim system. Griefing unclaimed builds is frowned upon, but claimed land is 100% protected.</li>
-                            <li><strong>3.2 Claim Surround Griefing:</strong> Lava-casting, water-grieving, or building obtrusive structures right outside someone's claim boundary is strictly punishable.</li>
-                            <li><strong>3.3 Portal Trapping:</strong> Trapping Nether or End portals to permanently kill players is prohibited.</li>
-                        </ul>
-                    </div>
-
-                    <div class="info-card">
-                        <h3><i class="fas fa-coins"></i> 4. ECONOMY & TRADING RULES</h3>
-                        <ul class="rules-list">
-                            <li><strong>4.1 Scamming Policy:</strong> In-game currency or item scamming during official auctions or direct trades is punishable by item rollback.</li>
-                            <li><strong>4.2 Real-Money Trading (RMT):</strong> Trading in-game cash or items for real money outside the official server store is strictly forbidden.</li>
-                            <li><strong>4.3 Chargeback Protection:</strong> Fraudulent billing chargebacks trigger automated IP bans across the entire OderisMC network.</li>
+                            <li><strong>2.1 Zero Tolerance Hacking:</strong> X-Ray, Fly, KillAura, or Auto-clickers (>15 CPS) trigger permanent bans.</li>
+                            <li><strong>2.2 Exploits & Duping:</strong> Bug exploitation triggers immediate account wipes.</li>
                         </ul>
                     </div>
                 </div>
@@ -1870,25 +1644,13 @@
         <!-- PAGE 5: TERMS & POLICY -->
         <section class="page-view" id="page-terms">
             <div class="store-section">
-                <h2 class="section-title">EXPANDED TERMS & CONDITIONS & LEGAL POLICY</h2>
-                <p class="section-subtitle">Official payment policy, virtual goods agreement, privacy rules, and network service terms.</p>
-                
+                <h2 class="section-title">TERMS & CONDITIONS</h2>
                 <div class="info-grid">
                     <div class="info-card">
-                        <h3><i class="fas fa-file-contract"></i> 1. ACCEPTANCE & SERVICE TERMS</h3>
+                        <h3><i class="fas fa-file-contract"></i> 1. VIRTUAL GOODS</h3>
                         <ul class="rules-list">
-                            <li><strong>1.1 Binding Agreement:</strong> By accessing the ODERISMC server or making a transaction, you agree to comply with all terms herein.</li>
-                            <li><strong>1.2 Digital Intangibles:</strong> All rank subscriptions, virtual coins, keys, and cosmetics are intangible digital perks with zero real-world monetary value.</li>
-                            <li><strong>1.3 Subscription Validity:</strong> Purchased rank subscriptions remain active for exactly 30 calendar days from the moment of activation.</li>
-                        </ul>
-                    </div>
-
-                    <div class="info-card">
-                        <h3><i class="fas fa-ban"></i> 2. STRICT REFUND & CHARGEBACK POLICY</h3>
-                        <ul class="rules-list">
-                            <li><strong>2.1 Non-Refundable Sales:</strong> All sales completed on the ODERISMC store or via manual payment are strictly final and non-refundable.</li>
-                            <li><strong>2.2 Anti-Fraud & Disputes:</strong> Opening an unauthorized payment dispute or chargeback will immediately trigger a permanent network-wide IP ban.</li>
-                            <li><strong>2.3 Rule Enforcement Exemption:</strong> Buying a rank does NOT grant immunity from server rules. Banned players forfeit rank access without refund.</li>
+                            <li><strong>1.1 Subscription Terms:</strong> All rank subscriptions are active for 30 calendar days.</li>
+                            <li><strong>1.2 Refund Policy:</strong> All digital goods purchases are strictly final and non-refundable.</li>
                         </ul>
                     </div>
                 </div>
@@ -1899,8 +1661,6 @@
         <section class="page-view" id="page-community">
             <div class="store-section">
                 <h2 class="section-title">OFFICIAL NETWORK STAFF</h2>
-                <p class="section-subtitle">Meet the team managing and operating the ODERISMC Cyber Network!</p>
-
                 <div class="staff-grid">
                     <div class="staff-card indian-flag-card">
                         <span class="staff-emoji-avatar">👑</span>
@@ -1908,39 +1668,30 @@
                         <div class="staff-role" style="color: var(--flag-saffron);">Server Owner</div>
                         <div class="indian-flag-badge">🇮🇳 Network Owner</div>
                     </div>
-
                     <div class="staff-card indian-flag-card">
                         <span class="staff-emoji-avatar">👑</span>
                         <div class="staff-name indian-flag-text">King_Oderis</div>
                         <div class="staff-role" style="color: var(--flag-saffron);">Server Owner</div>
                         <div class="indian-flag-badge">🇮🇳 Network Owner</div>
                     </div>
-
                     <div class="staff-card indian-flag-card">
                         <span class="staff-emoji-avatar">👑</span>
                         <div class="staff-name indian-flag-text">Ayushggs</div>
                         <div class="staff-role" style="color: var(--flag-saffron);">Server Owner</div>
                         <div class="indian-flag-badge">🇮🇳 Network Owner</div>
                     </div>
-
                     <div class="staff-card purple-media-card">
                         <span class="staff-emoji-avatar">🎥</span>
                         <div class="staff-name purple-media-text">NamanGamerz26</div>
                         <div class="staff-role purple-media-text">Media / Creator</div>
                         <div class="purple-media-badge">🎬 Official Media</div>
                     </div>
-
                     <div class="staff-card indian-flag-card">
                         <span class="staff-emoji-avatar">👑💻⚡</span>
                         <div class="staff-name indian-flag-text">YUVRAJ_THELEGEND</div>
                         <div class="staff-role" style="color: var(--flag-saffron);">Website Developer</div>
                         <div class="indian-flag-badge">🇮🇳 aka ragebg.exe</div>
                     </div>
-                </div>
-
-                <div class="staff-closed-card">
-                    <h3><i class="fas fa-lock"></i> STAFF APPLICATIONS CLOSED</h3>
-                    <p>Admin, Moderator, and Helper posts are currently <strong>NOT OPEN</strong>. There are no active player recruitments at this time.</p>
                 </div>
             </div>
         </section>
@@ -1951,18 +1702,25 @@
                 <h2 style="font-family: 'Orbitron'; font-size: 26px; color: var(--neon-red); margin-bottom: 10px;">
                     <i class="fas fa-user-shield"></i> YJDEV ADMIN MANAGEMENT DASHBOARD
                 </h2>
-                <p style="color: var(--text-dim); font-size: 14px; margin-bottom: 25px;">
-                    Welcome Admin! Manage live events, publish update logs, moderate comments, and monitor claimed Hero Kit codes dynamically.
-                </p>
+                
+                <!-- MAINTENANCE MODE TOGGLE BAR -->
+                <div style="background: rgba(255, 17, 68, 0.1); border: 1px solid var(--neon-red); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <strong style="color: #fff; font-family: 'Orbitron'; font-size: 16px;"><i class="fas fa-tools"></i> MAINTENANCE MODE:</strong>
+                        <span id="admin-maint-status-text" style="font-weight: 800; margin-left: 10px;">OFF</span>
+                    </div>
+                    <button class="action-btn" id="maint-toggle-btn" style="background: var(--neon-red); color: #fff;" onclick="toggleMaintenanceMode()">
+                        TOGGLE MAINTENANCE MODE
+                    </button>
+                </div>
 
                 <div class="admin-tab-group">
                     <button class="admin-tab-btn active" id="btn-tab-events" onclick="switchAdminTab('events')"><i class="fas fa-calendar-plus"></i> Events Manager</button>
                     <button class="admin-tab-btn" id="btn-tab-logs" onclick="switchAdminTab('logs')"><i class="fas fa-file-alt"></i> Update Logs Manager</button>
                     <button class="admin-tab-btn" id="btn-tab-comments" onclick="switchAdminTab('comments')"><i class="fas fa-comments"></i> Moderate Comments</button>
-                    <button class="admin-tab-btn" id="btn-tab-codes" onclick="switchAdminTab('codes')"><i class="fas fa-key"></i> Claimed Kit Codes</button>
                 </div>
 
-                <!-- ADMIN TAB 1: EVENT MANAGER (CREATE & EDIT & DELETE) -->
+                <!-- ADMIN TAB 1: EVENT MANAGER -->
                 <div id="admin-tab-events">
                     <h3 style="font-family:'Orbitron'; font-size:18px; color:#fff; margin-bottom:12px;">Create / Publish Event</h3>
                     <div class="admin-form-group">
@@ -1977,44 +1735,26 @@
                         <button class="action-btn" style="background: var(--neon-green);" onclick="adminAddEvent()"><i class="fas fa-plus-circle"></i> PUBLISH NEW EVENT</button>
                     </div>
 
-                    <h3 style="font-family:'Orbitron'; font-size:18px; color:#fff; margin: 25px 0 12px;">Existing Events (Edit / Change Status)</h3>
-                    <div class="comments-feed" id="admin-events-list">
-                        <!-- Rendered dynamically -->
-                    </div>
+                    <h3 style="font-family:'Orbitron'; font-size:18px; color:#fff; margin: 25px 0 12px;">Existing Events (Edit & Delete)</h3>
+                    <div class="comments-feed" id="admin-events-list"></div>
                 </div>
 
-                <!-- ADMIN TAB 2: UPDATE LOGS MANAGER -->
+                <!-- ADMIN TAB: UPDATE LOGS -->
                 <div id="admin-tab-logs" style="display: none;">
                     <h3 style="font-family:'Orbitron'; font-size:18px; color:#fff; margin-bottom:12px;">Publish Server Update Log</h3>
                     <div class="admin-form-group">
-                        <input type="text" id="admin-log-version" class="admin-input" placeholder="Version Tag (e.g. v2.94 or Patch #12)">
-                        <input type="text" id="admin-log-title" class="admin-input" placeholder="Log Title (e.g. Bedwars Overhaul & Anti-Cheat Update)">
-                        <input type="text" id="admin-log-date" class="admin-input" placeholder="Release Date (e.g. October 5, 2026)">
+                        <input type="text" id="admin-log-version" class="admin-input" placeholder="Version Tag (e.g. v2.94)">
+                        <input type="text" id="admin-log-title" class="admin-input" placeholder="Log Title">
+                        <input type="text" id="admin-log-date" class="admin-input" placeholder="Release Date">
                         <textarea id="admin-log-changes" class="comment-textarea" placeholder="List changes (one change per line)..."></textarea>
-                        <button class="action-btn" style="background: var(--cyan-glow); color: #000;" onclick="adminAddLog()"><i class="fas fa-upload"></i> PUBLISH UPDATE LOG</button>
-                    </div>
-
-                    <h3 style="font-family:'Orbitron'; font-size:18px; color:#fff; margin: 25px 0 12px;">Manage Published Update Logs</h3>
-                    <div class="comments-feed" id="admin-logs-feed">
-                        <!-- Rendered dynamically -->
+                        <button class="action-btn" style="background: var(--cyan-glow); color: #000;" onclick="adminAddLog()"><i class="fas fa-upload"></i> PUBLISH LOG</button>
                     </div>
                 </div>
 
-                <!-- ADMIN TAB 3: DELETE COMMENTS -->
+                <!-- ADMIN TAB: COMMENTS -->
                 <div id="admin-tab-comments" style="display: none;">
                     <h3 style="font-family:'Orbitron'; font-size:18px; color:#fff; margin-bottom:12px;">Comment Moderation</h3>
-                    <p style="color:var(--text-dim); font-size:13px; margin-bottom:15px;">All live comments are listed below. Click "DELETE" next to any comment to purge it.</p>
-                    <div class="comments-feed" id="admin-comments-feed">
-                        <!-- Admin comments feed rendered dynamically -->
-                    </div>
-                </div>
-
-                <!-- ADMIN TAB 4: CLAIMED HERO KIT CODES -->
-                <div id="admin-tab-codes" style="display: none;">
-                    <h3 style="font-family:'Orbitron'; font-size:18px; color:#fff; margin-bottom:12px;">Generated Hero Kit Codes</h3>
-                    <div class="comments-feed" id="admin-codes-feed">
-                        <!-- Claimed codes rendered dynamically -->
-                    </div>
+                    <div class="comments-feed" id="admin-comments-feed"></div>
                 </div>
             </div>
         </section>
@@ -2032,7 +1772,7 @@
                             </div>
                         </div>
                         <button class="copy-btn" style="padding: 6px 12px; font-size: 11px;" onclick="clearGhostChat()">
-                            <i class="fas fa-trash"></i> CLEAR CHAT
+                            <i class="fas fa-trash"></i> CLEAR
                         </button>
                     </div>
 
@@ -2040,15 +1780,12 @@
                         <div class="ghost-msg ai">
                             <div class="ghost-avatar" style="width: 32px; height: 32px; font-size: 16px;">👻</div>
                             <div class="ghost-msg-bubble">
-                                <strong style="color: var(--ghost-glow);">GHOST AI v2.93:</strong> Welcome player! 👋 Click any main topic below to ask questions or explore sub-questions:
+                                <strong style="color: var(--ghost-glow);">GHOST AI v2.93:</strong> Welcome player! 👋 Click any main topic below to ask questions:
                             </div>
                         </div>
                     </div>
 
                     <div class="ghost-options-panel">
-                        <div class="ghost-options-label">
-                            <span><i class="fas fa-list-check"></i> SELECT A MAIN TOPIC TO ASK:</span>
-                        </div>
                         <div class="ghost-options-grid">
                             <button class="ghost-opt-btn" onclick="askGhostAI('owners')"><i class="fas fa-crown"></i> Who's the owner?</button>
                             <button class="ghost-opt-btn" onclick="askGhostAI('ip')"><i class="fas fa-server"></i> Server IP & Port Details</button>
@@ -2063,7 +1800,7 @@
         </section>
     </main>
 
-    <!-- EDIT EVENT MODAL (ADMIN ONLY) -->
+    <!-- EDIT EVENT MODAL -->
     <div class="modal-overlay" id="edit-event-modal">
         <div class="modal-card">
             <button class="modal-close-btn" onclick="closeModal('edit-event-modal')">&times;</button>
@@ -2091,7 +1828,7 @@
         </div>
     </div>
 
-    <!-- AUTH MODAL (LOGIN / SIGN UP / ADMIN LOGIN) -->
+    <!-- AUTH MODAL -->
     <div class="modal-overlay" id="auth-modal">
         <div class="modal-card">
             <button class="modal-close-btn" onclick="closeModal('auth-modal')">&times;</button>
@@ -2102,7 +1839,6 @@
                 <button class="nav-btn" id="auth-tab-admin" style="color: var(--neon-red);" onclick="switchAuthTab('admin')">ADMIN LOGIN</button>
             </div>
 
-            <!-- PLAYER AUTH FORM -->
             <div id="auth-form-player">
                 <div class="admin-form-group">
                     <input type="text" id="player-user-input" class="admin-input" placeholder="Enter Minecraft IGN...">
@@ -2111,7 +1847,6 @@
                 </div>
             </div>
 
-            <!-- ADMIN AUTH FORM -->
             <div id="auth-form-admin" style="display: none;">
                 <div class="admin-form-group">
                     <input type="text" id="admin-user-input" class="admin-input" placeholder="Enter Admin Username">
@@ -2122,58 +1857,10 @@
         </div>
     </div>
 
-    <!-- SPIN THE WHEEL MODAL -->
-    <div class="modal-overlay" id="wheel-modal">
-        <div class="modal-card">
-            <button class="modal-close-btn" onclick="closeModal('wheel-modal')">&times;</button>
-            <div class="modal-title"><i class="fas fa-dharmachakra" style="color: var(--gold-accent);"></i> SPIN THE WHEEL</div>
-            <p style="color: var(--text-dim); font-size: 13px;">2 Free Daily Spins! (20 Coins per spin afterwards)</p>
-
-            <div class="wheel-container">
-                <div class="wheel-pointer"></div>
-                <canvas id="wheel-canvas" class="wheel-canvas" width="280" height="280"></canvas>
-            </div>
-
-            <p style="font-size: 14px; color: var(--gold-accent); margin-bottom: 15px;" id="wheel-status-text">Spins remaining today: 2 Free Spins</p>
-            <button class="gold-btn" id="spin-wheel-btn" style="width: 100%; justify-content: center;" onclick="spinWheelAction()">SPIN NOW!</button>
-        </div>
-    </div>
-
-    <!-- COINS STORE & HERO KIT MODAL -->
-    <div class="modal-overlay" id="coins-shop-modal">
-        <div class="modal-card" style="max-width: 650px;">
-            <button class="modal-close-btn" onclick="closeModal('coins-shop-modal')">&times;</button>
-            <div class="modal-title"><i class="fas fa-store" style="color: var(--gold-accent);"></i> ODERISMC COINS SHOP</div>
-            <p style="color: var(--text-dim); font-size: 14px;">Earn 20,000 Coins to claim a Free Hero Kit!</p>
-
-            <div class="coins-shop-grid">
-                <div class="coins-shop-card">
-                    <h4>🎁 FREE HERO KIT</h4>
-                    <p style="font-size: 12px; color: var(--text-dim);">Unlocks Kit Hero in-game via Claim Code</p>
-                    <div class="coins-shop-price">20,000 COINS</div>
-                    <button class="gold-btn" style="width: 100%; justify-content: center;" onclick="buyHeroKitWithCoins()">PURCHASE KIT</button>
-                </div>
-                <div class="coins-shop-card">
-                    <h4>🗝️ 1x VOTE KEY</h4>
-                    <p style="font-size: 12px; color: var(--text-dim);">Redeemable for Vote Crates</p>
-                    <div class="coins-shop-price">500 COINS</div>
-                    <button class="gold-btn" style="width: 100%; justify-content: center;" onclick="buyItemWithCoins('Vote Key', 500)">BUY KEY</button>
-                </div>
-            </div>
-
-            <!-- CODE REDEMPTION DISPLAY BOX -->
-            <div id="kit-code-result" style="display: none; margin-top: 20px; background: rgba(0, 255, 136, 0.1); border: 2px dashed var(--neon-green); padding: 15px; border-radius: 12px;">
-                <h4 style="color: var(--neon-green); font-family: 'Orbitron'; font-size: 16px;">CLAIM CODE GENERATED!</h4>
-                <p style="color: #fff; font-size: 18px; font-weight: 900; margin: 10px 0; font-family: 'Orbitron';" id="generated-code-text">HERO-ODERIS-8942</p>
-                <p style="color: var(--text-dim); font-size: 12px;">Copy this Code and give it to the Server Owner on Discord or in-game to claim your Hero Kit!</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- FLOATING AUTH / USER STATUS BAR -->
+    <!-- FLOATING AUTH BAR -->
     <div class="floating-auth-container">
         <span class="auth-user-badge">
-            <span style="font-size: 20px;" id="user-avatar-icon">🎮</span>
+            <span style="font-size: 20px;">🎮</span>
             <span id="user-display-name">Guest Player</span>
         </span>
         <button class="auth-btn" id="auth-action-btn" onclick="openAuthModal()">LOGIN / SIGN UP</button>
@@ -2190,32 +1877,30 @@
 
     <!-- JS LOGIC ENGINE -->
     <script>
-        // --- DATA PERSISTENCE & INITIAL STORAGE ---
         let appData = {
             currentUser: JSON.parse(localStorage.getItem('oderis_logged_user')) || null,
             users: JSON.parse(localStorage.getItem('oderis_users')) || {},
+            maintenance: JSON.parse(localStorage.getItem('oderis_maint')) || false,
             events: JSON.parse(localStorage.getItem('oderis_events')) || [
-                { id: 1, title: "Survival Launch Celebration", desc: "Special 2x Coins Drop active all week long!", date: "Active Now", status: "live" },
+                { id: 1, title: "Survival Launch Celebration", desc: "Special double experience active all week long!", date: "Active Now", status: "live" },
                 { id: 2, title: "Bedwars Tournament 2026", desc: "Compete for rare ranks and rewards!", date: "Sunday @ 6:00 PM IST", status: "starting_soon" }
             ],
             logs: JSON.parse(localStorage.getItem('oderis_logs')) || [
                 {
                     id: 201,
                     version: "v2.93",
-                    title: "Ghost AI Integration & Event Status Update",
+                    title: "Maintenance Mode & Admin System Overhaul",
                     date: "October 5, 2026",
                     changes: [
-                        "Added Admin Event Status manager (Live, Starting Soon, Ended).",
-                        "Added dedicated Update Logs & Patch Notes hub.",
-                        "Integrated Ghost AI v2.93 dynamic interactive terminal.",
-                        "Upgraded cross-play server network stability."
+                        "Integrated YJDEV STUDIOS Maintenance Mode ON/OFF toggle.",
+                        "Enhanced comment moderation and log tracking.",
+                        "Added Edit and Delete capability for all events."
                     ]
                 }
             ],
             comments: JSON.parse(localStorage.getItem('oderis_comments')) || [
                 { id: 101, author: "Sakarw_al142", text: "Welcome to OderisMC Cyber Network! Hope you all enjoy survival economy!", date: "2026-10-01" }
-            ],
-            claimedCodes: JSON.parse(localStorage.getItem('oderis_claimed_codes')) || []
+            ]
         };
 
         function saveData() {
@@ -2224,10 +1909,32 @@
             localStorage.setItem('oderis_events', JSON.stringify(appData.events));
             localStorage.setItem('oderis_logs', JSON.stringify(appData.logs));
             localStorage.setItem('oderis_comments', JSON.stringify(appData.comments));
-            localStorage.setItem('oderis_claimed_codes', JSON.stringify(appData.claimedCodes));
+            localStorage.setItem('oderis_maint', JSON.stringify(appData.maintenance));
         }
 
-        // PAGE SWITCHER ENGINE
+        function checkMaintenanceScreen() {
+            const maintScreen = document.getElementById('maintenance-screen');
+            const isAdmin = appData.currentUser && appData.currentUser.role === 'admin';
+            if (appData.maintenance && !isAdmin) {
+                maintScreen.style.display = 'flex';
+            } else {
+                maintScreen.style.display = 'none';
+            }
+
+            const mText = document.getElementById('admin-maint-status-text');
+            if (mText) {
+                mText.innerText = appData.maintenance ? "ON 🔴" : "OFF 🟢";
+                mText.style.color = appData.maintenance ? "var(--neon-red)" : "var(--neon-green)";
+            }
+        }
+
+        function toggleMaintenanceMode() {
+            appData.maintenance = !appData.maintenance;
+            saveData();
+            checkMaintenanceScreen();
+            alert(`Maintenance Mode turned ${appData.maintenance ? "ON" : "OFF"}`);
+        }
+
         function switchPage(pageId) {
             document.querySelectorAll('.page-view').forEach(page => page.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -2247,7 +1954,6 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        // --- AUTH & LOGIN SYSTEM ---
         function openAuthModal() {
             document.getElementById('auth-modal').style.display = 'grid';
         }
@@ -2266,6 +1972,15 @@
             }
         }
 
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-tab-' + tabName).classList.add('active');
+
+            document.getElementById('admin-tab-events').style.display = tabName === 'events' ? 'block' : 'none';
+            document.getElementById('admin-tab-logs').style.display = tabName === 'logs' ? 'block' : 'none';
+            document.getElementById('admin-tab-comments').style.display = tabName === 'comments' ? 'block' : 'none';
+        }
+
         function loginOrRegisterPlayer() {
             const user = document.getElementById('player-user-input').value.trim();
             const pass = document.getElementById('player-pass-input').value.trim();
@@ -2278,11 +1993,6 @@
             if (!appData.users[user]) {
                 appData.users[user] = {
                     password: pass,
-                    coins: 0,
-                    streak: 0,
-                    lastClaimDate: null,
-                    spinsToday: 0,
-                    lastSpinDate: null,
                     commentsToday: 0,
                     lastCommentDate: null,
                     role: 'player'
@@ -2306,12 +2016,12 @@
             if (adminUser === "YJDEV" && adminPass === "@2192@2192@") {
                 appData.currentUser = { username: "YJDEV", role: "admin" };
                 if (!appData.users["YJDEV"]) {
-                    appData.users["YJDEV"] = { password: "@2192@2192@", coins: 999999, streak: 99, role: "admin" };
+                    appData.users["YJDEV"] = { password: "@2192@2192@", role: "admin" };
                 }
                 saveData();
                 updateUIState();
                 closeModal('auth-modal');
-                alert("Admin Authentication Successful! Access Granted to Management Dashboard.");
+                alert("Admin Authentication Successful!");
                 switchPage('admin');
             } else {
                 alert("Invalid Admin Credentials!");
@@ -2340,19 +2050,14 @@
                 } else {
                     adminNav.style.display = 'none';
                 }
-
-                const uData = appData.users[appData.currentUser.username] || { coins: 0, streak: 0 };
-                document.getElementById('user-coin-balance').innerText = uData.coins || 0;
-                document.getElementById('user-streak-count').innerText = uData.streak || 0;
             } else {
                 displayName.innerText = "Guest Player";
                 authBtn.innerText = "LOGIN / SIGN UP";
                 authBtn.onclick = openAuthModal;
                 adminNav.style.display = 'none';
-                document.getElementById('user-coin-balance').innerText = 0;
-                document.getElementById('user-streak-count').innerText = 0;
             }
 
+            checkMaintenanceScreen();
             renderEvents();
             renderLogs();
             renderComments();
@@ -2363,357 +2068,37 @@
             alert("IP play.oderismc.fun copied to clipboard!");
         }
 
-        // --- DAILY REWARDS & COINS ENGINE ---
-        function claimDailyReward() {
-            if (!appData.currentUser) {
-                alert("Please Login/Sign up to claim daily rewards!");
-                openAuthModal();
-                return;
-            }
-
-            const username = appData.currentUser.username;
-            const uData = appData.users[username];
-            const todayStr = new Date().toDateString();
-
-            if (uData.lastClaimDate === todayStr) {
-                alert("You have already claimed your daily reward today! Come back tomorrow.");
-                return;
-            }
-
-            uData.streak = (uData.streak || 0) + 1;
-            const reward = Math.min(25 + (uData.streak * 5), 120);
-            uData.coins = (uData.coins || 0) + reward;
-            uData.lastClaimDate = todayStr;
-
-            saveData();
-            updateUIState();
-            alert(`🎉 Daily Claim Successful!\nReceived: +${reward} Coins!\nCurrent Streak: ${uData.streak} Days`);
-        }
-
-        // --- SPIN THE WHEEL MECHANIC ---
-        const prizes = [10, 25, 50, 100, 5, 200, 15, 30];
-        let currentWheelAngle = 0;
-        let isSpinning = false;
-
-        function openSpinWheel() {
-            if (!appData.currentUser) {
-                alert("Please Login/Sign Up to access Spin Wheel!");
-                openAuthModal();
-                return;
-            }
-            document.getElementById('wheel-modal').style.display = 'grid';
-            updateWheelStatus();
-            drawWheel();
-        }
-
-        function updateWheelStatus() {
-            const username = appData.currentUser.username;
-            const uData = appData.users[username];
-            const todayStr = new Date().toDateString();
-
-            if (uData.lastSpinDate !== todayStr) {
-                uData.spinsToday = 0;
-                uData.lastSpinDate = todayStr;
-                saveData();
-            }
-
-            const freeRemaining = Math.max(0, 2 - uData.spinsToday);
-            const statusTxt = document.getElementById('wheel-status-text');
-            if (freeRemaining > 0) {
-                statusTxt.innerText = `Spins remaining today: ${freeRemaining} Free Spins`;
-            } else {
-                statusTxt.innerText = `Free spins used. Cost per extra spin: 20 Coins`;
-            }
-        }
-
-        function drawWheel() {
-            const canvas = document.getElementById('wheel-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const numSlices = prizes.length;
-            const arc = (2 * Math.PI) / numSlices;
-            const colors = ['#00d9ff', '#ff1144', '#00ff88', '#ffb700', '#a855f7', '#0066ff', '#ff8800', '#138808'];
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            for (let i = 0; i < numSlices; i++) {
-                const angle = i * arc;
-                ctx.beginPath();
-                ctx.fillStyle = colors[i % colors.length];
-                ctx.moveTo(140, 140);
-                ctx.arc(140, 140, 136, angle, angle + arc);
-                ctx.lineTo(140, 140);
-                ctx.fill();
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = "#050811";
-                ctx.stroke();
-
-                ctx.save();
-                ctx.translate(140, 140);
-                ctx.rotate(angle + arc / 2);
-                ctx.textAlign = "right";
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 14px Orbitron";
-                ctx.fillText(prizes[i] + " 🪙", 120, 5);
-                ctx.restore();
-            }
-        }
-
-        function spinWheelAction() {
-            if (isSpinning) return;
-            const username = appData.currentUser.username;
-            const uData = appData.users[username];
-            const todayStr = new Date().toDateString();
-
-            if (uData.lastSpinDate !== todayStr) {
-                uData.spinsToday = 0;
-                uData.lastSpinDate = todayStr;
-            }
-
-            if (uData.spinsToday >= 2 && uData.coins < 20) {
-                alert("You don't have enough coins! Extra spins cost 20 Coins.");
-                return;
-            }
-
-            if (uData.spinsToday >= 2) {
-                uData.coins -= 20;
-            }
-            uData.spinsToday++;
-
-            isSpinning = true;
-            const winningIndex = Math.floor(Math.random() * prizes.length);
-            const sliceDegrees = 360 / prizes.length;
-            const targetRotation = (360 * 5) + (360 - (winningIndex * sliceDegrees) - (sliceDegrees / 2));
-            
-            const canvas = document.getElementById('wheel-canvas');
-            canvas.style.transform = `rotate(${currentWheelAngle + targetRotation}deg)`;
-            currentWheelAngle += targetRotation;
-
-            setTimeout(() => {
-                const prize = prizes[winningIndex];
-                uData.coins = (uData.coins || 0) + prize;
-                saveData();
-                updateUIState();
-                updateWheelStatus();
-                isSpinning = false;
-                alert(`🎊 Spin Complete!\nYou won +${prize} Coins!`);
-            }, 4000);
-        }
-
-        // --- SHOP & PURCHASE SYSTEM ---
-        function openCoinsShop() {
-            if (!appData.currentUser) {
-                alert("Please Login/Sign Up to open the Coins Shop!");
-                openAuthModal();
-                return;
-            }
-            document.getElementById('kit-code-result').style.display = 'none';
-            document.getElementById('coins-shop-modal').style.display = 'grid';
-        }
-
-        function buyHeroKitWithCoins() {
-            const username = appData.currentUser.username;
-            const uData = appData.users[username];
-
-            if (uData.coins < 20000) {
-                alert(`Insufficient Coins! You have ${uData.coins} Coins (Need 20,000 Coins).`);
-                return;
-            }
-
-            uData.coins -= 20000;
-            const randomCode = "HERO-ODERIS-" + Math.floor(1000 + Math.random() * 9000);
-            appData.claimedCodes.push({
-                user: username,
-                code: randomCode,
-                date: new Date().toLocaleString()
-            });
-
-            saveData();
-            updateUIState();
-
-            document.getElementById('generated-code-text').innerText = randomCode;
-            document.getElementById('kit-code-result').style.display = 'block';
-        }
-
-        function buyItemWithCoins(itemName, cost) {
-            const username = appData.currentUser.username;
-            const uData = appData.users[username];
-
-            if (uData.coins < cost) {
-                alert(`Insufficient Coins! You need ${cost} Coins.`);
-                return;
-            }
-
-            uData.coins -= cost;
-            saveData();
-            updateUIState();
-            alert(`✅ Successfully purchased ${itemName} for ${cost} Coins! Contact Server Owner on Discord or in-game to claim.`);
-        }
-
-        function startRankPurchase(rankName, price) {
-            if (!appData.currentUser) {
-                alert(`Sign up or login to subscribe to the ${rankName} Rank!`);
-                openAuthModal();
-                return;
-            }
-            alert(`📌 To purchase ${rankName} Rank (₹${price}/mo):\n\n1. Join our Discord: discord.gg/d7W62FeAXM\n2. Open a Support Ticket in #store-support.\n3. Mention your Username: ${appData.currentUser.username}`);
-        }
-
-        // --- LIVE EVENTS ENGINE ---
-        function getStatusBadge(status) {
-            if (status === 'live') return `<span class="event-tag status-live"><i class="fas fa-circle"></i> LIVE NOW</span>`;
-            if (status === 'starting_soon') return `<span class="event-tag status-starting_soon"><i class="fas fa-clock"></i> STARTING SOON</span>`;
-            return `<span class="event-tag status-ended"><i class="fas fa-times-circle"></i> ENDED</span>`;
-        }
-
         function renderEvents() {
-            const container = document.getElementById('events-feed');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (appData.events.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-dim);">No server events listed right now.</p>`;
-                return;
-            }
+            const grid = document.getElementById('events-feed');
+            const adminGrid = document.getElementById('admin-events-list');
+            grid.innerHTML = "";
+            if (adminGrid) adminGrid.innerHTML = "";
 
             appData.events.forEach(ev => {
-                const card = document.createElement('div');
-                card.className = 'event-card';
-                card.innerHTML = `
-                    ${getStatusBadge(ev.status || 'live')}
-                    <div class="event-title">${ev.title}</div>
-                    <div class="event-desc">${ev.desc}</div>
-                    <div class="event-date"><i class="fas fa-calendar-alt"></i> ${ev.date}</div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // --- UPDATE LOGS ENGINE ---
-        function renderLogs() {
-            const feed = document.getElementById('logs-feed');
-            if (!feed) return;
-            feed.innerHTML = '';
-
-            if (appData.logs.length === 0) {
-                feed.innerHTML = `<p style="color:var(--text-dim); text-align:center;">No update logs published yet.</p>`;
-                return;
-            }
-
-            appData.logs.forEach(log => {
-                const card = document.createElement('div');
-                card.className = 'log-card';
-                
-                let changesHTML = '';
-                log.changes.forEach(item => {
-                    changesHTML += `<li><i class="fas fa-angle-right"></i> ${item}</li>`;
-                });
-
-                card.innerHTML = `
-                    <div class="log-header">
-                        <span class="log-version-badge">${log.version}</span>
-                        <span class="log-date"><i class="fas fa-clock"></i> ${log.date}</span>
+                grid.innerHTML += `
+                    <div class="event-card">
+                        <span class="event-tag status-${ev.status}">${ev.status.replace('_', ' ')}</span>
+                        <div class="event-title">${ev.title}</div>
+                        <div class="event-desc">${ev.desc}</div>
+                        <div class="event-date"><i class="fas fa-clock"></i> ${ev.date}</div>
                     </div>
-                    <div class="log-title">${log.title}</div>
-                    <ul class="log-changes-list">
-                        ${changesHTML}
-                    </ul>
                 `;
-                feed.appendChild(card);
-            });
-        }
 
-        // --- COMMENTS ENGINE ---
-        function submitComment() {
-            if (!appData.currentUser) {
-                alert("Please Login/Sign Up to post a comment!");
-                openAuthModal();
-                return;
-            }
-
-            const input = document.getElementById('comment-input');
-            const text = input.value.trim();
-            if (!text) {
-                alert("Please write a comment before posting!");
-                return;
-            }
-
-            const username = appData.currentUser.username;
-            const uData = appData.users[username];
-            const todayStr = new Date().toDateString();
-
-            if (uData.lastCommentDate !== todayStr) {
-                uData.commentsToday = 0;
-                uData.lastCommentDate = todayStr;
-            }
-
-            if (uData.commentsToday >= 2 && appData.currentUser.role !== 'admin') {
-                alert("You have reached your limit of 2 comments per day!");
-                return;
-            }
-
-            uData.commentsToday++;
-            const newComment = {
-                id: Date.now(),
-                author: username,
-                text: text,
-                date: new Date().toLocaleDateString()
-            };
-
-            appData.comments.unshift(newComment);
-            saveData();
-            input.value = '';
-            renderComments();
-            if (appData.currentUser.role === 'admin') renderAdminComments();
-            alert("Comment posted successfully!");
-        }
-
-        function renderComments() {
-            const list = document.getElementById('comments-list');
-            if (!list) return;
-            list.innerHTML = '';
-
-            if (appData.comments.length === 0) {
-                list.innerHTML = `<p style="color:var(--text-dim); text-align:center;">No comments yet. Be the first to leave a review!</p>`;
-                return;
-            }
-
-            appData.comments.forEach(c => {
-                const item = document.createElement('div');
-                item.className = 'comment-item';
-                item.innerHTML = `
-                    <div>
-                        <div class="comment-user-info">
-                            <span class="comment-author">${c.author}</span>
-                            <span class="comment-date">${c.date}</span>
+                if (adminGrid) {
+                    adminGrid.innerHTML += `
+                        <div class="comment-item">
+                            <div>
+                                <strong style="color:#fff;">${ev.title}</strong> [Status: ${ev.status}]
+                                <p style="font-size:12px; color:var(--text-dim);">${ev.desc} - (${ev.date})</p>
+                            </div>
+                            <div>
+                                <button class="admin-edit-btn" onclick="openEditEventModal(${ev.id})"><i class="fas fa-edit"></i> EDIT</button>
+                                <button class="admin-delete-btn" onclick="adminDeleteEvent(${ev.id})"><i class="fas fa-trash"></i> DELETE</button>
+                            </div>
                         </div>
-                        <div class="comment-body">${c.text}</div>
-                    </div>
-                    ${appData.currentUser && appData.currentUser.role === 'admin' ? 
-                        `<button class="admin-delete-btn" onclick="deleteComment(${c.id})"><i class="fas fa-trash"></i> DELETE</button>` : ''}
-                `;
-                list.appendChild(item);
+                    `;
+                }
             });
-        }
-
-        function deleteComment(id) {
-            appData.comments = appData.comments.filter(c => c.id !== id);
-            saveData();
-            renderComments();
-            renderAdminComments();
-        }
-
-        // --- ADMIN DASHBOARD FUNCTIONS ---
-        function switchAdminTab(tab) {
-            ['events', 'logs', 'comments', 'codes'].forEach(t => {
-                document.getElementById('admin-tab-' + t).style.display = (t === tab ? 'block' : 'none');
-                document.getElementById('btn-tab-' + t).classList.toggle('active', t === tab);
-            });
-
-            if (tab === 'events') renderAdminEventsList();
-            if (tab === 'logs') renderAdminLogsList();
-            if (tab === 'comments') renderAdminComments();
-            if (tab === 'codes') renderAdminCodes();
         }
 
         function adminAddEvent() {
@@ -2723,42 +2108,29 @@
             const status = document.getElementById('admin-event-status').value;
 
             if (!title || !desc || !date) {
-                alert("Please fill in all event fields!");
+                alert("Please fill in all event details!");
                 return;
             }
 
-            appData.events.unshift({ id: Date.now(), title, desc, date, status });
+            appData.events.unshift({
+                id: Date.now(),
+                title, desc, date, status
+            });
+
             saveData();
             renderEvents();
-            renderAdminEventsList();
-
-            document.getElementById('admin-event-title').value = '';
-            document.getElementById('admin-event-desc').value = '';
-            document.getElementById('admin-event-date').value = '';
-            alert("Live Event published successfully!");
+            alert("Event published successfully!");
+            document.getElementById('admin-event-title').value = "";
+            document.getElementById('admin-event-desc').value = "";
+            document.getElementById('admin-event-date').value = "";
         }
 
-        function renderAdminEventsList() {
-            const feed = document.getElementById('admin-events-list');
-            if (!feed) return;
-            feed.innerHTML = '';
-
-            appData.events.forEach(ev => {
-                const item = document.createElement('div');
-                item.className = 'comment-item';
-                item.innerHTML = `
-                    <div>
-                        <strong style="color:var(--cyan-glow);">${ev.title}</strong> 
-                        <span style="font-size:11px; margin-left:8px;">[Status: ${ev.status.toUpperCase()}]</span>
-                        <p style="margin-top:4px; font-size:13px; color:var(--text-dim);">${ev.desc} (${ev.date})</p>
-                    </div>
-                    <div>
-                        <button class="admin-edit-btn" onclick="openEditEventModal(${ev.id})"><i class="fas fa-edit"></i> EDIT</button>
-                        <button class="admin-delete-btn" onclick="adminDeleteEvent(${ev.id})"><i class="fas fa-trash"></i> DELETE</button>
-                    </div>
-                `;
-                feed.appendChild(item);
-            });
+        function adminDeleteEvent(id) {
+            if (confirm("Are you sure you want to delete this event?")) {
+                appData.events = appData.events.filter(e => e.id !== id);
+                saveData();
+                renderEvents();
+            }
         }
 
         function openEditEventModal(id) {
@@ -2769,7 +2141,7 @@
             document.getElementById('edit-event-title').value = ev.title;
             document.getElementById('edit-event-desc').value = ev.desc;
             document.getElementById('edit-event-date').value = ev.date;
-            document.getElementById('edit-event-status').value = ev.status || 'live';
+            document.getElementById('edit-event-status').value = ev.status;
 
             document.getElementById('edit-event-modal').style.display = 'grid';
         }
@@ -2777,25 +2149,37 @@
         function saveEditedEvent() {
             const id = parseInt(document.getElementById('edit-event-id').value);
             const ev = appData.events.find(e => e.id === id);
-            if (!ev) return;
 
-            ev.title = document.getElementById('edit-event-title').value.trim();
-            ev.desc = document.getElementById('edit-event-desc').value.trim();
-            ev.date = document.getElementById('edit-event-date').value.trim();
-            ev.status = document.getElementById('edit-event-status').value;
+            if (ev) {
+                ev.title = document.getElementById('edit-event-title').value.trim();
+                ev.desc = document.getElementById('edit-event-desc').value.trim();
+                ev.date = document.getElementById('edit-event-date').value.trim();
+                ev.status = document.getElementById('edit-event-status').value;
 
-            saveData();
-            renderEvents();
-            renderAdminEventsList();
-            closeModal('edit-event-modal');
-            alert("Event updated successfully!");
+                saveData();
+                renderEvents();
+                closeModal('edit-event-modal');
+                alert("Event details updated!");
+            }
         }
 
-        function adminDeleteEvent(id) {
-            appData.events = appData.events.filter(e => e.id !== id);
-            saveData();
-            renderEvents();
-            renderAdminEventsList();
+        function renderLogs() {
+            const container = document.getElementById('logs-feed');
+            container.innerHTML = "";
+
+            appData.logs.forEach(log => {
+                let changesList = log.changes.map(item => `<li><i class="fas fa-check-circle"></i> ${item}</li>`).join("");
+                container.innerHTML += `
+                    <div class="log-card">
+                        <div class="log-header">
+                            <span class="log-version-badge">${log.version}</span>
+                            <span class="log-date"><i class="fas fa-calendar-alt"></i> ${log.date}</span>
+                        </div>
+                        <div class="log-title">${log.title}</div>
+                        <ul class="log-changes-list">${changesList}</ul>
+                    </div>
+                `;
+            });
         }
 
         function adminAddLog() {
@@ -2805,193 +2189,144 @@
             const changesText = document.getElementById('admin-log-changes').value.trim();
 
             if (!version || !title || !date || !changesText) {
-                alert("Please fill in all log fields!");
+                alert("Please fill in all update log fields!");
                 return;
             }
 
-            const changesArray = changesText.split('\n').filter(c => c.trim() !== '');
+            const changes = changesText.split('\n').filter(c => c.trim().length > 0);
 
             appData.logs.unshift({
                 id: Date.now(),
-                version,
-                title,
-                date,
-                changes: changesArray
+                version, title, date, changes
             });
 
             saveData();
             renderLogs();
-            renderAdminLogsList();
-
-            document.getElementById('admin-log-version').value = '';
-            document.getElementById('admin-log-title').value = '';
-            document.getElementById('admin-log-date').value = '';
-            document.getElementById('admin-log-changes').value = '';
-            alert("Update Log published successfully!");
+            alert("Update log published!");
         }
 
-        function renderAdminLogsList() {
-            const feed = document.getElementById('admin-logs-feed');
-            if (!feed) return;
-            feed.innerHTML = '';
+        function renderComments() {
+            const feed = document.getElementById('comments-list');
+            const adminFeed = document.getElementById('admin-comments-feed');
+            feed.innerHTML = "";
+            if (adminFeed) adminFeed.innerHTML = "";
 
-            appData.logs.forEach(log => {
-                const item = document.createElement('div');
-                item.className = 'comment-item';
-                item.innerHTML = `
-                    <div>
-                        <strong style="color:var(--cyan-glow);">${log.version} - ${log.title}</strong>
-                        <p style="margin-top:4px; font-size:12px; color:var(--text-dim);">${log.date} | ${log.changes.length} change items</p>
-                    </div>
-                    <button class="admin-delete-btn" onclick="adminDeleteLog(${log.id})"><i class="fas fa-trash"></i> DELETE</button>
-                `;
-                feed.appendChild(item);
-            });
-        }
-
-        function adminDeleteLog(id) {
-            appData.logs = appData.logs.filter(l => l.id !== id);
-            saveData();
-            renderLogs();
-            renderAdminLogsList();
-        }
-
-        function renderAdminComments() {
-            const feed = document.getElementById('admin-comments-feed');
-            if (!feed) return;
-            feed.innerHTML = '';
-
-            appData.comments.forEach(c => {
-                const item = document.createElement('div');
-                item.className = 'comment-item';
-                item.innerHTML = `
-                    <div>
-                        <strong style="color:var(--cyan-glow);">${c.author}</strong> <span style="font-size:11px; color:var(--text-dim);">${c.date}</span>
-                        <p style="margin-top:4px; font-size:13px; color:#fff;">${c.text}</p>
-                    </div>
-                    <button class="admin-delete-btn" onclick="deleteComment(${c.id})"><i class="fas fa-trash"></i> DELETE</button>
-                `;
-                feed.appendChild(item);
-            });
-        }
-
-        function renderAdminCodes() {
-            const feed = document.getElementById('admin-codes-feed');
-            if (!feed) return;
-            feed.innerHTML = '';
-
-            if (appData.claimedCodes.length === 0) {
-                feed.innerHTML = `<p style="color:var(--text-dim);">No Hero Kit codes generated yet.</p>`;
-                return;
-            }
-
-            appData.claimedCodes.forEach(item => {
-                const box = document.createElement('div');
-                box.className = 'comment-item';
-                box.innerHTML = `
-                    <div>
-                        <span style="color:var(--neon-green); font-family:'Orbitron'; font-weight:800;">${item.code}</span>
-                        <p style="color:var(--text-dim); font-size:12px; margin-top:2px;">User: ${item.user} | Claimed: ${item.date}</p>
-                    </div>
-                `;
-                feed.appendChild(box);
-            });
-        }
-
-        // --- GHOST AI KNOWLEDGE BASE & CHAT ENGINE ---
-        const ghostAnswers = {
-            owners: {
-                text: "The OderisMC Cyber Network is owned and operated by Sakarw_al142, King_Oderis, and Ayushggs! Official Media is led by NamanGamerz26, and the website was engineered by YUVRAJ_THELEGEND.",
-                subQ: ["What are their roles?", "How do I contact owners?"]
-            },
-            ip: {
-                text: "🌐 **Server IP & Connection Details:**\n• Java IP: play.oderismc.fun\n• Bedrock IP: play.oderismc.fun\n• Bedrock Port: 19142",
-                subQ: ["Is Bedrock supported?", "What versions work?"]
-            },
-            ranks: {
-                text: "💎 **Server Ranks Available:**\n• HERO (₹30/mo)\n• TITAN (₹60/mo)\n• KNIGHT (₹100/mo)\n• CHAMPION (₹150/mo)\n• CUSTOM (₹200/mo)\n• ODERIS (₹250/mo)\nVisit the Ranks & Store page to subscribe!",
-                subQ: ["What perks does Hero rank give?", "Can I get ranks for free?"]
-            },
-            rules: {
-                text: "🛡️ **Core Server Rules:**\n1. No hacking or modified clients (X-Ray, Fly, Auto-clicker >15 CPS).\n2. No toxic chat or advertising.\n3. Respect land claims.\n4. No duping or glitch exploitation.",
-                subQ: ["Are Minimaps allowed?", "What if I get scammed?"]
-            },
-            dev: {
-                text: "⚡ This web application was built and designed by **YUVRAJ_THELEGEND** (aka ragebg.exe) under **YJDEV STUDIOS**!",
-                subQ: ["What is YJDEV STUDIOS?", "How to report site bugs?"]
-            },
-            crossplay: {
-                text: "🎮 **Java & Bedrock Cross-Play:**\nOderisMC seamlessly links Java Edition and Bedrock Edition players together on the exact same survival server world!",
-                subQ: ["Can Bedrock join claims?", "How to link Discord?"]
-            }
-        };
-
-        function askGhostAI(key) {
-            const data = ghostAnswers[key];
-            if (!data) return;
-
-            appendGhostMessage("user", getTopicTitle(key));
-            setTimeout(() => {
-                appendGhostAIMessage(data.text, data.subQ);
-            }, 300);
-        }
-
-        function askGhostSubQ(text) {
-            appendGhostMessage("user", text);
-            setTimeout(() => {
-                appendGhostAIMessage(`Here is additional detail on "${text}": You can open a support ticket on our official Discord (discord.gg/d7W62FeAXM) for step-by-step guidance!`, []);
-            }, 300);
-        }
-
-        function getTopicTitle(key) {
-            const titles = {
-                owners: "Who's the owner?",
-                ip: "Server IP & Port Details",
-                ranks: "How to Buy Ranks & Prices",
-                rules: "Server Rules & Fair Play",
-                dev: "Who built this Website?",
-                crossplay: "How Cross-Play Works"
-            };
-            return titles[key] || key;
-        }
-
-        function appendGhostMessage(role, text) {
-            const feed = document.getElementById('ghost-chat-feed');
-            const msg = document.createElement('div');
-            msg.className = `ghost-msg ${role}`;
-            msg.innerHTML = `
-                <div class="ghost-avatar" style="width:32px; height:32px; font-size:16px;">${role === 'user' ? '🎮' : '👻'}</div>
-                <div class="ghost-msg-bubble">${text}</div>
-            `;
-            feed.appendChild(msg);
-            feed.scrollTop = feed.scrollHeight;
-        }
-
-        function appendGhostAIMessage(text, subQuestions) {
-            const feed = document.getElementById('ghost-chat-feed');
-            const msg = document.createElement('div');
-            msg.className = 'ghost-msg ai';
-
-            let subHTML = '';
-            if (subQuestions && subQuestions.length > 0) {
-                subHTML = `
-                    <div class="sub-questions-container">
-                        <div class="sub-q-title">SUGGESTED FOLLOW-UPS:</div>
-                        <div class="sub-q-grid">
-                            ${subQuestions.map(sq => `<button class="sub-q-btn" onclick="askGhostSubQ('${sq}')"><i class="fas fa-question-circle"></i> ${sq}</button>`).join('')}
+            appData.comments.forEach(cm => {
+                feed.innerHTML += `
+                    <div class="comment-item">
+                        <div>
+                            <div class="comment-author">${cm.author}</div>
+                            <div class="comment-date">${cm.date}</div>
+                            <div class="comment-body">${cm.text}</div>
                         </div>
                     </div>
                 `;
+
+                if (adminFeed) {
+                    adminFeed.innerHTML += `
+                        <div class="comment-item">
+                            <div>
+                                <strong class="comment-author">${cm.author}</strong> (${cm.date})
+                                <p class="comment-body">${cm.text}</p>
+                            </div>
+                            <button class="admin-delete-btn" onclick="adminDeleteComment(${cm.id})"><i class="fas fa-trash"></i> DELETE</button>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function submitComment() {
+            if (!appData.currentUser) {
+                alert("Please login to post comments!");
+                openAuthModal();
+                return;
             }
 
-            msg.innerHTML = `
-                <div class="ghost-avatar" style="width:32px; height:32px; font-size:16px;">👻</div>
-                <div class="ghost-msg-bubble">
-                    <strong style="color: var(--ghost-glow);">GHOST AI:</strong> ${text}
-                    ${subHTML}
+            const text = document.getElementById('comment-input').value.trim();
+            if (!text) {
+                alert("Comment cannot be empty!");
+                return;
+            }
+
+            const user = appData.users[appData.currentUser.username];
+            const todayStr = new Date().toDateString();
+
+            if (user.lastCommentDate !== todayStr) {
+                user.commentsToday = 0;
+                user.lastCommentDate = todayStr;
+            }
+
+            if (user.commentsToday >= 2 && appData.currentUser.role !== 'admin') {
+                alert("Daily comment limit reached! (Max 2 comments/day)");
+                return;
+            }
+
+            user.commentsToday = (user.commentsToday || 0) + 1;
+
+            appData.comments.unshift({
+                id: Date.now(),
+                author: appData.currentUser.username,
+                text: text,
+                date: new Date().toLocaleDateString()
+            });
+
+            saveData();
+            renderComments();
+            document.getElementById('comment-input').value = "";
+            alert("Comment posted successfully!");
+        }
+
+        function adminDeleteComment(id) {
+            if (confirm("Delete this comment?")) {
+                appData.comments = appData.comments.filter(c => c.id !== id);
+                saveData();
+                renderComments();
+            }
+        }
+
+        function startRankPurchase(rankName, price) {
+            alert(`To purchase ${rankName} Rank (₹${price}/mo), please join our Discord server or contact server admins!`);
+        }
+
+        /* --- GHOST AI ENGINE --- */
+        function askGhostAI(topic) {
+            const feed = document.getElementById('ghost-chat-feed');
+            let userQuestion = "";
+            let aiResponse = "";
+
+            if (topic === 'owners') {
+                userQuestion = "Who is the owner of OderisMC?";
+                aiResponse = "OderisMC is owned and managed by Sakarw_al142, King_Oderis, and Ayushggs. Website developed by YUVRAJ_THELEGEND (ragebg.exe) under YJDEV STUDIOS.";
+            } else if (topic === 'ip') {
+                userQuestion = "What is the Server IP & Port?";
+                aiResponse = "Server IP: play.oderismc.fun | Port: 19142. It supports Java and Bedrock cross-play!";
+            } else if (topic === 'ranks') {
+                userQuestion = "How do I buy ranks?";
+                aiResponse = "Navigate to the 'Ranks & Store' page or open a ticket on Discord. Ranks start from ₹30/month (HERO) up to ₹250/month (ODERIS).";
+            } else if (topic === 'rules') {
+                userQuestion = "What are the server rules?";
+                aiResponse = "No cheating/hacking, no toxicity/hate speech, no advertising other servers, and no bug exploitation. Check the 'Rules & FAQ' tab for full details.";
+            } else if (topic === 'dev') {
+                userQuestion = "Who developed this website?";
+                aiResponse = "This cyber portal was built by YUVRAJ_THELEGEND (YJDEV STUDIOS).";
+            } else if (topic === 'crossplay') {
+                userQuestion = "How does cross-play work?";
+                aiResponse = "Java players use `play.oderismc.fun`. Bedrock/PE players use `play.oderismc.fun` with Port `19142`.";
+            }
+
+            feed.innerHTML += `
+                <div class="ghost-msg user">
+                    <div class="ghost-msg-bubble">${userQuestion}</div>
+                </div>
+                <div class="ghost-msg ai">
+                    <div class="ghost-avatar" style="width: 32px; height: 32px; font-size: 16px;">👻</div>
+                    <div class="ghost-msg-bubble">
+                        <strong style="color: var(--ghost-glow);">GHOST AI:</strong> ${aiResponse}
+                    </div>
                 </div>
             `;
-            feed.appendChild(msg);
+
             feed.scrollTop = feed.scrollHeight;
         }
 
@@ -3001,54 +2336,13 @@
                 <div class="ghost-msg ai">
                     <div class="ghost-avatar" style="width: 32px; height: 32px; font-size: 16px;">👻</div>
                     <div class="ghost-msg-bubble">
-                        <strong style="color: var(--ghost-glow);">GHOST AI v2.93:</strong> Chat cleared! 👋 Select a topic below to begin.
+                        <strong style="color: var(--ghost-glow);">GHOST AI v2.93:</strong> Chat cleared! 👋 Choose a topic below to get started.
                     </div>
                 </div>
             `;
         }
 
-        // CANVAS PARTICLES EFFECT
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        const particles = [];
-        for (let i = 0; i < 45; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 2 + 1,
-                dx: (Math.random() - 0.5) * 0.5,
-                dy: (Math.random() - 0.5) * 0.5,
-                alpha: Math.random() * 0.5 + 0.2
-            });
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.x += p.dx;
-                p.y += p.dy;
-
-                if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(0, 217, 255, ${p.alpha})`;
-                ctx.fill();
-            });
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-
-        // INITIAL LOAD
+        // Initialize App
         window.onload = function() {
             updateUIState();
         };
