@@ -35,7 +35,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none !important; /* Managed by Custom Pixel Cursor */
             font-family: 'Rajdhani', sans-serif;
             user-select: none;
         }
@@ -46,6 +45,10 @@
             overflow-x: hidden;
             min-height: 100vh;
             position: relative;
+        }
+
+        button, a, .brand, .ghost-opt-btn, .sub-q-btn, .nav-btn {
+            cursor: pointer;
         }
 
         /* --- INDIAN FLAG GRADIENT UTILITIES --- */
@@ -103,30 +106,6 @@
             align-items: center;
             gap: 6px;
             font-family: 'Orbitron', sans-serif;
-        }
-
-        /* --- RED PIXEL SWORD / POINTER CURSOR --- */
-        #custom-pixel-cursor {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 28px;
-            height: 28px;
-            pointer-events: none;
-            z-index: 999999;
-            transform: translate(-2px, -2px);
-            transition: transform 0.04s ease-out;
-            filter: drop-shadow(0 0 8px rgba(255, 17, 68, 0.9));
-        }
-
-        #custom-pixel-cursor svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .cursor-hover #custom-pixel-cursor {
-            transform: scale(1.25) translate(-2px, -2px);
-            filter: drop-shadow(0 0 14px var(--neon-red)) drop-shadow(0 0 6px var(--gold-accent));
         }
 
         /* BACKGROUND CANVAS */
@@ -1424,15 +1403,6 @@
 </head>
 <body>
 
-    <!-- CUSTOM RAGE SMP RED PIXEL SWORD CURSOR -->
-    <div id="custom-pixel-cursor">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 0V22L6 16L11 26L16 24L11 14L18 14L0 0Z" fill="#ff1144"/>
-            <path d="M2 3V18L6 14L10 22L12 21L8 13L14 13L2 3Z" fill="#0d0004"/>
-            <path d="M4 6L8 10L6 11L4 6Z" fill="#ff2255"/>
-        </svg>
-    </div>
-
     <!-- CANVAS BACKGROUND -->
     <canvas id="bg-canvas"></canvas>
 
@@ -1477,9 +1447,7 @@
     </div>
 
     <main>
-        <!-- ==========================================
-             PAGE 1: HOME VIEW & COINS SYSTEM
-             ========================================== -->
+        <!-- PAGE 1: HOME VIEW & COINS SYSTEM -->
         <section class="page-view active" id="page-home">
             <div class="hero">
                 <div class="banner-wrapper">
@@ -1551,7 +1519,7 @@
                 </div>
             </div>
 
-            <!-- COMMENTS SECTION (MAX 2 COMMENTS/DAY, DELETED BY ADMIN ONLY) -->
+            <!-- COMMENTS SECTION -->
             <div class="comments-section">
                 <div class="comments-card">
                     <h2 class="section-title" style="font-size: 24px; text-align: left; margin-bottom: 15px;">
@@ -1573,9 +1541,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             PAGE 2: RANK STORE VIEW
-             ========================================== -->
+        <!-- PAGE 2: RANK STORE VIEW -->
         <section class="page-view" id="page-store">
             <div class="store-section">
                 <h2 class="section-title">SERVER RANKS (MONTHLY SUBSCRIPTION)</h2>
@@ -1669,9 +1635,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             PAGE 3: VOTE & REWARDS
-             ========================================== -->
+        <!-- PAGE 3: VOTE & REWARDS -->
         <section class="page-view" id="page-vote">
             <div class="store-section">
                 <h2 class="section-title">VOTE FOR ODERISMC</h2>
@@ -1700,9 +1664,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             PAGE 4: RULES & FAQ
-             ========================================== -->
+        <!-- PAGE 4: RULES & FAQ -->
         <section class="page-view" id="page-rules">
             <div class="store-section">
                 <h2 class="section-title">EXPANDED SERVER RULES & CODE OF CONDUCT</h2>
@@ -1749,9 +1711,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             PAGE 5: TERMS & POLICY
-             ========================================== -->
+        <!-- PAGE 5: TERMS & POLICY -->
         <section class="page-view" id="page-terms">
             <div class="store-section">
                 <h2 class="section-title">EXPANDED TERMS & CONDITIONS & LEGAL POLICY</h2>
@@ -1779,9 +1739,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             PAGE 6: COMMUNITY & STAFF
-             ========================================== -->
+        <!-- PAGE 6: COMMUNITY & STAFF -->
         <section class="page-view" id="page-community">
             <div class="store-section">
                 <h2 class="section-title">OFFICIAL NETWORK STAFF</h2>
@@ -1831,9 +1789,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             PAGE 7: ADMIN CONTROL PANEL (ADMIN ONLY)
-             ========================================== -->
+        <!-- PAGE 7: ADMIN CONTROL PANEL (ADMIN ONLY) -->
         <section class="page-view" id="page-admin">
             <div class="admin-panel-card">
                 <h2 style="font-family: 'Orbitron'; font-size: 26px; color: var(--neon-red); margin-bottom: 10px;">
@@ -1879,9 +1835,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             PAGE 8: GHOST AI VERSION 2.93
-             ========================================== -->
+        <!-- PAGE 8: GHOST AI VERSION 2.93 -->
         <section class="page-view" id="page-ghost-ai">
             <div class="ghost-ai-container">
                 <div class="ghost-terminal-card">
@@ -2045,13 +1999,6 @@
             localStorage.setItem('oderis_claimed_codes', JSON.stringify(appData.claimedCodes));
         }
 
-        // RED PIXEL CURSOR TRACKER
-        const pixelCursor = document.getElementById('custom-pixel-cursor');
-        document.addEventListener('mousemove', (e) => {
-            pixelCursor.style.left = e.clientX + 'px';
-            pixelCursor.style.top = e.clientY + 'px';
-        });
-
         // PAGE SWITCHER ENGINE
         function switchPage(pageId) {
             document.querySelectorAll('.page-view').forEach(page => page.classList.remove('active'));
@@ -2067,6 +2014,10 @@
         }
 
         function openGhostAIPage() { switchPage('ghost-ai'); }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
 
         // --- AUTH & LOGIN SYSTEM ---
         function openAuthModal() {
@@ -2097,7 +2048,6 @@
             }
 
             if (!appData.users[user]) {
-                // Register
                 appData.users[user] = {
                     password: pass,
                     coins: 0,
@@ -2121,7 +2071,6 @@
             alert(`Welcome back, ${user}!`);
         }
 
-        // STRICT ADMIN LOGIN CHECK
         function loginAdmin() {
             const adminUser = document.getElementById('admin-user-input').value.trim();
             const adminPass = document.getElementById('admin-pass-input').value.trim();
@@ -2164,7 +2113,6 @@
                     adminNav.style.display = 'none';
                 }
 
-                // Update Coin Stats
                 const uData = appData.users[appData.currentUser.username] || { coins: 0, streak: 0 };
                 document.getElementById('user-coin-balance').innerText = uData.coins || 0;
                 document.getElementById('user-streak-count').innerText = uData.streak || 0;
@@ -2173,371 +2121,19 @@
                 authBtn.innerText = "LOGIN / SIGN UP";
                 authBtn.onclick = openAuthModal;
                 adminNav.style.display = 'none';
-                document.getElementById('user-coin-balance').innerText = '0';
-                document.getElementById('user-streak-count').innerText = '0';
-            }
-
-            renderEvents();
-            renderComments();
-            renderAdminView();
-        }
-
-        // --- DAY COUNTER & DAILY REWARD SYSTEM ---
-        function claimDailyReward() {
-            if (!appData.currentUser) {
-                alert("Please Login first to claim your daily reward!");
-                openAuthModal();
-                return;
-            }
-
-            const username = appData.currentUser.username;
-            const u = appData.users[username];
-            const todayStr = new Date().toISOString().split('T')[0];
-
-            if (u.lastClaimDate === todayStr) {
-                alert("You have already claimed your daily reward today! Come back tomorrow.");
-                return;
-            }
-
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-            if (u.lastClaimDate === yesterdayStr) {
-                u.streak = (u.streak || 0) + 1;
-            } else {
-                u.streak = 1; // Streak reset if day missed
-            }
-
-            // Calculation: Daily reward = 25 coins + 5 per streak day, max per day = 120
-            let rewardCoins = 25 + (u.streak - 1) * 5;
-            if (rewardCoins > 120) rewardCoins = 120;
-
-            u.coins = (u.coins || 0) + rewardCoins;
-            u.lastClaimDate = todayStr;
-
-            saveData();
-            updateUIState();
-            alert(`🎉 Daily Claim Successful!\nStreak: Day ${u.streak}\nReceived: +${rewardCoins} OderisMC Coins!`);
-        }
-
-        // --- SPIN THE WHEEL SYSTEM ---
-        function openSpinWheel() {
-            if (!appData.currentUser) {
-                alert("Please Login to Spin the Wheel!");
-                openAuthModal();
-                return;
-            }
-            document.getElementById('wheel-modal').style.display = 'grid';
-            drawWheel();
-            updateWheelStatus();
-        }
-
-        function updateWheelStatus() {
-            const username = appData.currentUser.username;
-            const u = appData.users[username];
-            const todayStr = new Date().toISOString().split('T')[0];
-
-            if (u.lastSpinDate !== todayStr) {
-                u.spinsToday = 0;
-                u.lastSpinDate = todayStr;
-                saveData();
-            }
-
-            const freeLeft = Math.max(0, 2 - u.spinsToday);
-            document.getElementById('wheel-status-text').innerText = freeLeft > 0 
-                ? `Spins remaining today: ${freeLeft} Free Spin(s)` 
-                : `Free spins used. Next spin costs 20 Coins!`;
-        }
-
-        const wheelPrizes = [10, 25, 50, 100, 20, 250, 5, 500];
-        function drawWheel() {
-            const canvas = document.getElementById('wheel-canvas');
-            const ctx = canvas.getContext('2d');
-            const numSlices = wheelPrizes.length;
-            const sliceAngle = (2 * Math.PI) / numSlices;
-            const colors = ['#00d9ff', '#ff1144', '#00ff88', '#ffb700', '#a855f7', '#0066ff', '#ff5500', '#00f0ff'];
-
-            ctx.clearRect(0, 0, 280, 280);
-            for (let i = 0; i < numSlices; i++) {
-                ctx.beginPath();
-                ctx.fillStyle = colors[i % colors.length];
-                ctx.moveTo(140, 140);
-                ctx.arc(140, 140, 130, i * sliceAngle, (i + 1) * sliceAngle);
-                ctx.fill();
-
-                // Draw Text
-                ctx.save();
-                ctx.translate(140, 140);
-                ctx.rotate(i * sliceAngle + sliceAngle / 2);
-                ctx.fillStyle = '#000';
-                ctx.font = 'bold 14px Orbitron';
-                ctx.fillText(wheelPrizes[i] + 'C', 60, 5);
-                ctx.restore();
+                document.getElementById('user-coin-balance').innerText = 0;
+                document.getElementById('user-streak-count').innerText = 0;
             }
         }
-
-        let isSpinning = false;
-        function spinWheelAction() {
-            if (isSpinning) return;
-            const username = appData.currentUser.username;
-            const u = appData.users[username];
-
-            const freeLeft = Math.max(0, 2 - u.spinsToday);
-            if (freeLeft <= 0 && u.coins < 20) {
-                alert("Not enough coins! Each spin costs 20 Coins after free spins.");
-                return;
-            }
-
-            if (freeLeft <= 0) {
-                u.coins -= 20;
-            }
-            u.spinsToday += 1;
-
-            isSpinning = true;
-            const canvas = document.getElementById('wheel-canvas');
-            const prizeIndex = Math.floor(Math.random() * wheelPrizes.length);
-            const randomRotation = 360 * 5 + (360 - (prizeIndex * 45 + 22.5));
-
-            canvas.style.transform = `rotate(${randomRotation}deg)`;
-
-            setTimeout(() => {
-                const wonCoins = wheelPrizes[prizeIndex];
-                u.coins += wonCoins;
-                saveData();
-                updateUIState();
-                updateWheelStatus();
-                alert(`🎊 WHEEL LANDED! You won +${wonCoins} OderisMC Coins!`);
-                canvas.style.transition = 'none';
-                canvas.style.transform = `rotate(0deg)`;
-                setTimeout(() => canvas.style.transition = 'transform 4s cubic-bezier(0.15, 0.9, 0.2, 1)', 50);
-                isSpinning = false;
-            }, 4000);
-        }
-
-        // --- COINS SHOP & HERO KIT REDEMPTION ---
-        function openCoinsShop() {
-            if (!appData.currentUser) {
-                alert("Please Login to access Coins Shop!");
-                openAuthModal();
-                return;
-            }
-            document.getElementById('coins-shop-modal').style.display = 'grid';
-        }
-
-        function buyHeroKitWithCoins() {
-            const username = appData.currentUser.username;
-            const u = appData.users[username];
-
-            if (u.coins < 20000) {
-                alert(`Insufficient Coins! You currently have ${u.coins} Coins. You need 20,000 Coins to claim a Free Hero Kit.`);
-                return;
-            }
-
-            u.coins -= 20000;
-            const claimCode = "HERO-ODERIS-" + Math.floor(1000 + Math.random() * 9000);
-            appData.claimedCodes.push({ user: username, code: claimCode, date: new Date().toLocaleString() });
-
-            saveData();
-            updateUIState();
-
-            document.getElementById('generated-code-text').innerText = claimCode;
-            document.getElementById('kit-code-result').style.display = 'block';
-            alert(`🎉 HERO KIT PURCHASED SUCCESSFUL!\nClaim Code Generated: ${claimCode}`);
-        }
-
-        function buyItemWithCoins(name, cost) {
-            const username = appData.currentUser.username;
-            const u = appData.users[username];
-
-            if (u.coins < cost) {
-                alert(`Insufficient Coins! Item costs ${cost} Coins.`);
-                return;
-            }
-
-            u.coins -= cost;
-            saveData();
-            updateUIState();
-            alert(`Successfully purchased ${name} for ${cost} Coins!`);
-        }
-
-        // --- COMMENTS SYSTEM (MAX 2/DAY, ADMIN DELETION ONLY) ---
-        function submitComment() {
-            if (!appData.currentUser) {
-                alert("Please Login to post comments!");
-                openAuthModal();
-                return;
-            }
-
-            const input = document.getElementById('comment-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            const username = appData.currentUser.username;
-            const u = appData.users[username];
-            const todayStr = new Date().toISOString().split('T')[0];
-
-            if (u.lastCommentDate !== todayStr) {
-                u.commentsToday = 0;
-                u.lastCommentDate = todayStr;
-            }
-
-            if (u.commentsToday >= 2 && appData.currentUser.role !== 'admin') {
-                alert("Daily Comment Limit Reached! Players can post a maximum of 2 comments per day.");
-                return;
-            }
-
-            u.commentsToday += 1;
-            appData.comments.unshift({
-                id: Date.now(),
-                author: username,
-                text: text,
-                date: new Date().toISOString().split('T')[0]
-            });
-
-            input.value = '';
-            saveData();
-            renderComments();
-            renderAdminView();
-            alert("Comment posted successfully!");
-        }
-
-        function renderComments() {
-            const container = document.getElementById('comments-list');
-            if (!container) return;
-
-            container.innerHTML = appData.comments.map(c => `
-                <div class="comment-item">
-                    <div>
-                        <div class="comment-user-info">
-                            <span class="comment-author">${c.author}</span>
-                            <span class="comment-date">${c.date}</span>
-                        </div>
-                        <div class="comment-body">${c.text}</div>
-                    </div>
-                    ${appData.currentUser && appData.currentUser.role === 'admin' ? `
-                        <button class="admin-delete-btn" onclick="deleteComment(${c.id})"><i class="fas fa-trash"></i> DELETE</button>
-                    ` : ''}
-                </div>
-            `).join('');
-        }
-
-        function deleteComment(id) {
-            if (!appData.currentUser || appData.currentUser.role !== 'admin') {
-                alert("Comments can ONLY be deleted by Admin!");
-                return;
-            }
-            appData.comments = appData.comments.filter(c => c.id !== id);
-            saveData();
-            renderComments();
-            renderAdminView();
-        }
-
-        // --- LIVE EVENTS ENGINE ---
-        function renderEvents() {
-            const container = document.getElementById('events-feed');
-            if (!container) return;
-
-            container.innerHTML = appData.events.map(e => `
-                <div class="event-card">
-                    <span class="event-tag">LIVE / UPCOMING</span>
-                    <div class="event-title">${e.title}</div>
-                    <div class="event-desc">${e.desc}</div>
-                    <div class="event-date"><i class="fas fa-clock"></i> ${e.date}</div>
-                </div>
-            `).join('');
-        }
-
-        // --- ADMIN DASHBOARD ACTIONS ---
-        function switchAdminTab(tab) {
-            document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('admin-tab-events').style.display = tab === 'events' ? 'block' : 'none';
-            document.getElementById('admin-tab-comments').style.display = tab === 'comments' ? 'block' : 'none';
-            document.getElementById('admin-tab-codes').style.display = tab === 'codes' ? 'block' : 'none';
-        }
-
-        function adminAddEvent() {
-            const title = document.getElementById('admin-event-title').value.trim();
-            const desc = document.getElementById('admin-event-desc').value.trim();
-            const date = document.getElementById('admin-event-date').value.trim();
-
-            if (!title || !desc || !date) {
-                alert("Please fill out all event details!");
-                return;
-            }
-
-            appData.events.unshift({ id: Date.now(), title, desc, date });
-            saveData();
-            renderEvents();
-            document.getElementById('admin-event-title').value = '';
-            document.getElementById('admin-event-desc').value = '';
-            document.getElementById('admin-event-date').value = '';
-            alert("New Live Event published successfully!");
-        }
-
-        function renderAdminView() {
-            const commentsContainer = document.getElementById('admin-comments-feed');
-            if (commentsContainer) {
-                commentsContainer.innerHTML = appData.comments.map(c => `
-                    <div class="comment-item">
-                        <div>
-                            <strong style="color:var(--cyan-glow);">${c.author}:</strong> ${c.text}
-                        </div>
-                        <button class="admin-delete-btn" onclick="deleteComment(${c.id})">PURGE</button>
-                    </div>
-                `).join('');
-            }
-
-            const codesContainer = document.getElementById('admin-codes-feed');
-            if (codesContainer) {
-                codesContainer.innerHTML = appData.claimedCodes.map(code => `
-                    <div class="comment-item">
-                        <div>
-                            <strong style="color:var(--gold-accent);">${code.user}:</strong> Code: <code>${code.code}</code> (${code.date})
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
-        // CANVAS PARTICLES & INITIALIZE
-        window.onload = function() {
-            updateUIState();
-        };
-
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        const particles = Array.from({ length: 40 }, () => ({
-            x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-            size: Math.random() * 2 + 1, speedX: (Math.random() - 0.5) * 0.5, speedY: (Math.random() - 0.5) * 0.5,
-            opacity: Math.random() * 0.5 + 0.2
-        }));
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.x += p.speedX; p.y += p.speedY;
-                if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
-                if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
-                ctx.fillStyle = `rgba(0, 217, 255, ${p.opacity})`;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
-            });
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
 
         function copyIP() {
-            navigator.clipboard.writeText('play.oderismc.fun');
-            alert('Server IP (play.oderismc.fun) copied to clipboard!');
+            navigator.clipboard.writeText("play.oderismc.fun");
+            alert("IP play.oderismc.fun copied to clipboard!");
         }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateUIState();
+        });
     </script>
 </body>
 </html>
