@@ -1,8 +1,10 @@
 /**
- * OderisMC Cyber Network Interactive Scripts
- * Handles Dual Cursor, Particle Canvas, Minotar Head Fetching,
- * Ghost AI v2.93 Interactive Engine (with Persistent Memory),
- * and Payment Modal & Purchase History Storage.
+ * OderisMC Cyber Network Interactive Scripts (Updated)
+ * Features:
+ * - Persistent Coin Balance Engine & UI Sync
+ * - User Comment Submission & Display Storage
+ * - Exact-Angle Spin Wheel Engine with Fixed Reward Alignment
+ * - Dual Cursor, Particle Canvas, Minotar Head Fetching, Payment Gateway, Ghost AI v2.93
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,7 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     CHAT_HISTORY: 'oderis_chat_history_v1',
     PURCHASE_LOGS: 'oderis_purchase_logs_v1',
     LAST_USERNAME: 'oderis_saved_username_v1',
-    STATS: 'oderis_system_stats_v1'
+    STATS: 'oderis_system_stats_v1',
+    USER_COINS: 'oderis_user_coins_v1',       // Added Coin Persistence Key
+    COMMENTS_LOG: 'oderis_user_comments_v1'    // Added User Comments Key
   };
 
   const DB = {
@@ -44,6 +48,32 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   /* ==========================================
+     0.1 COIN DATA ENGINE & UI SYNC
+     ========================================== */
+  const coinDisplayElements = document.querySelectorAll('.user-coin-balance, #user-coins');
+
+  function getUserCoins() {
+    return DB.get(STORAGE_KEYS.USER_COINS, 100); // Default initial balance of 100 coins
+  }
+
+  function updateUserCoins(amount) {
+    const current = getUserCoins();
+    const updated = Math.max(0, current + amount);
+    DB.set(STORAGE_KEYS.USER_COINS, updated);
+    renderCoinsUI(updated);
+    return updated;
+  }
+
+  function renderCoinsUI(balance = getUserCoins()) {
+    coinDisplayElements.forEach((el) => {
+      el.innerText = balance.toLocaleString();
+    });
+  }
+
+  // Initial Coin Render
+  renderCoinsUI();
+
+  /* ==========================================
      1. DUAL CUSTOM CURSOR EFFECT
      ========================================== */
   const cursorDot = document.getElementById('cursor-dot');
@@ -63,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, { duration: 300, fill: "forwards" });
     });
 
-    const hoverables = document.querySelectorAll('a, button, .card, .chip, input');
+    const hoverables = document.querySelectorAll('a, button, .card, .chip, input, textarea');
     hoverables.forEach((el) => {
       el.addEventListener('mouseenter', () => {
         cursorOutline.style.width = '50px';
@@ -181,7 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
     copyIpBtn.addEventListener('click', () => {
       const serverIP = 'play.oderismc.net';
 
-      // Update persistent copy count statistic
       const stats = DB.get(STORAGE_KEYS.STATS, { copyCount: 0 });
       stats.copyCount += 1;
       stats.lastCopied = new Date().toISOString();
@@ -202,7 +231,198 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================
-     5. PAYMENT MODAL SIMULATION & ORDER PERSISTENCE
+     5. USER COMMENTS SYSTEM ENGINE
+     ========================================== */
+  const commentForm = document.getElementById('comment-form');
+  const commentInput = document.getElementById('comment-input');
+  const commentAuthorInput = document.getElementById('comment-author-input');
+  const commentsContainer = document.getElementById('comments-container');
+
+  function renderComments() {
+    if (!commentsContainer) return;
+    const comments = DB.get(STORAGE_KEYS.COMMENTS_LOG, []);
+    commentsContainer.innerHTML = '';
+
+    if (comments.length === 0) {
+      commentsContainer.innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
+      return;
+    }
+
+    comments.slice().reverse().forEach((item) => {
+      const commentEl = document.createElement('div');
+      commentEl.className = 'comment-card';
+      
+      const timeAgo = new Date(item.timestamp).toLocaleDateString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      commentEl.innerHTML = `
+        <div class="comment-header">
+          <img src="https://minotar.net/helm/${encodeURIComponent(item.author)}/32.png" 
+               onerror="this.src='https://minotar.net/helm/MHF_Steve/32.png'" 
+               alt="${item.author}" class="comment-avatar">
+          <strong class="comment-author">${item.author}</strong>
+          <span class="comment-time">${timeAgo}</span>
+        </div>
+        <p class="comment-body"></p>
+      `;
+      
+      // Prevent XSS injection
+      commentEl.querySelector('.comment-body').innerText = item.text;
+      commentsContainer.appendChild(commentEl);
+    });
+  }
+
+  if (commentForm) {
+    commentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const author = (commentAuthorInput ? commentAuthorInput.value.trim() : '') || DB.get(STORAGE_KEYS.LAST_USERNAME, 'Guest');
+      const text = commentInput ? commentInput.value.trim() : '';
+
+      if (!text) return;
+
+      const newComment = {
+        id: 'cmt_' + Date.now(),
+        author: author,
+        text: text,
+        timestamp: new Date().toISOString()
+      };
+
+      const comments = DB.get(STORAGE_KEYS.COMMENTS_LOG, []);
+      comments.push(newComment);
+      DB.set(STORAGE_KEYS.COMMENTS_LOG, comments);
+
+      if (commentInput) commentInput.value = '';
+      renderComments();
+    });
+  }
+
+  // Load existing comments on page load
+  renderComments();
+
+  /* ==========================================
+     6. ACCURATE SPIN WHEEL ENGINE (FIXED POINTER MATCHING)
+     ========================================== */
+  const spinBtn = document.getElementById('spin-wheel-btn');
+  const wheelCanvas = document.getElementById('wheel-canvas') || document.getElementById('spin-wheel');
+  const resultDisplay = document.getElementById('spin-result-display');
+
+  // Ordered segments array (Clockwise order on visual canvas starting from 0 degrees)
+  const wheelRewards = [25, 50, 100, 200, 500, 10, 0, 150];
+  const numSegments = wheelRewards.length;
+  const segmentAngle = 360 / numSegments; // 45 degrees per slice
+
+  let isSpinning = false;
+  let currentWheelAngle = 0;
+
+  function renderWheelCanvas() {
+    if (!wheelCanvas || wheelCanvas.tagName !== 'CANVAS') return;
+    const ctx = wheelCanvas.getContext('2d');
+    const width = wheelCanvas.width || 300;
+    const height = wheelCanvas.height || 300;
+    const center = width / 2;
+    const radius = center - 10;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const colors = ['#6366f1', '#4f46e5', '#4338ca', '#3730a3', '#312e81', '#22d3ee', '#0891b2', '#0e7490'];
+
+    for (let i = 0; i < numSegments; i++) {
+      const startAngle = (i * segmentAngle) * (Math.PI / 180);
+      const endAngle = ((i + 1) * segmentAngle) * (Math.PI / 180);
+
+      ctx.beginPath();
+      ctx.moveTo(center, center);
+      ctx.arc(center, center, radius, startAngle, endAngle);
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#0f172a';
+      ctx.stroke();
+
+      // Render Text Labels
+      ctx.save();
+      ctx.translate(center, center);
+      ctx.rotate(startAngle + (segmentAngle * Math.PI / 360));
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText(`${wheelRewards[i]} Coins`, radius - 15, 5);
+      ctx.restore();
+    }
+  }
+
+  renderWheelCanvas();
+
+  if (spinBtn) {
+    spinBtn.addEventListener('click', () => {
+      if (isSpinning) return;
+
+      const userCoins = getUserCoins();
+      const spinCost = 20; // 20 coins per spin
+
+      if (userCoins < spinCost) {
+        alert(`Insufficient coins! You need at least ${spinCost} coins to spin.`);
+        return;
+      }
+
+      // Deduct spin fee
+      updateUserCoins(-spinCost);
+
+      isSpinning = true;
+      spinBtn.disabled = true;
+      if (resultDisplay) resultDisplay.innerText = 'Spinning...';
+
+      // Pick a target reward segment index
+      const winningIndex = Math.floor(Math.random() * numSegments);
+      const rewardValue = wheelRewards[winningIndex];
+
+      /*
+       * EXACT MATHEMATICAL CALCULATIONS:
+       * Assuming Top Pointer is at 12 o'clock (-90 deg / 270 deg):
+       * To align segment `winningIndex` under top pointer:
+       * Segment center angle = (winningIndex + 0.5) * segmentAngle
+       * Target wheel rotation angle = 270 - center angle
+       */
+      const segmentCenterOffset = (winningIndex + 0.5) * segmentAngle;
+      let targetLandingAngle = (270 - segmentCenterOffset) % 360;
+      if (targetLandingAngle < 0) targetLandingAngle += 360;
+
+      // Add minimum 5 full rotations (1800deg) for animation smoothness
+      const fullRotations = 360 * 5;
+      const currentNormalized = currentWheelAngle % 360;
+      const angleDifference = (targetLandingAngle - currentNormalized + 360) % 360;
+
+      const totalRotationToApply = fullRotations + angleDifference;
+      currentWheelAngle += totalRotationToApply;
+
+      if (wheelCanvas) {
+        wheelCanvas.style.transition = 'transform 4s cubic-bezier(0.15, 0.90, 0.20, 1.00)';
+        wheelCanvas.style.transform = `rotate(${currentWheelAngle}deg)`;
+      }
+
+      setTimeout(() => {
+        isSpinning = false;
+        spinBtn.disabled = false;
+
+        // Add won coins to storage balance
+        updateUserCoins(rewardValue);
+
+        if (resultDisplay) {
+          resultDisplay.innerText = rewardValue > 0 
+            ? `🎉 Congratulations! You landed on ${rewardValue} Coins!` 
+            : `Better luck next time! You got 0 Coins.`;
+        }
+      }, 4000);
+    });
+  }
+
+  /* ==========================================
+     7. PAYMENT MODAL SIMULATION & ORDER PERSISTENCE
      ========================================== */
   const modalOverlay = document.getElementById('payment-modal');
   const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -212,7 +432,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const paymentForm = document.getElementById('payment-form');
   const usernameInput = document.getElementById('mc-username');
 
-  // Pre-fill username if previously stored in memory
   if (usernameInput) {
     const savedName = DB.get(STORAGE_KEYS.LAST_USERNAME, '');
     if (savedName) usernameInput.value = savedName;
@@ -260,10 +479,11 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.innerText = 'Processing Gateway...';
 
         setTimeout(() => {
-          // Save last used username
           DB.set(STORAGE_KEYS.LAST_USERNAME, username);
 
-          // Save order to persistent purchase log
+          // Reward 100 bonus coins on store rank purchase
+          updateUserCoins(100);
+
           const newTransaction = {
             transactionId: 'ODR-' + Math.floor(100000 + Math.random() * 900000),
             username: username,
@@ -276,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
           purchases.push(newTransaction);
           DB.set(STORAGE_KEYS.PURCHASE_LOGS, purchases);
 
-          alert(`Success! [${username}] has been credited with the ${rank} rank on play.oderismc.net.\n\nTransaction ID: ${newTransaction.transactionId}`);
+          alert(`Success! [${username}] has been credited with the ${rank} rank on play.oderismc.net.\nBonus +100 Coins added!\n\nTransaction ID: ${newTransaction.transactionId}`);
 
           submitBtn.disabled = false;
           submitBtn.innerText = 'Complete Purchase';
@@ -287,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================
-     6. GHOST AI v2.93 INTERACTIVE ENGINE (PERSISTENT CHAT)
+     8. GHOST AI v2.93 INTERACTIVE ENGINE (PERSISTENT CHAT)
      ========================================== */
   const chatMessages = document.getElementById('chat-messages');
   const chatForm = document.getElementById('chat-form');
@@ -298,6 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const ghostKnowledge = [
     { keywords: ['ip', 'address', 'connect', 'join'], response: 'The official server IP is **play.oderismc.net**! Join us on version 1.16 through 1.20+.' },
     { keywords: ['vip', 'rank', 'mvp', 'oderis', 'god', 'store', 'perk'], response: 'Ranks range from VIP ($4.99) to GOD ($49.99). All ranks include /fly abilities, cosmetics, and priority server queue access.' },
+    { keywords: ['coins', 'balance', 'currency', 'money'], response: () => `You currently have ${getUserCoins()} coins saved in your account balance.` },
     { keywords: ['owner', 'yuvraj', 'developer', 'yjdev'], response: 'OderisMC was created and built by lead developer YuvrajBudhwar under YJDEV STUDIOS.' },
     { keywords: ['bedwars', 'game', 'mode', 'pvp', 'skyblock'], response: 'We feature custom Bedwars with special knockback physics, fast-paced Skyblock, and custom aura-based combat mechanics!' },
     { keywords: ['staff', 'apply', 'admin', 'mod'], response: 'Staff applications open periodically on our official Discord community server.' },
@@ -331,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function loadSavedChatHistory() {
     const savedMessages = DB.get(STORAGE_KEYS.CHAT_HISTORY, []);
     if (savedMessages.length > 0 && chatMessages) {
-      chatMessages.innerHTML = ''; // Clear default markup
+      chatMessages.innerHTML = '';
       savedMessages.forEach(msg => {
         addMessage(msg.text, msg.sender, false);
       });
@@ -359,7 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return typeof k.response === 'function' ? k.response() : k.response;
       }
     }
-    return "Ghost AI v2.93: I am listening! You can ask me about the server IP (play.oderismc.net), rank pricing, game modes, your purchase history, or type '/clear' to reset this chat.";
+    return "Ghost AI v2.93: I am listening! You can ask me about the server IP (play.oderismc.net), rank pricing, game modes, your coin balance, or type '/clear' to reset this chat.";
   }
 
   function handleUserSubmit(message) {
@@ -374,7 +595,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 600);
   }
 
-  // Restore previous chat memory upon page load
   loadSavedChatHistory();
 
   if (chatForm && chatInput) {
