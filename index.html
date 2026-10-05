@@ -1182,7 +1182,7 @@
             height: 100%;
             background: rgba(4, 7, 13, 0.93);
             backdrop-filter: blur(14px);
-            z-index: 10000;
+            z-index: 200000;
             display: none;
             place-items: center;
             padding: 20px;
@@ -1363,7 +1363,7 @@
             The OderisMC Network website is currently undergoing planned system upgrades & maintenance.
             <br>Admins can log in below to access the management panel.
         </p>
-        <button class="gold-btn" style="background: linear-gradient(90deg, var(--neon-red), #ff5500); color: #fff;" onclick="openAuthModal()">
+        <button class="gold-btn" style="background: linear-gradient(90deg, var(--neon-red), #ff5500); color: #fff;" onclick="openAuthModal('admin')">
             <i class="fas fa-user-shield"></i> ADMIN LOGIN
         </button>
     </div>
@@ -1982,8 +1982,9 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        function openAuthModal() {
+        function openAuthModal(defaultTab = 'player') {
             document.getElementById('auth-modal').style.display = 'grid';
+            switchAuthTab(defaultTab);
         }
 
         function switchAuthTab(type) {
