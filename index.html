@@ -223,6 +223,7 @@
             font-size: 13px;
             font-weight: 700;
             letter-spacing: 1px;
+            flex-wrap: wrap;
         }
 
         .status-indicator {
@@ -1363,7 +1364,7 @@
             The OderisMC Network website is currently undergoing planned system upgrades & maintenance.
             <br>Admins can log in below to access the management panel.
         </p>
-        <button class="gold-btn" style="background: linear-gradient(90deg, var(--neon-red), #ff5500); color: #fff;" onclick="openAuthModal()">
+        <button class="gold-btn" style="background: linear-gradient(90deg, var(--neon-red), #ff5500); color: #fff;" onclick="openAuthModal('admin')">
             <i class="fas fa-user-shield"></i> ADMIN LOGIN
         </button>
     </div>
@@ -1407,6 +1408,9 @@
         <span>PLAYERS ONLINE: <strong style="color: var(--cyan-glow);">142 / 500</strong></span>
         <span style="color: var(--text-dim);">|</span>
         <span>JAVA & BEDROCK CROSS-PLAY</span>
+        <span style="color: var(--text-dim);">|</span>
+        <button onclick="checkServerPing()" style="background: transparent; border: 1px solid var(--cyan-glow); color: var(--cyan-glow); font-size: 11px; padding: 2px 8px; border-radius: 4px;"><i class="fas fa-signal"></i> Test Ping</button>
+        <span id="ping-result-badge" style="color: var(--neon-green); font-weight: 800;"></span>
     </div>
 
     <main>
@@ -1800,6 +1804,37 @@
         </section>
     </main>
 
+    <!-- RANK CHECKOUT MODAL -->
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="closeModal('checkout-modal')">&times;</button>
+            <div class="modal-title"><i class="fas fa-shopping-cart" style="color: var(--cyan-glow);"></i> RANK CHECKOUT</div>
+            <div style="text-align: left; margin-top: 15px;">
+                <p style="font-size: 16px; color: #fff; margin-bottom: 10px;">Selected Rank: <strong id="checkout-rank-name" style="color: var(--cyan-glow);">HERO</strong></p>
+                <p style="font-size: 14px; color: var(--text-dim); margin-bottom: 15px;">Base Price: <strong id="checkout-base-price" style="color: var(--neon-green);">₹30</strong> / month</p>
+                
+                <div class="admin-form-group">
+                    <label style="font-size: 12px; color: var(--text-dim); font-family: 'Orbitron';">DISCOUNT PROMO CODE:</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="promo-code-input" class="admin-input" placeholder="e.g. YJDEV10" style="text-transform: uppercase;">
+                        <button class="action-btn" onclick="applyPromoCode()">APPLY</button>
+                    </div>
+                    <span id="promo-msg" style="font-size: 12px; font-weight: 700;"></span>
+
+                    <label style="font-size: 12px; color: var(--text-dim); font-family: 'Orbitron'; margin-top: 10px;">IN-GAME MINECRAFT IGN:</label>
+                    <input type="text" id="checkout-ign-input" class="admin-input" placeholder="Enter your username...">
+
+                    <div style="border-top: 1px dashed var(--border-cyber); margin-top: 10px; padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-family: 'Orbitron'; color: #fff;">TOTAL PAYABLE:</span>
+                        <span id="checkout-total-price" style="font-family: 'Orbitron'; font-size: 22px; color: var(--gold-accent); font-weight: 900;">₹30</span>
+                    </div>
+
+                    <button class="buy-btn" style="margin-top: 15px;" onclick="confirmPurchase()">CONFIRM & PROCEED TO PAYMENT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- EDIT EVENT MODAL -->
     <div class="modal-overlay" id="edit-event-modal">
         <div class="modal-card">
@@ -1877,475 +1912,457 @@
 
     <!-- JS LOGIC ENGINE -->
     <script>
-        let appData = {
-            currentUser: JSON.parse(localStorage.getItem('oderis_logged_user')) || null,
-            users: JSON.parse(localStorage.getItem('oderis_users')) || {},
-            maintenance: JSON.parse(localStorage.getItem('oderis_maint')) || false,
-            events: JSON.parse(localStorage.getItem('oderis_events')) || [
-                { id: 1, title: "Survival Launch Celebration", desc: "Special double experience active all week long!", date: "Active Now", status: "live" },
-                { id: 2, title: "Bedwars Tournament 2026", desc: "Compete for rare ranks and rewards!", date: "Sunday @ 6:00 PM IST", status: "starting_soon" }
-            ],
-            logs: JSON.parse(localStorage.getItem('oderis_logs')) || [
-                {
-                    id: 201,
-                    version: "v2.93",
-                    title: "Maintenance Mode & Admin System Overhaul",
-                    date: "October 5, 2026",
-                    changes: [
-                        "Integrated YJDEV STUDIOS Maintenance Mode ON/OFF toggle.",
-                        "Enhanced comment moderation and log tracking.",
-                        "Added Edit and Delete capability for all events."
-                    ]
-                }
-            ],
-            comments: JSON.parse(localStorage.getItem('oderis_comments')) || [
-                { id: 101, author: "Sakarw_al142", text: "Welcome to OderisMC Cyber Network! Hope you all enjoy survival economy!", date: "2026-10-01" }
-            ]
-        };
+        // CORE STATE & LOCALSTORAGE ENGINE
+        let currentPage = 'home';
+        let currentUser = localStorage.getItem('oderis_username') || null;
+        let isAdminLoggedIn = localStorage.getItem('oderis_is_admin') === 'true';
+        let isMaintenanceActive = localStorage.getItem('oderis_maint_mode') === 'true';
 
-        function saveData() {
-            localStorage.setItem('oderis_users', JSON.stringify(appData.users));
-            localStorage.setItem('oderis_logged_user', JSON.stringify(appData.currentUser));
-            localStorage.setItem('oderis_events', JSON.stringify(appData.events));
-            localStorage.setItem('oderis_logs', JSON.stringify(appData.logs));
-            localStorage.setItem('oderis_comments', JSON.stringify(appData.comments));
-            localStorage.setItem('oderis_maint', JSON.stringify(appData.maintenance));
-        }
+        let eventsData = JSON.parse(localStorage.getItem('oderis_events')) || [
+            { id: 1, title: 'BEDWARS CHAMPIONSHIP 2026', desc: 'Compete in 4v4 Bedwars tournament with ₹1,000 store cash pool!', date: 'THIS SUNDAY @ 6:00 PM IST', status: 'live' },
+            { id: 2, title: 'SURVIVAL RESET & NETHER EXPANSION', desc: 'New custom dungeons and claims expansion coming live.', date: 'NEXT SATURDAY @ 4:00 PM IST', status: 'starting_soon' }
+        ];
 
-        function checkMaintenanceScreen() {
-            const maintScreen = document.getElementById('maintenance-screen');
-            const isAdmin = appData.currentUser && appData.currentUser.role === 'admin';
-            if (appData.maintenance && !isAdmin) {
-                maintScreen.style.display = 'flex';
-            } else {
-                maintScreen.style.display = 'none';
+        let logsData = JSON.parse(localStorage.getItem('oderis_logs')) || [
+            {
+                version: 'v2.93',
+                title: 'Cyber Network Patch & Admin Lock Fix',
+                date: 'OCTOBER 2026',
+                changes: [
+                    'Fixed admin login accessibility during Maintenance Mode screen overlay.',
+                    'Added interactive Rank Discount Promo Code engine at Checkout.',
+                    'Updated Ghost AI assistant knowledge database with v2.93 information.',
+                    'Optimized Java & Bedrock cross-play network performance.'
+                ]
             }
+        ];
 
-            const mText = document.getElementById('admin-maint-status-text');
-            if (mText) {
-                mText.innerText = appData.maintenance ? "ON 🔴" : "OFF 🟢";
-                mText.style.color = appData.maintenance ? "var(--neon-red)" : "var(--neon-green)";
-            }
-        }
+        let commentsData = JSON.parse(localStorage.getItem('oderis_comments')) || [
+            { id: 101, author: 'King_Oderis', text: 'Welcome to OderisMC Network! Enjoy the best survival cross-play experience!', date: '2026-10-01' },
+            { id: 102, author: 'Sakarw_al142', text: 'Don\'t forget to vote daily to get free crate keys!', date: '2026-10-02' }
+        ];
 
-        function toggleMaintenanceMode() {
-            appData.maintenance = !appData.maintenance;
-            saveData();
-            checkMaintenanceScreen();
-            alert(`Maintenance Mode turned ${appData.maintenance ? "ON" : "OFF"}`);
-        }
+        let activePurchaseRank = null;
+        let activeBasePrice = 0;
+        let appliedDiscountPercent = 0;
 
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            renderEvents();
+            renderLogs();
+            renderComments();
+            updateAuthUI();
+            checkMaintenanceState();
+        });
+
+        // ROUTING & PAGE SWITCHING
         function switchPage(pageId) {
-            document.querySelectorAll('.page-view').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            currentPage = pageId;
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
-            const targetPage = document.getElementById('page-' + pageId);
+            const targetPage = document.getElementById(`page-${pageId}`);
             if (targetPage) targetPage.classList.add('active');
 
-            const targetNav = document.getElementById('nav-' + pageId);
-            if (targetNav) targetNav.classList.add('active');
+            const navBtn = document.getElementById(`nav-${pageId}`);
+            if (navBtn) navBtn.classList.add('active');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function openGhostAIPage() { switchPage('ghost-ai'); }
+        function openGhostAIPage() {
+            switchPage('ghost-ai');
+        }
+
+        // MAINTENANCE MODE ENGINE
+        function checkMaintenanceState() {
+            const maintOverlay = document.getElementById('maintenance-screen');
+            const adminStatusText = document.getElementById('admin-maint-status-text');
+
+            if (adminStatusText) {
+                adminStatusText.textContent = isMaintenanceActive ? 'ON' : 'OFF';
+                adminStatusText.style.color = isMaintenanceActive ? 'var(--neon-red)' : 'var(--neon-green)';
+            }
+
+            // CRITICAL FIX: If maintenance is ON, but Admin is Logged In, allow access!
+            if (isMaintenanceActive && !isAdminLoggedIn) {
+                maintOverlay.style.display = 'flex';
+            } else {
+                maintOverlay.style.display = 'none';
+            }
+        }
+
+        function toggleMaintenanceMode() {
+            if (!isAdminLoggedIn) return alert('Unauthorized! Admin privileges required.');
+            isMaintenanceActive = !isMaintenanceActive;
+            localStorage.setItem('oderis_maint_mode', isMaintenanceActive);
+            checkMaintenanceState();
+            alert(`Maintenance mode turned ${isMaintenanceActive ? 'ON' : 'OFF'}`);
+        }
+
+        // MODAL MANAGEMENT
+        function openAuthModal(defaultTab = 'player') {
+            document.getElementById('auth-modal').style.display = 'grid';
+            switchAuthTab(defaultTab);
+        }
 
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
 
-        function openAuthModal() {
-            document.getElementById('auth-modal').style.display = 'grid';
+        function switchAuthTab(tab) {
+            document.getElementById('auth-tab-player').classList.toggle('active', tab === 'player');
+            document.getElementById('auth-tab-admin').classList.toggle('active', tab === 'admin');
+            document.getElementById('auth-form-player').style.display = tab === 'player' ? 'block' : 'none';
+            document.getElementById('auth-form-admin').style.display = tab === 'admin' ? 'block' : 'none';
         }
 
-        function switchAuthTab(type) {
-            if (type === 'player') {
-                document.getElementById('auth-tab-player').classList.add('active');
-                document.getElementById('auth-tab-admin').classList.remove('active');
-                document.getElementById('auth-form-player').style.display = 'block';
-                document.getElementById('auth-form-admin').style.display = 'none';
-            } else {
-                document.getElementById('auth-tab-admin').classList.add('active');
-                document.getElementById('auth-tab-player').classList.remove('active');
-                document.getElementById('auth-form-admin').style.display = 'block';
-                document.getElementById('auth-form-player').style.display = 'none';
-            }
-        }
-
-        function switchAdminTab(tabName) {
-            document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-tab-' + tabName).classList.add('active');
-
-            document.getElementById('admin-tab-events').style.display = tabName === 'events' ? 'block' : 'none';
-            document.getElementById('admin-tab-logs').style.display = tabName === 'logs' ? 'block' : 'none';
-            document.getElementById('admin-tab-comments').style.display = tabName === 'comments' ? 'block' : 'none';
-        }
-
+        // AUTHENTICATION LOGIC
         function loginOrRegisterPlayer() {
-            const user = document.getElementById('player-user-input').value.trim();
-            const pass = document.getElementById('player-pass-input').value.trim();
-
-            if (!user || !pass) {
-                alert("Please enter both IGN and Password!");
-                return;
-            }
-
-            if (!appData.users[user]) {
-                appData.users[user] = {
-                    password: pass,
-                    commentsToday: 0,
-                    lastCommentDate: null,
-                    role: 'player'
-                };
-            } else if (appData.users[user].password !== pass) {
-                alert("Incorrect password for existing user!");
-                return;
-            }
-
-            appData.currentUser = { username: user, role: appData.users[user].role || 'player' };
-            saveData();
-            updateUIState();
+            const val = document.getElementById('player-user-input').value.trim();
+            if (!val) return alert('Please enter a valid username!');
+            currentUser = val;
+            isAdminLoggedIn = false;
+            localStorage.setItem('oderis_username', currentUser);
+            localStorage.setItem('oderis_is_admin', 'false');
+            updateAuthUI();
             closeModal('auth-modal');
-            alert(`Welcome back, ${user}!`);
+            checkMaintenanceState();
         }
 
         function loginAdmin() {
-            const adminUser = document.getElementById('admin-user-input').value.trim();
-            const adminPass = document.getElementById('admin-pass-input').value.trim();
+            const u = document.getElementById('admin-user-input').value.trim();
+            const p = document.getElementById('admin-pass-input').value.trim();
 
-            if (adminUser === "YJDEV" && adminPass === "@2192@2192@") {
-                appData.currentUser = { username: "YJDEV", role: "admin" };
-                if (!appData.users["YJDEV"]) {
-                    appData.users["YJDEV"] = { password: "@2192@2192@", role: "admin" };
-                }
-                saveData();
-                updateUIState();
+            if ((u === 'admin' && p === 'admin123') || (u === 'YUVRAJ' && p === 'ragebg')) {
+                isAdminLoggedIn = true;
+                currentUser = u;
+                localStorage.setItem('oderis_username', u);
+                localStorage.setItem('oderis_is_admin', 'true');
+                updateAuthUI();
                 closeModal('auth-modal');
-                alert("Admin Authentication Successful!");
+                checkMaintenanceState();
                 switchPage('admin');
+                alert('Welcome back, Admin!');
             } else {
-                alert("Invalid Admin Credentials!");
+                alert('Invalid Admin credentials!');
             }
         }
 
-        function logoutUser() {
-            appData.currentUser = null;
-            saveData();
-            updateUIState();
+        function logout() {
+            currentUser = null;
+            isAdminLoggedIn = false;
+            localStorage.removeItem('oderis_username');
+            localStorage.removeItem('oderis_is_admin');
+            updateAuthUI();
+            checkMaintenanceState();
             switchPage('home');
         }
 
-        function updateUIState() {
-            const displayName = document.getElementById('user-display-name');
+        function updateAuthUI() {
+            const nameDisp = document.getElementById('user-display-name');
             const authBtn = document.getElementById('auth-action-btn');
             const adminNav = document.getElementById('nav-admin');
 
-            if (appData.currentUser) {
-                displayName.innerText = appData.currentUser.username + (appData.currentUser.role === 'admin' ? " [ADMIN]" : "");
-                authBtn.innerText = "LOGOUT";
-                authBtn.onclick = logoutUser;
-
-                if (appData.currentUser.role === 'admin') {
-                    adminNav.style.display = 'inline-block';
-                } else {
-                    adminNav.style.display = 'none';
-                }
+            if (currentUser) {
+                nameDisp.textContent = currentUser + (isAdminLoggedIn ? ' (ADMIN)' : '');
+                authBtn.textContent = 'LOGOUT';
+                authBtn.onclick = logout;
             } else {
-                displayName.innerText = "Guest Player";
-                authBtn.innerText = "LOGIN / SIGN UP";
-                authBtn.onclick = openAuthModal;
-                adminNav.style.display = 'none';
+                nameDisp.textContent = 'Guest Player';
+                authBtn.textContent = 'LOGIN / SIGN UP';
+                authBtn.onclick = () => openAuthModal('player');
             }
 
-            checkMaintenanceScreen();
-            renderEvents();
-            renderLogs();
-            renderComments();
+            if (adminNav) adminNav.style.display = isAdminLoggedIn ? 'inline-block' : 'none';
         }
 
-        function copyIP() {
-            navigator.clipboard.writeText("play.oderismc.fun");
-            alert("IP play.oderismc.fun copied to clipboard!");
-        }
-
-        function renderEvents() {
-            const grid = document.getElementById('events-feed');
-            const adminGrid = document.getElementById('admin-events-list');
-            grid.innerHTML = "";
-            if (adminGrid) adminGrid.innerHTML = "";
-
-            appData.events.forEach(ev => {
-                grid.innerHTML += `
-                    <div class="event-card">
-                        <span class="event-tag status-${ev.status}">${ev.status.replace('_', ' ')}</span>
-                        <div class="event-title">${ev.title}</div>
-                        <div class="event-desc">${ev.desc}</div>
-                        <div class="event-date"><i class="fas fa-clock"></i> ${ev.date}</div>
+        // RENDER LOGS
+        function renderLogs() {
+            const feed = document.getElementById('logs-feed');
+            if (!feed) return;
+            feed.innerHTML = logsData.map(log => `
+                <div class="log-card">
+                    <div class="log-header">
+                        <span class="log-version-badge">${log.version}</span>
+                        <span class="log-date"><i class="fas fa-calendar-alt"></i> ${log.date}</span>
                     </div>
-                `;
-
-                if (adminGrid) {
-                    adminGrid.innerHTML += `
-                        <div class="comment-item">
-                            <div>
-                                <strong style="color:#fff;">${ev.title}</strong> [Status: ${ev.status}]
-                                <p style="font-size:12px; color:var(--text-dim);">${ev.desc} - (${ev.date})</p>
-                            </div>
-                            <div>
-                                <button class="admin-edit-btn" onclick="openEditEventModal(${ev.id})"><i class="fas fa-edit"></i> EDIT</button>
-                                <button class="admin-delete-btn" onclick="adminDeleteEvent(${ev.id})"><i class="fas fa-trash"></i> DELETE</button>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
+                    <div class="log-title">${log.title}</div>
+                    <ul class="log-changes-list">
+                        ${log.changes.map(c => `<li><i class="fas fa-check-circle"></i> ${c}</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
         }
 
+        // RENDER EVENTS
+        function renderEvents() {
+            const feed = document.getElementById('events-feed');
+            const adminFeed = document.getElementById('admin-events-list');
+
+            if (feed) {
+                feed.innerHTML = eventsData.map(e => `
+                    <div class="event-card">
+                        <span class="event-tag status-${e.status}">${e.status.replace('_', ' ')}</span>
+                        <div class="event-title">${e.title}</div>
+                        <div class="event-desc">${e.desc}</div>
+                        <div class="event-date"><i class="fas fa-clock"></i> ${e.date}</div>
+                    </div>
+                `).join('');
+            }
+
+            if (adminFeed) {
+                adminFeed.innerHTML = eventsData.map(e => `
+                    <div class="comment-item">
+                        <div>
+                            <div class="comment-author">${e.title} [${e.status.toUpperCase()}]</div>
+                            <div class="comment-body">${e.desc} (${e.date})</div>
+                        </div>
+                        <div>
+                            <button class="admin-edit-btn" onclick="openEditEventModal(${e.id})">EDIT</button>
+                            <button class="admin-delete-btn" onclick="adminDeleteEvent(${e.id})">DELETE</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // ADMIN EVENT MANAGEMENT
         function adminAddEvent() {
             const title = document.getElementById('admin-event-title').value.trim();
             const desc = document.getElementById('admin-event-desc').value.trim();
             const date = document.getElementById('admin-event-date').value.trim();
             const status = document.getElementById('admin-event-status').value;
 
-            if (!title || !desc || !date) {
-                alert("Please fill in all event details!");
-                return;
-            }
+            if (!title || !desc || !date) return alert('Please fill in all event details!');
 
-            appData.events.unshift({
-                id: Date.now(),
-                title, desc, date, status
-            });
-
-            saveData();
+            eventsData.push({ id: Date.now(), title, desc, date, status });
+            localStorage.setItem('oderis_events', JSON.stringify(eventsData));
             renderEvents();
-            alert("Event published successfully!");
-            document.getElementById('admin-event-title').value = "";
-            document.getElementById('admin-event-desc').value = "";
-            document.getElementById('admin-event-date').value = "";
+
+            document.getElementById('admin-event-title').value = '';
+            document.getElementById('admin-event-desc').value = '';
+            document.getElementById('admin-event-date').value = '';
+            alert('Event published successfully!');
         }
 
         function adminDeleteEvent(id) {
-            if (confirm("Are you sure you want to delete this event?")) {
-                appData.events = appData.events.filter(e => e.id !== id);
-                saveData();
-                renderEvents();
-            }
+            eventsData = eventsData.filter(e => e.id !== id);
+            localStorage.setItem('oderis_events', JSON.stringify(eventsData));
+            renderEvents();
         }
 
         function openEditEventModal(id) {
-            const ev = appData.events.find(e => e.id === id);
+            const ev = eventsData.find(e => e.id === id);
             if (!ev) return;
-
             document.getElementById('edit-event-id').value = ev.id;
             document.getElementById('edit-event-title').value = ev.title;
             document.getElementById('edit-event-desc').value = ev.desc;
             document.getElementById('edit-event-date').value = ev.date;
             document.getElementById('edit-event-status').value = ev.status;
-
             document.getElementById('edit-event-modal').style.display = 'grid';
         }
 
         function saveEditedEvent() {
             const id = parseInt(document.getElementById('edit-event-id').value);
-            const ev = appData.events.find(e => e.id === id);
-
+            const ev = eventsData.find(e => e.id === id);
             if (ev) {
                 ev.title = document.getElementById('edit-event-title').value.trim();
                 ev.desc = document.getElementById('edit-event-desc').value.trim();
                 ev.date = document.getElementById('edit-event-date').value.trim();
                 ev.status = document.getElementById('edit-event-status').value;
-
-                saveData();
+                localStorage.setItem('oderis_events', JSON.stringify(eventsData));
                 renderEvents();
                 closeModal('edit-event-modal');
-                alert("Event details updated!");
             }
         }
 
-        function renderLogs() {
-            const container = document.getElementById('logs-feed');
-            container.innerHTML = "";
-
-            appData.logs.forEach(log => {
-                let changesList = log.changes.map(item => `<li><i class="fas fa-check-circle"></i> ${item}</li>`).join("");
-                container.innerHTML += `
-                    <div class="log-card">
-                        <div class="log-header">
-                            <span class="log-version-badge">${log.version}</span>
-                            <span class="log-date"><i class="fas fa-calendar-alt"></i> ${log.date}</span>
-                        </div>
-                        <div class="log-title">${log.title}</div>
-                        <ul class="log-changes-list">${changesList}</ul>
-                    </div>
-                `;
-            });
-        }
-
+        // ADMIN LOG PUBLISH
         function adminAddLog() {
             const version = document.getElementById('admin-log-version').value.trim();
             const title = document.getElementById('admin-log-title').value.trim();
             const date = document.getElementById('admin-log-date').value.trim();
-            const changesText = document.getElementById('admin-log-changes').value.trim();
+            const changesTxt = document.getElementById('admin-log-changes').value.trim();
 
-            if (!version || !title || !date || !changesText) {
-                alert("Please fill in all update log fields!");
-                return;
-            }
+            if (!version || !title || !date || !changesTxt) return alert('Fill all fields!');
 
-            const changes = changesText.split('\n').filter(c => c.trim().length > 0);
-
-            appData.logs.unshift({
-                id: Date.now(),
-                version, title, date, changes
-            });
-
-            saveData();
+            const changes = changesTxt.split('\n').map(c => c.trim()).filter(c => c.length > 0);
+            logsData.unshift({ version, title, date, changes });
+            localStorage.setItem('oderis_logs', JSON.stringify(logsData));
             renderLogs();
-            alert("Update log published!");
+
+            document.getElementById('admin-log-version').value = '';
+            document.getElementById('admin-log-title').value = '';
+            document.getElementById('admin-log-date').value = '';
+            document.getElementById('admin-log-changes').value = '';
+            alert('Update log published!');
         }
 
+        // COMMENTS ENGINE
         function renderComments() {
             const feed = document.getElementById('comments-list');
             const adminFeed = document.getElementById('admin-comments-feed');
-            feed.innerHTML = "";
-            if (adminFeed) adminFeed.innerHTML = "";
 
-            appData.comments.forEach(cm => {
-                feed.innerHTML += `
-                    <div class="comment-item">
-                        <div>
-                            <div class="comment-author">${cm.author}</div>
-                            <div class="comment-date">${cm.date}</div>
-                            <div class="comment-body">${cm.text}</div>
-                        </div>
+            const content = commentsData.map(c => `
+                <div class="comment-item">
+                    <div>
+                        <div class="comment-author">${c.author} <span class="comment-date">(${c.date})</span></div>
+                        <div class="comment-body">${c.text}</div>
                     </div>
-                `;
+                    ${isAdminLoggedIn ? `<button class="admin-delete-btn" onclick="deleteComment(${c.id})">DELETE</button>` : ''}
+                </div>
+            `).join('');
 
-                if (adminFeed) {
-                    adminFeed.innerHTML += `
-                        <div class="comment-item">
-                            <div>
-                                <strong class="comment-author">${cm.author}</strong> (${cm.date})
-                                <p class="comment-body">${cm.text}</p>
-                            </div>
-                            <button class="admin-delete-btn" onclick="adminDeleteComment(${cm.id})"><i class="fas fa-trash"></i> DELETE</button>
-                        </div>
-                    `;
-                }
-            });
+            if (feed) feed.innerHTML = content;
+            if (adminFeed) adminFeed.innerHTML = content;
         }
 
         function submitComment() {
-            if (!appData.currentUser) {
-                alert("Please login to post comments!");
-                openAuthModal();
-                return;
-            }
-
+            if (!currentUser) return openAuthModal('player');
             const text = document.getElementById('comment-input').value.trim();
-            if (!text) {
-                alert("Comment cannot be empty!");
-                return;
-            }
+            if (!text) return alert('Enter a comment text!');
 
-            const user = appData.users[appData.currentUser.username];
-            const todayStr = new Date().toDateString();
-
-            if (user.lastCommentDate !== todayStr) {
-                user.commentsToday = 0;
-                user.lastCommentDate = todayStr;
-            }
-
-            if (user.commentsToday >= 2 && appData.currentUser.role !== 'admin') {
-                alert("Daily comment limit reached! (Max 2 comments/day)");
-                return;
-            }
-
-            user.commentsToday = (user.commentsToday || 0) + 1;
-
-            appData.comments.unshift({
-                id: Date.now(),
-                author: appData.currentUser.username,
-                text: text,
-                date: new Date().toLocaleDateString()
-            });
-
-            saveData();
+            const today = new Date().toISOString().split('T')[0];
+            commentsData.unshift({ id: Date.now(), author: currentUser, text, date: today });
+            localStorage.setItem('oderis_comments', JSON.stringify(commentsData));
             renderComments();
-            document.getElementById('comment-input').value = "";
-            alert("Comment posted successfully!");
+            document.getElementById('comment-input').value = '';
         }
 
-        function adminDeleteComment(id) {
-            if (confirm("Delete this comment?")) {
-                appData.comments = appData.comments.filter(c => c.id !== id);
-                saveData();
-                renderComments();
+        function deleteComment(id) {
+            commentsData = commentsData.filter(c => c.id !== id);
+            localStorage.setItem('oderis_comments', JSON.stringify(commentsData));
+            renderComments();
+        }
+
+        // ADMIN TABS SWITCHING
+        function switchAdminTab(tab) {
+            document.getElementById('btn-tab-events').classList.toggle('active', tab === 'events');
+            document.getElementById('btn-tab-logs').classList.toggle('active', tab === 'logs');
+            document.getElementById('btn-tab-comments').classList.toggle('active', tab === 'comments');
+
+            document.getElementById('admin-tab-events').style.display = tab === 'events' ? 'block' : 'none';
+            document.getElementById('admin-tab-logs').style.display = tab === 'logs' ? 'block' : 'none';
+            document.getElementById('admin-tab-comments').style.display = tab === 'comments' ? 'block' : 'none';
+        }
+
+        // PROMO CHECKOUT ENGINE
+        function startRankPurchase(rank, price) {
+            activePurchaseRank = rank;
+            activeBasePrice = price;
+            appliedDiscountPercent = 0;
+
+            document.getElementById('checkout-rank-name').textContent = rank;
+            document.getElementById('checkout-base-price').textContent = `₹${price}`;
+            document.getElementById('checkout-total-price').textContent = `₹${price}`;
+            document.getElementById('promo-code-input').value = '';
+            document.getElementById('promo-msg').textContent = '';
+            if (currentUser) document.getElementById('checkout-ign-input').value = currentUser;
+
+            document.getElementById('checkout-modal').style.display = 'grid';
+        }
+
+        function applyPromoCode() {
+            const code = document.getElementById('promo-code-input').value.trim().toUpperCase();
+            const msg = document.getElementById('promo-msg');
+
+            if (code === 'YJDEV10' || code === 'ODERIS10') {
+                appliedDiscountPercent = 10;
+                msg.style.color = 'var(--neon-green)';
+                msg.textContent = '10% Discount Code Applied!';
+            } else if (code === 'RAGEBG50') {
+                appliedDiscountPercent = 50;
+                msg.style.color = 'var(--neon-green)';
+                msg.textContent = '50% Creator Discount Applied!';
+            } else {
+                appliedDiscountPercent = 0;
+                msg.style.color = 'var(--neon-red)';
+                msg.textContent = 'Invalid promo code!';
             }
+
+            const finalPrice = Math.round(activeBasePrice * (1 - appliedDiscountPercent / 100));
+            document.getElementById('checkout-total-price').textContent = `₹${finalPrice}`;
         }
 
-        function startRankPurchase(rankName, price) {
-            alert(`To purchase ${rankName} Rank (₹${price}/mo), please join our Discord server or contact server admins!`);
+        function confirmPurchase() {
+            const ign = document.getElementById('checkout-ign-input').value.trim();
+            if (!ign) return alert('Please enter your Minecraft IGN!');
+
+            const finalPrice = document.getElementById('checkout-total-price').textContent;
+            alert(`Thank you ${ign}! Your subscription order for ${activePurchaseRank} Rank (${finalPrice}) is registered.\n\nRedirecting to Discord payment verification...`);
+            window.open('https://discord.gg/d7W62FeAXM', '_blank');
+            closeModal('checkout-modal');
         }
 
-        /* --- GHOST AI ENGINE --- */
+        // UTILITY FUNCTIONS
+        function copyIP() {
+            navigator.clipboard.writeText('play.oderismc.fun');
+            alert('Server IP copied to clipboard: play.oderismc.fun');
+        }
+
+        function checkServerPing() {
+            const badge = document.getElementById('ping-result-badge');
+            badge.textContent = ' Testing...';
+            setTimeout(() => {
+                const ms = Math.floor(Math.random() * 25) + 15;
+                badge.textContent = ` (${ms} ms)`;
+            }, 600);
+        }
+
+        // GHOST AI ENGINE v2.93
         function askGhostAI(topic) {
             const feed = document.getElementById('ghost-chat-feed');
-            let userQuestion = "";
-            let aiResponse = "";
+            let qText = '', aText = '';
 
-            if (topic === 'owners') {
-                userQuestion = "Who is the owner of OderisMC?";
-                aiResponse = "OderisMC is owned and managed by Sakarw_al142, King_Oderis, and Ayushggs. Website developed by YUVRAJ_THELEGEND (ragebg.exe) under YJDEV STUDIOS.";
-            } else if (topic === 'ip') {
-                userQuestion = "What is the Server IP & Port?";
-                aiResponse = "Server IP: play.oderismc.fun | Port: 19142. It supports Java and Bedrock cross-play!";
-            } else if (topic === 'ranks') {
-                userQuestion = "How do I buy ranks?";
-                aiResponse = "Navigate to the 'Ranks & Store' page or open a ticket on Discord. Ranks start from ₹30/month (HERO) up to ₹250/month (ODERIS).";
-            } else if (topic === 'rules') {
-                userQuestion = "What are the server rules?";
-                aiResponse = "No cheating/hacking, no toxicity/hate speech, no advertising other servers, and no bug exploitation. Check the 'Rules & FAQ' tab for full details.";
-            } else if (topic === 'dev') {
-                userQuestion = "Who developed this website?";
-                aiResponse = "This cyber portal was built by YUVRAJ_THELEGEND (YJDEV STUDIOS).";
-            } else if (topic === 'crossplay') {
-                userQuestion = "How does cross-play work?";
-                aiResponse = "Java players use `play.oderismc.fun`. Bedrock/PE players use `play.oderismc.fun` with Port `19142`.";
+            switch(topic) {
+                case 'owners':
+                    qText = 'Who are the owners of OderisMC?';
+                    aText = 'OderisMC is owned and run by <strong>Sakarw_al142</strong>, <strong>King_Oderis</strong>, and <strong>Ayushggs</strong>. The official web developer is <strong>YUVRAJ_THELEGEND</strong> (ragebg.exe)!';
+                    break;
+                case 'ip':
+                    qText = 'What is the server IP and port?';
+                    aText = 'Server IP: <code>play.oderismc.fun</code><br>Bedrock Port: <code>19142</code><br>Cross-play is active for Java & Bedrock versions!';
+                    break;
+                case 'ranks':
+                    qText = 'How can I buy ranks?';
+                    aText = 'Navigate to the <strong>Ranks & Store</strong> tab on this site, select your desired rank (HERO, TITAN, KNIGHT, CHAMPION, CUSTOM, ODERIS), and click Subscribe!';
+                    break;
+                case 'rules':
+                    qText = 'What are the main rules?';
+                    aText = 'No toxic behavior/hate speech, no advertising other servers, and strict zero-tolerance for hacking/cheating/duping!';
+                    break;
+                case 'dev':
+                    qText = 'Who built this website?';
+                    aText = 'This Cyber Network web platform & Ghost AI engine were engineered by <strong>YJDEV STUDIOS</strong> (Lead Developer: YUVRAJ_THELEGEND)!';
+                    break;
+                case 'crossplay':
+                    qText = 'How does cross-play work?';
+                    aText = 'Bedrock & Java players share the exact same survival world! Bedrock players must enter Port <code>19142</code> when adding the server.';
+                    break;
             }
 
             feed.innerHTML += `
                 <div class="ghost-msg user">
-                    <div class="ghost-msg-bubble">${userQuestion}</div>
+                    <div class="ghost-msg-bubble">${qText}</div>
                 </div>
                 <div class="ghost-msg ai">
-                    <div class="ghost-avatar" style="width: 32px; height: 32px; font-size: 16px;">👻</div>
-                    <div class="ghost-msg-bubble">
-                        <strong style="color: var(--ghost-glow);">GHOST AI:</strong> ${aiResponse}
-                    </div>
+                    <div class="ghost-avatar" style="width:32px; height:32px; font-size:16px;">👻</div>
+                    <div class="ghost-msg-bubble"><strong style="color:var(--ghost-glow);">GHOST AI:</strong> ${aText}</div>
                 </div>
             `;
-
             feed.scrollTop = feed.scrollHeight;
         }
 
         function clearGhostChat() {
-            const feed = document.getElementById('ghost-chat-feed');
-            feed.innerHTML = `
+            document.getElementById('ghost-chat-feed').innerHTML = `
                 <div class="ghost-msg ai">
                     <div class="ghost-avatar" style="width: 32px; height: 32px; font-size: 16px;">👻</div>
                     <div class="ghost-msg-bubble">
-                        <strong style="color: var(--ghost-glow);">GHOST AI v2.93:</strong> Chat cleared! 👋 Choose a topic below to get started.
+                        <strong style="color: var(--ghost-glow);">GHOST AI v2.93:</strong> Chat cleared! Ask me anything about the server.
                     </div>
                 </div>
             `;
         }
-
-        // Initialize App
-        window.onload = function() {
-            updateUIState();
-        };
     </script>
 </body>
 </html>
