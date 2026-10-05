@@ -1,656 +1,284 @@
-/* ======================================================
-   ODERISMC - AUTH, COMMENTS, LIVE EDITING, EVENTS & RED CURSOR ENGINE
-   ====================================================== */
+/**
+ * OderisMC Cyber Network Interactive Scripts
+ * Handles Dual Cursor, Particle Canvas, Minotar Head Fetching,
+ * Ghost AI v2.93 Interactive Engine, and Payment Modal Simulation.
+ */
 
-/* --- 1. LOCAL STORAGE DATABASE & INIT --- */
-function initLocalStorage() {
-    if (!localStorage.getItem('oderis_users')) {
-        localStorage.setItem('oderis_users', JSON.stringify([]));
-    }
-
-    if (!localStorage.getItem('oderis_comments')) {
-        const defaultComments = [
-            {
-                id: 1,
-                author: "Sakarw_al142",
-                text: "Welcome to the official OderisMC website! Drop your comments and suggestions below!",
-                time: "10 mins ago",
-                likes: 12,
-                likedBy: [],
-                isPinned: true
-            },
-            {
-                id: 2,
-                author: "YUVRAJ_THELEGEND",
-                text: "Sign-up & Comment persistence system is now live! Enjoy zero lag and safe storage.",
-                time: "5 mins ago",
-                likes: 8,
-                likedBy: [],
-                isPinned: false
-            }
-        ];
-        localStorage.setItem('oderis_comments', JSON.stringify(defaultComments));
-    }
-
-    if (!localStorage.getItem('oderis_live_events')) {
-        const defaultEvents = [
-            {
-                id: 101,
-                title: "Cyber Bedwars Tournament",
-                date: "Saturday @ 8:00 PM IST",
-                desc: "1v1 Bedwars showdown with 500 Coins prize pool!",
-                badge: "UPCOMING"
-            }
-        ];
-        localStorage.setItem('oderis_live_events', JSON.stringify(defaultEvents));
-    }
-
-    if (!localStorage.getItem('oderis_site_edits')) {
-        localStorage.setItem('oderis_site_edits', JSON.stringify({}));
-    }
-}
-
-initLocalStorage();
-
-/* --- HELPER DATA GETTERS & SETTERS --- */
-function getUsers() {
-    return JSON.parse(localStorage.getItem('oderis_users')) || [];
-}
-
-function getCurrentUser() {
-    return JSON.parse(localStorage.getItem('oderis_current_user')) || null;
-}
-
-function isAdmin() {
-    const currentUser = getCurrentUser();
-    return currentUser && currentUser.username === "YUVRAJ_THELEGEND";
-}
-
-function getComments() {
-    return JSON.parse(localStorage.getItem('oderis_comments')) || [];
-}
-
-function saveComments(comments) {
-    localStorage.setItem('oderis_comments', JSON.stringify(comments));
-}
-
-function getLiveEvents() {
-    return JSON.parse(localStorage.getItem('oderis_live_events')) || [];
-}
-
-function saveLiveEvents(events) {
-    localStorage.setItem('oderis_live_events', JSON.stringify(events));
-}
-
-/* --- 2. UPDATE AUTH UI & ADMIN BAR --- */
-function updateUIAuthState() {
-    const currentUser = getCurrentUser();
-    const headerAuthContainer = document.getElementById('header-auth-container');
-    const commentUserDisplay = document.getElementById('comment-active-user-display');
-    const adminToolbar = document.getElementById('admin-toolbar');
-
-    if (currentUser) {
-        const adminBadge = isAdmin() ? `<span class="admin-tag-badge">ADMIN</span>` : '';
-        if (headerAuthContainer) {
-            headerAuthContainer.innerHTML = `
-                <div class="user-profile-badge">
-                    <div class="user-profile-avatar">
-                        ${currentUser.username.charAt(0).toUpperCase()}
-                    </div>
-                    <span>${escapeHtml(currentUser.username)} ${adminBadge}</span>
-                    <button class="logout-sm-btn" onclick="handleLogout()" title="Log Out">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
-                </div>
-            `;
-        }
-
-        if (commentUserDisplay) {
-            commentUserDisplay.innerHTML = `
-                <i class="fas fa-user-check" style="color: var(--neon-green);"></i>
-                Posting as: <strong style="color:#fff;">${escapeHtml(currentUser.username)}</strong>
-            `;
-        }
-    } else {
-        if (headerAuthContainer) {
-            headerAuthContainer.innerHTML = `
-                <button class="header-auth-btn" onclick="openAuthModal('login')">
-                    <i class="fas fa-user-lock"></i> SIGN IN / SIGN UP
-                </button>
-            `;
-        }
-
-        if (commentUserDisplay) {
-            commentUserDisplay.innerHTML = `
-                <i class="fas fa-info-circle"></i>
-                Log in to post as a registered user!
-            `;
-        }
-    }
-
-    // Toggle Admin Toolbar
-    if (adminToolbar) {
-        adminToolbar.style.display = isAdmin() ? 'flex' : 'none';
-    }
-
-    renderLiveEvents();
-    loadSiteEdits();
-}
-
-/* --- 3. AUTH MODAL TAB SWITCHER --- */
-function switchAuthTab(tab) {
-    playSound(400, 'sine', 0.1);
-    const loginForm = document.getElementById('auth-login-form');
-    const signupForm = document.getElementById('auth-signup-form');
-    const adminForm = document.getElementById('auth-admin-form');
-    
-    const loginTabBtn = document.getElementById('tab-login-btn');
-    const signupTabBtn = document.getElementById('tab-signup-btn');
-    const adminTabBtn = document.getElementById('tab-admin-btn');
-
-    if (loginForm) loginForm.style.display = (tab === 'login') ? 'block' : 'none';
-    if (signupForm) signupForm.style.display = (tab === 'signup') ? 'block' : 'none';
-    if (adminForm) adminForm.style.display = (tab === 'admin') ? 'block' : 'none';
-
-    if (loginTabBtn) loginTabBtn.classList.toggle('active', tab === 'login');
-    if (signupTabBtn) signupTabBtn.classList.toggle('active', tab === 'signup');
-    if (adminTabBtn) adminTabBtn.classList.toggle('active', tab === 'admin');
-}
-
-function openAuthModal(tab = 'login') {
-    switchAuthTab(tab);
-    const modal = document.getElementById('auth-modal');
-    if (modal) modal.style.display = 'grid';
-}
-
-/* --- 4. LOGIN & SIGNUP HANDLERS --- */
-function handleSignupSubmit(e) {
-    e.preventDefault();
-    const nameInput = document.getElementById('signup-username');
-    const passInput = document.getElementById('signup-password');
-    const statusMsg = document.getElementById('signup-status-msg');
-
-    if (!nameInput || !passInput || !statusMsg) return;
-
-    const username = nameInput.value.trim();
-    const password = passInput.value.trim();
-
-    if (!username || !password) {
-        statusMsg.className = 'auth-status-msg error';
-        statusMsg.innerText = 'Please fill out all fields!';
-        return;
-    }
-
-    const users = getUsers();
-    if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
-        statusMsg.className = 'auth-status-msg error';
-        statusMsg.innerText = 'Username already exists! Try logging in.';
-        playSound(200, 'sawtooth', 0.2);
-        return;
-    }
-
-    users.push({ username, password, joinedAt: new Date().toISOString() });
-    localStorage.setItem('oderis_users', JSON.stringify(users));
-    localStorage.setItem('oderis_current_user', JSON.stringify({ username }));
-
-    statusMsg.className = 'auth-status-msg success';
-    statusMsg.innerText = 'Account created successfully!';
-    playSound(600, 'sine', 0.2);
-
-    setTimeout(() => {
-        closeModal('auth-modal');
-        updateUIAuthState();
-        renderComments();
-    }, 800);
-}
-
-function handleLoginSubmit(e) {
-    e.preventDefault();
-    const nameInput = document.getElementById('login-username');
-    const passInput = document.getElementById('login-password');
-    const statusMsg = document.getElementById('login-status-msg');
-
-    if (!nameInput || !passInput || !statusMsg) return;
-
-    const username = nameInput.value.trim();
-    const password = passInput.value.trim();
-
-    // Stealth Admin Check via Login tab
-    if (username === "YUVRAJ_THELEGEND" && password === "@2192@2192@") {
-        localStorage.setItem('oderis_current_user', JSON.stringify({ username: "YUVRAJ_THELEGEND" }));
-        statusMsg.className = 'auth-status-msg success';
-        statusMsg.innerText = 'Admin Login Authorized!';
-        playSound(700, 'sine', 0.2);
-        setTimeout(() => {
-            closeModal('auth-modal');
-            updateUIAuthState();
-            renderComments();
-        }, 800);
-        return;
-    }
-
-    const users = getUsers();
-    const match = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
-
-    if (!match) {
-        statusMsg.className = 'auth-status-msg error';
-        statusMsg.innerText = 'Invalid username or password!';
-        playSound(200, 'sawtooth', 0.2);
-        return;
-    }
-
-    localStorage.setItem('oderis_current_user', JSON.stringify({ username: match.username }));
-    statusMsg.className = 'auth-status-msg success';
-    statusMsg.innerText = 'Login successful!';
-    playSound(600, 'sine', 0.2);
-
-    setTimeout(() => {
-        closeModal('auth-modal');
-        updateUIAuthState();
-        renderComments();
-    }, 800);
-}
-
-function handleAdminLoginSubmit(e) {
-    e.preventDefault();
-    const passInput = document.getElementById('admin-pass-key');
-    const statusMsg = document.getElementById('admin-status-msg');
-
-    if (!passInput || !statusMsg) return;
-
-    if (passInput.value.trim() === "@2192@2192@") {
-        localStorage.setItem('oderis_current_user', JSON.stringify({ username: "YUVRAJ_THELEGEND" }));
-        statusMsg.className = 'auth-status-msg success';
-        statusMsg.innerText = 'Admin Portal Access Granted!';
-        playSound(750, 'sine', 0.25);
-
-        setTimeout(() => {
-            closeModal('auth-modal');
-            passInput.value = '';
-            statusMsg.innerText = '';
-            updateUIAuthState();
-            renderComments();
-        }, 800);
-    } else {
-        statusMsg.className = 'auth-status-msg error';
-        statusMsg.innerText = 'Incorrect Admin Passcode!';
-        playSound(200, 'sawtooth', 0.25);
-    }
-}
-
-function handleLogout() {
-    playSound(300, 'sine', 0.15);
-    localStorage.removeItem('oderis_current_user');
-    updateUIAuthState();
-    renderComments();
-}
-
-/* --- 5. COMMENTS SYSTEM (PERMISSIONS & PINNING) --- */
-function renderComments() {
-    const feed = document.getElementById('comments-feed-list');
-    if (!feed) return;
-
-    let comments = getComments();
-    const currentUser = getCurrentUser();
-
-    if (comments.length === 0) {
-        feed.innerHTML = `<div style="text-align:center; color:var(--text-dim); padding:30px;">No comments yet. Be the first to post!</div>`;
-        return;
-    }
-
-    // Sort pinned comments to the top
-    comments.sort((a, b) => (b.isPinned ? 1 : 0) - (a.isPinned ? 1 : 0));
-
-    feed.innerHTML = comments.map(comment => {
-        const isLiked = currentUser && comment.likedBy && comment.likedBy.includes(currentUser.username);
-        
-        // Strict Deletion Rule: Users can ONLY delete their own comment. Admin can delete any.
-        const canDelete = currentUser && (currentUser.username === comment.author || isAdmin());
-
-        return `
-            <div class="comment-card ${comment.isPinned ? 'pinned-comment' : ''}">
-                ${comment.isPinned ? `<div class="pinned-badge"><i class="fas fa-thumbtack"></i> PINNED BY ADMIN</div>` : ''}
-
-                <div class="comment-header">
-                    <div class="comment-author-box">
-                        <div class="comment-avatar">
-                            ${escapeHtml(comment.author).charAt(0).toUpperCase()}
-                        </div>
-                        <div>
-                            <div class="comment-author-name">
-                                ${escapeHtml(comment.author)}
-                                ${comment.author === 'YUVRAJ_THELEGEND' ? `<span class="admin-mini-badge">ADMIN</span>` : ''}
-                            </div>
-                            <div class="comment-timestamp">${escapeHtml(comment.time)}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="comment-body-text">${escapeHtml(comment.text)}</div>
-
-                <div class="comment-footer-actions">
-                    <button class="comment-action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLikeComment(${comment.id})">
-                        <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
-                        ${comment.likes || 0} Likes
-                    </button>
-
-                    ${isAdmin() ? `
-                        <button class="comment-action-btn pin-btn" onclick="togglePinComment(${comment.id})">
-                            <i class="fas fa-thumbtack"></i> ${comment.isPinned ? 'Unpin' : 'Pin'}
-                        </button>
-                    ` : ''}
-
-                    ${canDelete ? `
-                        <button class="comment-action-btn comment-delete-btn" onclick="deleteComment(${comment.id})">
-                            <i class="fas fa-trash-alt"></i> Delete
-                        </button>
-                    ` : ''}
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function handlePostComment() {
-    const textInput = document.getElementById('comment-input-text');
-    if (!textInput) return;
-
-    const text = textInput.value.trim();
-    if (!text) {
-        alert('Please type a comment before posting!');
-        return;
-    }
-
-    const currentUser = getCurrentUser();
-    const authorName = currentUser ? currentUser.username : 'Guest Player';
-    const comments = getComments();
-
-    const newComment = {
-        id: Date.now(),
-        author: authorName,
-        text: text,
-        time: 'Just now',
-        likes: 0,
-        likedBy: [],
-        isPinned: false
-    };
-
-    comments.unshift(newComment);
-    saveComments(comments);
-    textInput.value = '';
-    playSound(550, 'triangle', 0.15);
-    renderComments();
-}
-
-function toggleLikeComment(commentId) {
-    const currentUser = getCurrentUser();
-    if (!currentUser) {
-        openAuthModal('login');
-        return;
-    }
-
-    const comments = getComments();
-    const comment = comments.find(c => c.id === commentId);
-    if (!comment) return;
-
-    if (!comment.likedBy) comment.likedBy = [];
-    const idx = comment.likedBy.indexOf(currentUser.username);
-
-    if (idx > -1) {
-        comment.likedBy.splice(idx, 1);
-        comment.likes = Math.max(0, comment.likes - 1);
-    } else {
-        comment.likedBy.push(currentUser.username);
-        comment.likes = (comment.likes || 0) + 1;
-        playSound(650, 'sine', 0.1);
-    }
-
-    saveComments(comments);
-    renderComments();
-}
-
-function togglePinComment(commentId) {
-    if (!isAdmin()) return;
-    const comments = getComments();
-    const comment = comments.find(c => c.id === commentId);
-    if (comment) {
-        comment.isPinned = !comment.isPinned;
-        saveComments(comments);
-        renderComments();
-        playSound(600, 'sine', 0.15);
-    }
-}
-
-function deleteComment(commentId) {
-    const currentUser = getCurrentUser();
-    const comments = getComments();
-    const target = comments.find(c => c.id === commentId);
-
-    if (!target) return;
-
-    // Permissions check
-    if (!isAdmin() && (!currentUser || currentUser.username !== target.author)) {
-        alert("You can only delete your own comments!");
-        return;
-    }
-
-    if (!confirm('Are you sure you want to delete this comment?')) return;
-
-    const filtered = comments.filter(c => c.id !== commentId);
-    saveComments(filtered);
-    playSound(300, 'sawtooth', 0.15);
-    renderComments();
-}
-
-/* --- 6. LIVE EDITING ENGINE (NO-FILE SITE EDITING) --- */
-let isEditModeActive = false;
-
-function toggleAdminEditMode() {
-    if (!isAdmin()) return;
-
-    isEditModeActive = !isEditModeActive;
-    const editBtn = document.getElementById('admin-edit-toggle-btn');
-
-    if (editBtn) {
-        editBtn.innerText = isEditModeActive ? "DISABLE LIVE EDIT" : "ENABLE LIVE EDIT";
-        editBtn.classList.toggle('active', isEditModeActive);
-    }
-
-    const editableElements = document.querySelectorAll('[data-editable-id]');
-    editableElements.forEach(el => {
-        el.contentEditable = isEditModeActive ? "true" : "false";
-        el.classList.toggle('editable-active', isEditModeActive);
-
-        if (isEditModeActive) {
-            el.onblur = function () {
-                saveSiteEdits();
-            };
-        }
-    });
-
-    if (isEditModeActive) {
-        alert("Live Editing Enabled! Click on site titles, hero texts, or store items to edit them instantly.");
-    } else {
-        saveSiteEdits();
-        alert("Live Edits Saved!");
-    }
-}
-
-function saveSiteEdits() {
-    const edits = {};
-    document.querySelectorAll('[data-editable-id]').forEach(el => {
-        const id = el.getAttribute('data-editable-id');
-        edits[id] = el.innerHTML;
-    });
-    localStorage.setItem('oderis_site_edits', JSON.stringify(edits));
-}
-
-function loadSiteEdits() {
-    const edits = JSON.parse(localStorage.getItem('oderis_site_edits')) || {};
-    Object.keys(edits).forEach(id => {
-        const el = document.querySelector(`[data-editable-id="${id}"]`);
-        if (el && edits[id]) {
-            el.innerHTML = edits[id];
-        }
-    });
-}
-
-/* --- 7. LIVE EVENTS ENGINE --- */
-function renderLiveEvents() {
-    const container = document.getElementById('live-events-container');
-    if (!container) return;
-
-    const events = getLiveEvents();
-
-    if (events.length === 0) {
-        container.innerHTML = `<p style="color:var(--text-dim); text-align:center;">No upcoming live events scheduled.</p>`;
-        return;
-    }
-
-    container.innerHTML = events.map(ev => `
-        <div class="event-card">
-            <div class="event-badge">${escapeHtml(ev.badge || 'EVENT')}</div>
-            <h3 class="event-title">${escapeHtml(ev.title)}</h3>
-            <div class="event-time"><i class="far fa-clock"></i> ${escapeHtml(ev.date)}</div>
-            <p class="event-desc">${escapeHtml(ev.desc)}</p>
-            ${isAdmin() ? `
-                <button class="event-delete-btn" onclick="deleteLiveEvent(${ev.id})">
-                    <i class="fas fa-trash-alt"></i> Remove Event
-                </button>
-            ` : ''}
-        </div>
-    `).join('');
-}
-
-function openAddEventModal() {
-    if (!isAdmin()) return;
-    const modal = document.getElementById('event-modal');
-    if (modal) modal.style.display = 'grid';
-}
-
-function handleAddLiveEventSubmit(e) {
-    e.preventDefault();
-    if (!isAdmin()) return;
-
-    const title = document.getElementById('event-title-input').value.trim();
-    const date = document.getElementById('event-date-input').value.trim();
-    const desc = document.getElementById('event-desc-input').value.trim();
-    const badge = document.getElementById('event-badge-input').value.trim() || 'LIVE';
-
-    if (!title || !date) {
-        alert("Please specify at least an event title and time!");
-        return;
-    }
-
-    const events = getLiveEvents();
-    events.unshift({ id: Date.now(), title, date, desc, badge });
-    saveLiveEvents(events);
-
-    closeModal('event-modal');
-    renderLiveEvents();
-    playSound(600, 'sine', 0.2);
-}
-
-function deleteLiveEvent(eventId) {
-    if (!isAdmin()) return;
-    if (!confirm("Delete this Live Event?")) return;
-
-    const events = getLiveEvents().filter(e => e.id !== eventId);
-    saveLiveEvents(events);
-    renderLiveEvents();
-    playSound(300, 'sawtooth', 0.15);
-}
-
-/* --- 8. RED CURSOR FOLLOW ENGINE --- */
 document.addEventListener('DOMContentLoaded', () => {
-    const redCursor = document.getElementById('red-cursor');
 
-    if (redCursor) {
-        window.addEventListener('mousemove', (e) => {
-            redCursor.style.left = e.clientX + 'px';
-            redCursor.style.top = e.clientY + 'px';
-        });
+  /* ==========================================
+     1. DUAL CUSTOM CURSOR EFFECT
+     ========================================== */
+  const cursorDot = document.getElementById('cursor-dot');
+  const cursorOutline = document.getElementById('cursor-outline');
 
-        document.addEventListener('mousedown', () => {
-            redCursor.classList.add('clicking');
-        });
+  if (cursorDot && cursorOutline) {
+    window.addEventListener('mousemove', (e) => {
+      const posX = e.clientX;
+      const posY = e.clientY;
 
-        document.addEventListener('mouseup', () => {
-            redCursor.classList.remove('clicking');
-        });
+      cursorDot.style.left = `${posX}px`;
+      cursorDot.style.top = `${posY}px`;
 
-        const interactables = 'button, a, input, select, textarea, .clickable, [role="button"], .nav-btn, .action-btn';
-        document.querySelectorAll(interactables).forEach(el => {
-            el.addEventListener('mouseenter', () => redCursor.classList.add('pointer'));
-            el.addEventListener('mouseleave', () => redCursor.classList.remove('pointer'));
-        });
+      cursorOutline.animate({
+        left: `${posX}px`,
+        top: `${posY}px`
+      }, { duration: 300, fill: "forwards" });
+    });
+
+    const hoverables = document.querySelectorAll('a, button, .card, .chip, input');
+    hoverables.forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        cursorOutline.style.width = '50px';
+        cursorOutline.style.height = '50px';
+        cursorOutline.style.borderColor = 'var(--secondary)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorOutline.style.width = '32px';
+        cursorOutline.style.height = '32px';
+        cursorOutline.style.borderColor = 'var(--primary)';
+      });
+    });
+  }
+
+  /* ==========================================
+     2. BACKGROUND PARTICLE CANVAS ENGINE
+     ========================================== */
+  const canvas = document.getElementById('particle-canvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let particlesArray = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.8;
+        this.speedY = (Math.random() - 0.5) * 0.8;
+        this.color = '#4f46e5';
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
-    updateUIAuthState();
-    renderComments();
-});
+    function initParticles() {
+      particlesArray = [];
+      const particleCount = Math.floor((canvas.width * canvas.height) / 12000);
+      for (let i = 0; i < particleCount; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+    initParticles();
 
-/* --- 9. UTILITIES & AUDIO --- */
-function escapeHtml(str) {
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
+    function connectParticles() {
+      for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a; b < particlesArray.length; b++) {
+          const dx = particlesArray[a].x - particlesArray[b].x;
+          const dy = particlesArray[a].y - particlesArray[b].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
-function switchPage(pageId) {
-    playSound(400, 'sine', 0.1);
-    document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+          if (distance < 110) {
+            ctx.strokeStyle = `rgba(79, 70, 229, ${1 - distance / 110})`;
+            ctx.lineWidth = 0.6;
+            ctx.beginPath();
+            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
 
-    const targetPage = document.getElementById('page-' + pageId);
-    if (targetPage) targetPage.classList.add('active');
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach((particle) => {
+        particle.update();
+        particle.draw();
+      });
+      connectParticles();
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  }
 
-    const targetNav = document.getElementById('nav-' + pageId);
-    if (targetNav) targetNav.classList.add('active');
+  /* ==========================================
+     3. MINOTAR MINECRAFT AVATAR FETCHING
+     ========================================== */
+  const staffAvatars = document.querySelectorAll('[data-mc-head]');
+  staffAvatars.forEach((img) => {
+    const username = img.getAttribute('data-mc-head');
+    if (username) {
+      img.src = `https://minotar.net/helm/${username}/100.png`;
+      img.onerror = () => {
+        img.src = 'https://minotar.net/helm/MHF_Steve/100.png';
+      };
+    }
+  });
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function openGhostAIPage() {
-    switchPage('ghost-ai');
-    playSound(600, 'sawtooth', 0.15);
-}
-
-function closeModal(id) {
-    playSound(300, 'sine', 0.1);
-    const modal = document.getElementById(id);
-    if (modal) modal.style.display = 'none';
-}
-
-let audioCtx = null;
-function playSound(freq, type = 'sine', duration = 0.1) {
-    try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) return;
-        if (!audioCtx) audioCtx = new AudioContext();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-    } catch (e) { }
-}
-
-function copyIP() {
-    navigator.clipboard.writeText('play.oderismc.fun').then(() => {
-        playSound(600, 'triangle', 0.15);
-        alert('Server IP (play.oderismc.fun) copied to clipboard!');
+  /* ==========================================
+     4. COPY SERVER IP BUTTON
+     ========================================== */
+  const copyIpBtn = document.getElementById('copy-ip-btn');
+  if (copyIpBtn) {
+    copyIpBtn.addEventListener('click', () => {
+      const serverIP = 'play.oderismc.net';
+      navigator.clipboard.writeText(serverIP).then(() => {
+        const originalText = copyIpBtn.innerText;
+        copyIpBtn.innerText = 'IP Copied to Clipboard!';
+        copyIpBtn.style.background = '#10b981';
+        setTimeout(() => {
+          copyIpBtn.innerText = originalText;
+          copyIpBtn.style.background = '';
+        }, 2500);
+      }).catch(() => {
+        alert(`Server IP: ${serverIP}`);
+      });
     });
-}
+  }
+
+  /* ==========================================
+     5. PAYMENT MODAL SIMULATION
+     ========================================== */
+  const modalOverlay = document.getElementById('payment-modal');
+  const modalCloseBtn = document.getElementById('modal-close-btn');
+  const modalRankTitle = document.getElementById('modal-rank-title');
+  const modalRankPrice = document.getElementById('modal-rank-price');
+  const buyButtons = document.querySelectorAll('.buy-rank-btn');
+  const paymentForm = document.getElementById('payment-form');
+
+  buyButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const rank = btn.getAttribute('data-rank');
+      const price = btn.getAttribute('data-price');
+      if (modalRankTitle && modalRankPrice && modalOverlay) {
+        modalRankTitle.innerText = `Checkout [${rank}] Rank`;
+        modalRankPrice.innerText = `Total Amount: $${price}`;
+        modalOverlay.classList.add('active');
+      }
+    });
+  });
+
+  if (modalCloseBtn && modalOverlay) {
+    modalCloseBtn.addEventListener('click', () => {
+      modalOverlay.classList.remove('active');
+    });
+
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        modalOverlay.classList.remove('active');
+      }
+    });
+  }
+
+  if (paymentForm) {
+    paymentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const usernameInput = document.getElementById('mc-username');
+      const submitBtn = document.getElementById('pay-submit-btn');
+
+      if (usernameInput && submitBtn) {
+        const username = usernameInput.value.trim();
+        if (!username) return;
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Processing Gateway...';
+
+        setTimeout(() => {
+          alert(`Success! [${username}] has been credited with the rank on play.oderismc.net.`);
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'Complete Purchase';
+          usernameInput.value = '';
+          modalOverlay.classList.remove('active');
+        }, 1500);
+      }
+    });
+  }
+
+  /* ==========================================
+     6. GHOST AI v2.93 INTERACTIVE ENGINE
+     ========================================== */
+  const chatMessages = document.getElementById('chat-messages');
+  const chatForm = document.getElementById('chat-form');
+  const chatInput = document.getElementById('chat-input');
+  const chipButtons = document.querySelectorAll('.chip');
+
+  const ghostKnowledge = [
+    { keywords: ['ip', 'address', 'connect', 'join'], response: 'The official server IP is **play.oderismc.net**! Join us on version 1.16 through 1.20+.' },
+    { keywords: ['vip', 'rank', 'mvp', 'oderis', 'god', 'store', 'perk'], response: 'Ranks range from VIP ($4.99) to GOD ($49.99). All ranks include /fly abilities, cosmetics, and priority server queue access.' },
+    { keywords: ['owner', 'yuvraj', 'developer', 'yjdev'], response: 'OderisMC was created and built by lead developer YuvrajBudhwar under YJDEV STUDIOS.' },
+    { keywords: ['bedwars', 'game', 'mode', 'pvp', 'skyblock'], response: 'We feature custom Bedwars with special knockback physics, fast-paced Skyblock, and custom aura-based combat mechanics!' },
+    { keywords: ['staff', 'apply', 'admin', 'mod'], response: 'Staff applications open periodically on our official Discord community server.' }
+  ];
+
+  function addMessage(text, sender) {
+    if (!chatMessages) return;
+    const bubble = document.createElement('div');
+    bubble.className = `chat-bubble ${sender}`;
+    bubble.innerText = text;
+    chatMessages.appendChild(bubble);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function generateGhostResponse(userQuery) {
+    const query = userQuery.toLowerCase();
+    for (let k of ghostKnowledge) {
+      if (k.keywords.some(kw => query.includes(kw))) {
+        return k.response;
+      }
+    }
+    return "Ghost AI v2.93: I am listening! You can ask me about the server IP (play.oderismc.net), rank pricing, game modes, or leadership team details.";
+  }
+
+  function handleUserSubmit(message) {
+    if (!message) return;
+    addMessage(message, 'user');
+
+    // Simulate AI thinking delay
+    setTimeout(() => {
+      const response = generateGhostResponse(message);
+      addMessage(response, 'ai');
+    }, 600);
+  }
+
+  if (chatForm && chatInput) {
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const query = chatInput.value.trim();
+      if (query) {
+        handleUserSubmit(query);
+        chatInput.value = '';
+      }
+    });
+  }
+
+  chipButtons.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const query = chip.getAttribute('data-query');
+      if (query) {
+        handleUserSubmit(query);
+      }
+    });
+  });
+
+});
